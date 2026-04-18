@@ -1,0 +1,11 @@
+torch
+torchvision
+torchaudio
+mediapipe
+opencv-python
+numpy
+pandas
+scipy
+matplotlib
+seaborn
+jupyter
