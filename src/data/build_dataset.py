@@ -3,21 +3,30 @@
 # Script untuk memproses banyak video sekaligus dari struktur folder yang terorganisir
 # dan membangun dataset manifest (CSV) yang siap digunakan oleh PyTorch DataLoader.
 #
+# ── SISTEM AUTOMATED GROUND TRUTH LABELING ────────────────────────────────────
+# Label ditetapkan secara OTOMATIS menggunakan BiomechanicalValidator, bukan
+# berdasarkan nama sub-folder. Setiap tensor (64, 33, 3) yang dihasilkan akan
+# dievaluasi oleh validator biomekanik:
+#   - Validator mengembalikan True  → label = 0 (Benar)
+#   - Validator mengembalikan False → label = 1 (Salah)
+#
 # Struktur folder input yang diharapkan:
-#   data/raw/<NamaLatihan>/<Kelas>/video.mp4
+#   data/raw/<NamaLatihan>/video.mp4
 #   Contoh:
-#     data/raw/Deadlift/Benar/deadlift_001.mp4
-#     data/raw/Deadlift/Salah/deadlift_error_001.mp4
-#     data/raw/Squat/Benar/squat_001.mp4
-#     data/raw/Squat/Salah/squat_error_001.mp4
+#     data/raw/Deadlift/deadlift_001.mp4
+#     data/raw/Squat/squat_002.mp4
+#     data/raw/BenchPress/bench_003.mp4
 #
 # Output:
-#   data/processed/tensors/<NamaLatihan>_<Kelas>_<nomor>.npy  → tensor (64, 33, 3)
-#   data/processed/dataset_manifest.csv                       → {file_path, label}
+#   data/processed/tensors/<NamaLatihan>_<nomor>.npy  → tensor (64, 33, 3)
+#   data/processed/dataset_manifest.csv               → {file_path, label, exercise, reason}
 #
-# Peta Label (CLASS_LABEL_MAP):
-#   "Benar" → 0
-#   "Salah" → 1
+# Peta Validator per Nama Latihan (case-insensitive substring match):
+#   "squat"      → BiomechanicalValidator.validate_squat
+#   "deadlift"   → BiomechanicalValidator.validate_deadlift
+#   "benchpress" → BiomechanicalValidator.validate_benchpress
+#   "bench"      → BiomechanicalValidator.validate_benchpress
+# ──────────────────────────────────────────────────────────────────────────────
 
 import os
 import sys
@@ -35,6 +44,7 @@ if str(_SRC_DIR) not in sys.path:
 
 from data.extract_pose import PoseExtractor
 from data.preprocess import DataPreprocessor
+from data.biomechanics_validator import BiomechanicalValidator
 
 # ── Konfigurasi logging ────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -43,11 +53,20 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ── Peta nama folder kelas → indeks label integer ─────────────────────────────
-CLASS_LABEL_MAP: dict[str, int] = {
-    "Benar": 0,
-    "Salah": 1,
+# ── Inisialisasi validator biomekanik (satu instance, digunakan bersama) ───────
+_validator = BiomechanicalValidator()
+
+# ── Peta nama latihan (substring lowercase) → fungsi validator ────────────────
+EXERCISE_VALIDATOR_MAP: dict[str, callable] = {
+    "squat"      : _validator.validate_squat,
+    "deadlift"   : _validator.validate_deadlift,
+    "benchpress" : _validator.validate_benchpress,
+    "bench"      : _validator.validate_benchpress,
 }
+
+# ── Konstanta label integer ───────────────────────────────────────────────────
+LABEL_BENAR = 0  # Lulus validasi biomekanik → gerakan benar
+LABEL_SALAH = 1  # Gagal validasi biomekanik → gerakan salah
 
 
 def build_dataset(
@@ -59,11 +78,17 @@ def build_dataset(
 ) -> pd.DataFrame:
     """
     Memproses semua video .mp4 di dalam `raw_root` secara rekursif,
-    mengekstrak pose, melakukan pra-pemrosesan, dan menyimpan tensor
-    serta file manifest CSV.
+    mengekstrak pose, melakukan pra-pemrosesan, menentukan label secara otomatis
+    menggunakan BiomechanicalValidator, lalu menyimpan tensor dan manifest CSV.
 
     Struktur folder yang diharapkan di `raw_root`:
-        <raw_root>/<NamaLatihan>/<Kelas>/*.mp4
+        <raw_root>/<NamaLatihan>/*.mp4
+        Contoh: data/raw/Squat/squat_001.mp4
+
+    Label ditetapkan secara OTOMATIS berdasarkan hasil validator biomekanik:
+        BiomechanicalValidator.validate_<exercise>(tensor) → (is_valid, reason)
+        - is_valid = True  → label = 0 (Benar)
+        - is_valid = False → label = 1 (Salah)
 
     Args:
         raw_root       : Direktori root data mentah, misal ``data/raw``.
@@ -71,9 +96,10 @@ def build_dataset(
         extractor      : Instance PoseExtractor. Jika None, dibuat dengan default.
         preprocessor   : Instance DataPreprocessor. Jika None, dibuat dengan default.
         overwrite      : Jika False, video yang sudah punya tensor .npy di-skip.
+                         Label otomatis tetap dihitung ulang dari tensor yang ada.
 
     Returns:
-        pd.DataFrame dengan kolom ``file_path`` dan ``label``.
+        pd.DataFrame dengan kolom ``file_path``, ``label``, ``exercise``, ``reason``.
     """
     raw_root       = Path(raw_root)
     processed_root = Path(processed_root)
@@ -109,7 +135,7 @@ def build_dataset(
             f"Tidak ada sub-folder latihan yang ditemukan di: {raw_root}. "
             "Pastikan struktur folder sudah benar."
         )
-        return pd.DataFrame(columns=["file_path", "label"])
+        return pd.DataFrame(columns=["file_path", "label", "exercise", "reason"])
 
     logger.info(f"Ditemukan {len(exercise_dirs)} jenis latihan: "
                 f"{[d.name for d in exercise_dirs]}")
@@ -118,54 +144,50 @@ def build_dataset(
     for exercise_dir in exercise_dirs:
         exercise_name = exercise_dir.name
 
-        # Temukan semua sub-folder kelas (Benar, Salah)
-        class_dirs = sorted([d for d in exercise_dir.iterdir() if d.is_dir()])
+        # ── Tentukan fungsi validator berdasarkan nama latihan ─────────────────
+        # Pencocokan dilakukan secara case-insensitive dengan substring matching
+        validate_fn = None
+        for key, fn in EXERCISE_VALIDATOR_MAP.items():
+            if key in exercise_name.lower():
+                validate_fn = fn
+                break
 
-        for class_dir in class_dirs:
-            class_name = class_dir.name
-
-            # Validasi: nama folder kelas harus ada di CLASS_LABEL_MAP
-            if class_name not in CLASS_LABEL_MAP:
-                logger.warning(
-                    f"Folder kelas '{class_name}' tidak dikenali "
-                    f"(bukan salah satu dari {list(CLASS_LABEL_MAP.keys())}). Di-skip."
-                )
-                continue
-
-            label = CLASS_LABEL_MAP[class_name]
-
-            # Kumpulkan semua file video .mp4 di folder ini
-            video_files = sorted(class_dir.glob("*.mp4"))
-
-            if not video_files:
-                logger.warning(
-                    f"Tidak ada file .mp4 di: {class_dir}. Di-skip."
-                )
-                continue
-
-            logger.info(
-                f"\n[{exercise_name}/{class_name}] Memproses {len(video_files)} video "
-                f"(label={label})..."
+        if validate_fn is None:
+            logger.warning(
+                f"[{exercise_name}] Tidak ada validator yang cocok. "
+                f"Nama latihan harus mengandung salah satu dari: "
+                f"{list(EXERCISE_VALIDATOR_MAP.keys())}. Folder ini di-skip."
             )
+            continue
 
-            # ── Loop melalui setiap file video ─────────────────────────────────
-            for video_idx, video_path in enumerate(video_files, start=1):
-                # Buat nama file output yang unik dan deskriptif
-                tensor_filename = f"{exercise_name}_{class_name}_{video_idx:03d}.npy"
-                tensor_path     = tensor_dir / tensor_filename
+        # Kumpulkan semua file video .mp4 langsung di dalam folder latihan
+        # (TIDAK ada sub-folder Benar/Salah — struktur baru)
+        video_files = sorted(exercise_dir.glob("*.mp4"))
 
-                # ── Lewati jika sudah diproses dan overwrite=False ──────────────
-                if tensor_path.exists() and not overwrite:
-                    logger.info(
-                        f"  [{video_idx:03d}/{len(video_files):03d}] "
-                        f"Di-skip (sudah ada): {tensor_filename}"
-                    )
-                    manifest_rows.append({
-                        "file_path": str(tensor_path),
-                        "label"    : label,
-                    })
-                    continue
+        if not video_files:
+            logger.warning(
+                f"[{exercise_name}] Tidak ada file .mp4 di: {exercise_dir}. Di-skip."
+            )
+            continue
 
+        logger.info(
+            f"\n[{exercise_name}] Memproses {len(video_files)} video "
+            f"dengan auto-labeling biomekanik..."
+        )
+
+        # ── Loop melalui setiap file video ─────────────────────────────────────
+        for video_idx, video_path in enumerate(video_files, start=1):
+            # Buat nama file output yang unik dan deskriptif
+            tensor_filename = f"{exercise_name}_{video_idx:03d}.npy"
+            tensor_path     = tensor_dir / tensor_filename
+
+            # ── Lewati ekstraksi jika sudah diproses dan overwrite=False ────────
+            if tensor_path.exists() and not overwrite:
+                logger.info(
+                    f"  [{video_idx:03d}/{len(video_files):03d}] "
+                    f"Tensor sudah ada, langsung re-label: {tensor_filename}"
+                )
+            else:
                 logger.info(
                     f"  [{video_idx:03d}/{len(video_files):03d}] "
                     f"Memproses: {video_path.name} ..."
@@ -173,12 +195,11 @@ def build_dataset(
 
                 try:
                     # ── Langkah 1: Ekstraksi pose menggunakan MediaPipe BlazePose ──
-                    # Simpan hasil mentah ke file .npy sementara
                     raw_npy_path = tensor_dir / f"_tmp_{tensor_filename}"
                     raw_array = extractor.extract_video(
                         video_path=str(video_path),
                         output_npy_path=str(raw_npy_path),
-                        output_video_path=None,  # Tidak perlu video visualisasi
+                        output_video_path=None,
                     )
 
                     # Pastikan ada frame yang berhasil diekstraksi
@@ -188,7 +209,7 @@ def build_dataset(
                             f"{video_path.name}. Di-skip."
                         )
                         if raw_npy_path.exists():
-                            raw_npy_path.unlink()  # Hapus file sementara
+                            raw_npy_path.unlink()
                         continue
 
                     # ── Langkah 2: Pra-pemrosesan (clean → smooth → normalize → resample) ──
@@ -211,17 +232,6 @@ def build_dataset(
                         tensor_path.unlink()
                         continue
 
-                    # ── Tambahkan ke manifest ───────────────────────────────────
-                    manifest_rows.append({
-                        "file_path": str(tensor_path),
-                        "label"    : label,
-                    })
-
-                    logger.info(
-                        f"  [{video_idx:03d}/{len(video_files):03d}] "
-                        f"Selesai → {tensor_filename}  shape={final_tensor.shape}"
-                    )
-
                 except Exception as e:
                     logger.error(
                         f"  Gagal memproses {video_path.name}: {e}. Di-skip.",
@@ -231,9 +241,41 @@ def build_dataset(
                     for tmp_path in [tensor_path, raw_npy_path]:
                         if tmp_path.exists():
                             tmp_path.unlink()
+                    continue
+
+            # ── Langkah 3: AUTO-LABELING menggunakan BiomechanicalValidator ────
+            # Tensor sudah tersedia di disk (baik baru diproses maupun di-skip)
+            try:
+                tensor_data = np.load(tensor_path)  # (64, 33, 3)
+                is_valid, reason = validate_fn(tensor_data)
+            except Exception as e:
+                logger.error(
+                    f"  Gagal menjalankan validator untuk {tensor_filename}: {e}. Di-skip.",
+                    exc_info=True,
+                )
+                continue
+
+            # Tentukan label berdasarkan hasil validator
+            auto_label = LABEL_BENAR if is_valid else LABEL_SALAH
+            label_str  = "Benar (0)" if is_valid else "Salah (1)"
+
+            logger.info(
+                f"  [{video_idx:03d}/{len(video_files):03d}] "
+                f"→ {tensor_filename}  |  label={auto_label} [{label_str}]  |  {reason[:80]}"
+            )
+
+            # ── Tambahkan ke manifest ──────────────────────────────────────────
+            manifest_rows.append({
+                "file_path": str(tensor_path),
+                "label"    : auto_label,
+                "exercise" : exercise_name,
+                "reason"   : reason,
+            })
 
     # ── Buat dan simpan manifest CSV ───────────────────────────────────────────
-    manifest_df = pd.DataFrame(manifest_rows, columns=["file_path", "label"])
+    manifest_df = pd.DataFrame(
+        manifest_rows, columns=["file_path", "label", "exercise", "reason"]
+    )
 
     # Acak urutan baris agar distribusi kelas lebih merata saat dipakai DataLoader
     manifest_df = manifest_df.sample(frac=1, random_state=42).reset_index(drop=True)
@@ -243,7 +285,8 @@ def build_dataset(
     logger.info(f"\n{'='*60}")
     logger.info(f"Dataset manifest disimpan ke : {manifest_path}")
     logger.info(f"Total sampel                 : {len(manifest_df)}")
-    for label_val, label_name in {v: k for k, v in CLASS_LABEL_MAP.items()}.items():
+    label_names = {LABEL_BENAR: "Benar", LABEL_SALAH: "Salah"}
+    for label_val, label_name in label_names.items():
         count = (manifest_df["label"] == label_val).sum()
         logger.info(f"  Kelas {label_val} ({label_name:5s})           : {count} sampel")
     logger.info(f"{'='*60}")
@@ -254,7 +297,10 @@ def build_dataset(
 # ── Entry point: jalankan langsung dari terminal ───────────────────────────────
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Build dataset: proses semua video → tensor .npy + manifest CSV."
+        description=(
+            "Build dataset dengan Auto-Labeling: proses semua video → "
+            "tensor .npy → label otomatis via BiomechanicalValidator → manifest CSV."
+        )
     )
     parser.add_argument(
         "--raw_root",
@@ -271,7 +317,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "--overwrite",
         action="store_true",
-        help="Timpa tensor .npy yang sudah ada. Jika tidak di-set, video yang sudah diproses di-skip.",
+        help=(
+            "Timpa tensor .npy yang sudah ada dan proses ulang dari video. "
+            "Jika tidak di-set, tensor yang sudah ada di-skip namun label "
+            "tetap dihitung ulang secara otomatis."
+        ),
     )
     args = parser.parse_args()
 

@@ -165,9 +165,7 @@ class BiomechanicalValidator:
         Memvalidasi eksekusi gerakan Squat berdasarkan dua kriteria biomekanik:
 
         **Kriteria 1 — Kedalaman Squat (Squat Depth)**
-          Referensi: Chen, K.-Y. et al. (2022). "Fitness Movement Types and
-                     Completeness Detection Using a Transfer-Learning-Based Deep
-                     Neural Network."
+          Referensi: Escamilla et al. (2001), Hales et al. (2009)
           Kriteria  : Sudut Pinggul-Lutut-Pergelangan Kaki (rata-rata kiri & kanan)
                       harus mencapai ≤ 100° pada frame dengan fleksi lutut terdalam.
           Rasional  : Sudut 100° secara klinis setara dengan posisi "parallel squat"
@@ -175,9 +173,7 @@ class BiomechanicalValidator:
                       yang dianggap efektif secara biomekanik.
 
         **Kriteria 2 — Knee Valgus (Lutut Mengunci ke Dalam)**
-          Referensi: Rao, P., Asha, C. S., & Rao, R. P. (2023). "Real-time Posture
-                     Correction of Squat Exercise: A Deep Learning Approach for
-                     Performance Analysis and Error Correction."
+          Referensi: Bell et al. (2008), Chen et al. (2022)
           Kriteria  : Pada posisi terdalam, lebar horizontal lutut (sumbu X) tidak
                       boleh < 85% dari lebar horizontal pergelangan kaki.
           Rasional  : Kolaps medial lutut (valgus) meningkatkan risiko cedera ACL
@@ -263,9 +259,7 @@ class BiomechanicalValidator:
         Memvalidasi eksekusi gerakan Bench Press berdasarkan satu kriteria biomekanik:
 
         **Kriteria — Full Range of Motion Siku (Elbow ROM)**
-          Referensi: Ko, Y.-M., Nasridinov, A., & Park, S.-H. (2024). "Real-Time
-                     AI Posture Correction for Powerlifting Exercises Using YOLOv5
-                     and MediaPipe."
+          Referensi: Glass & Armstrong (1997), Barnett et al. (1995), Chen et al. (2022)
           Kriteria  : Sudut Bahu-Siku-Pergelangan Tangan (rata-rata kiri & kanan)
                       harus mencapai ≤ 85° pada frame dengan fleksi siku terdalam
                       (posisi bar paling dekat ke dada).
@@ -320,12 +314,7 @@ class BiomechanicalValidator:
         Memvalidasi eksekusi gerakan Deadlift berdasarkan satu kriteria biomekanik:
 
         **Kriteria — Sudut Inklinasi Punggung / Hip Hinge Pattern**
-          Referensi:
-            - Chen, K.-Y. et al. (2022). "Fitness Movement Types and Completeness
-              Detection Using a Transfer-Learning-Based Deep Neural Network."
-            - Ko, Y.-M., Nasridinov, A., & Park, S.-H. (2024). "Real-Time AI
-              Posture Correction for Powerlifting Exercises Using YOLOv5 and
-              MediaPipe."
+          Referensi: Escamilla et al. (2000), Hales (2010), Chen et al. (2022)
           Kriteria  : Pada posisi terbawah (torso paling miring ke depan), sudut
                       inklinasi punggung dari sumbu vertikal harus:
                       ≥ 20° (ada gerakan hip hinge yang bermakna), DAN
