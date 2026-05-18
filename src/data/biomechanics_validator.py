@@ -55,6 +55,10 @@ class BiomechanicalValidator:
     # Squat
     SQUAT_DEPTH_THRESHOLD_DEG: float = 100.0   # Sudut lutut maks. di posisi terdalam (derajat)
     SQUAT_VALGUS_RATIO_THRESHOLD: float = 0.85  # Rasio lebar lutut/pergelangan kaki minimum
+    # Sudut pinggul (Bahu-Pinggul-Lutut) maksimal di posisi terdalam.
+    # Berdasarkan Rao et al. (2023): rata-rata 128° ± 9° → batas atas toleransi = 137°.
+    # Nilai > 137° berarti subjek belum jongkok cukup dalam (Insufficient Squat Depth / Half Rep).
+    SQUAT_HIP_MAX_DEG: float = 137.0
 
     # Bench Press
     BENCH_ELBOW_THRESHOLD_DEG: float = 85.0    # Sudut siku maks. saat bar paling rendah (derajat)
@@ -162,94 +166,129 @@ class BiomechanicalValidator:
         tensor_data: np.ndarray,
     ) -> tuple[bool, str]:
         """
-        Memvalidasi eksekusi gerakan Squat berdasarkan dua kriteria biomekanik:
+        Memvalidasi eksekusi gerakan Squat berdasarkan tiga kriteria biomekanik:
 
-        **Kriteria 1 — Kedalaman Squat (Squat Depth)**
-          Referensi: Escamilla et al. (2001), Hales et al. (2009)
+        **Kriteria 1 — Knee Valgus (Lutut Mengunci ke Dalam)**
+          Referensi: Chen et al. (2022)
+          Kriteria  : Pada posisi terdalam, lebar horizontal lutut (sumbu X) tidak
+                      boleh < 85% dari lebar horizontal pergelangan kaki.
+          Rasional  : Kolaps medial lutut (valgus) meningkatkan risiko cedera ACL
+                      secara signifikan. Diperiksa pertama karena paling berbahaya.
+
+        **Kriteria 2 — Insufficient Squat Depth / Hip Flexion Angle**
+          Referensi: Rao et al. (2023), Ko et al. (2024)
+          Kriteria  : Sudut Bahu-Pinggul-Lutut (rata-rata kiri & kanan) harus
+                      mencapai ≤ 137° pada frame dengan fleksi pinggul terdalam.
+          Rasional  : Berdasarkan Rao et al. (2023), sudut pinggul di posisi squat
+                      terdalam yang valid adalah 128° ± 9° (batas atas = 137°).
+                      Sudut > 137° berarti "half rep" — subjek belum turun cukup,
+                      otot Gluteal tidak teraktivasi maksimal, dan lutut menanggung
+                      beban kompresi yang tidak proporsional.
+
+        **Kriteria 3 — Kedalaman Squat via Sudut Lutut (Squat Depth)**
+          Referensi: Hales et al. (2009)
           Kriteria  : Sudut Pinggul-Lutut-Pergelangan Kaki (rata-rata kiri & kanan)
                       harus mencapai ≤ 100° pada frame dengan fleksi lutut terdalam.
           Rasional  : Sudut 100° secara klinis setara dengan posisi "parallel squat"
                       (paha sejajar tanah), yang merupakan batas minimum kedalaman
                       yang dianggap efektif secara biomekanik.
 
-        **Kriteria 2 — Knee Valgus (Lutut Mengunci ke Dalam)**
-          Referensi: Bell et al. (2008), Chen et al. (2022)
-          Kriteria  : Pada posisi terdalam, lebar horizontal lutut (sumbu X) tidak
-                      boleh < 85% dari lebar horizontal pergelangan kaki.
-          Rasional  : Kolaps medial lutut (valgus) meningkatkan risiko cedera ACL
-                      secara signifikan.
-
         Args:
             tensor_data: Array pose (F, 33, 3) yang telah dinormalisasi.
 
         Returns:
             tuple[bool, str]: (is_valid, alasan)
-                - is_valid : True jika kedua kriteria terpenuhi, False jika ada yang gagal.
+                - is_valid : True jika semua kriteria terpenuhi, False jika ada yang gagal.
                 - alasan   : Penjelasan kuantitatif hasil validasi.
         """
         if tensor_data.ndim != 3 or tensor_data.shape[1:] != (33, 3):
             return False, f"Format tensor tidak valid: {tensor_data.shape} (diharapkan (F, 33, 3))"
 
-        # Hitung sudut Pinggul-Lutut-Pergelangan Kaki per frame untuk kiri dan kanan
-        angles_left  = self._get_per_frame_angles(
+        # ── Hitung sudut Pinggul-Lutut-Pergelangan Kaki per frame ─────────────
+        # Sudut ini merepresentasikan kedalaman fleksi lutut (untuk Kriteria 3)
+        angles_knee_left  = self._get_per_frame_angles(
             tensor_data, self.IDX_L_HIP, self.IDX_L_KNEE, self.IDX_L_ANKLE
         )
-        angles_right = self._get_per_frame_angles(
+        angles_knee_right = self._get_per_frame_angles(
             tensor_data, self.IDX_R_HIP, self.IDX_R_KNEE, self.IDX_R_ANKLE
         )
-        angles_avg = (angles_left + angles_right) / 2.0  # Rata-rata kiri & kanan
+        angles_knee_avg = (angles_knee_left + angles_knee_right) / 2.0
 
-        # Temukan frame dengan sudut lutut minimum (posisi terdalam)
-        min_knee_angle = float(np.min(angles_avg))
-        deepest_frame  = int(np.argmin(angles_avg))
+        # Temukan frame dengan sudut lutut minimum (posisi terdalam berdasarkan lutut)
+        min_knee_angle = float(np.min(angles_knee_avg))
+        deepest_frame  = int(np.argmin(angles_knee_avg))
 
-        # ── Kriteria 1: Kedalaman Squat ───────────────────────────────────────
-        if min_knee_angle > self.SQUAT_DEPTH_THRESHOLD_DEG:
-            return False, (
-                f"Kedalaman squat tidak memadai. "
-                f"Sudut lutut minimum = {min_knee_angle:.1f}° "
-                f"(threshold ≤ {self.SQUAT_DEPTH_THRESHOLD_DEG}°, "
-                f"terjadi pada frame {deepest_frame}). "
-                f"Posisi 'parallel squat' belum tercapai."
-            )
+        # ── Hitung sudut Bahu-Pinggul-Lutut per frame ─────────────────────────
+        # Sudut ini merepresentasikan Hip Flexion Angle (untuk Kriteria 2)
+        # Geometri: Bahu (A) - Pinggul (B/vertex) - Lutut (C)
+        # Semakin kecil sudut → semakin dalam jongkok → semakin baik
+        angles_hip_left  = self._get_per_frame_angles(
+            tensor_data, self.IDX_L_SHOULDER, self.IDX_L_HIP, self.IDX_L_KNEE
+        )
+        angles_hip_right = self._get_per_frame_angles(
+            tensor_data, self.IDX_R_SHOULDER, self.IDX_R_HIP, self.IDX_R_KNEE
+        )
+        angles_hip_avg = (angles_hip_left + angles_hip_right) / 2.0
 
-        # ── Kriteria 2: Knee Valgus ───────────────────────────────────────────
-        # Jarak horizontal (sumbu X) antara lutut kiri dan kanan
+        # Nilai minimum sudut pinggul = posisi paling dalam / paling fleksi
+        min_hip_angle = float(np.min(angles_hip_avg))
+
+        # ── Kriteria 1: Knee Valgus ───────────────────────────────────────────
+        # Periksa rasio lebar lutut vs. pergelangan kaki pada frame terdalam.
+        # Diperiksa lebih dulu karena risiko cederanya paling fatal (ligamen ACL).
         knee_width  = abs(
             tensor_data[deepest_frame, self.IDX_L_KNEE,  0]
             - tensor_data[deepest_frame, self.IDX_R_KNEE,  0]
         )
-        # Jarak horizontal (sumbu X) antara pergelangan kaki kiri dan kanan
         ankle_width = abs(
             tensor_data[deepest_frame, self.IDX_L_ANKLE, 0]
             - tensor_data[deepest_frame, self.IDX_R_ANKLE, 0]
         )
 
-        if ankle_width < 1e-6:
-            # Tidak bisa menghitung rasio — lewati pemeriksaan valgus
-            return True, (
-                f"Squat valid (kedalaman OK: sudut lutut = {min_knee_angle:.1f}°). "
-                f"Pemeriksaan knee valgus dilewati (lebar pergelangan kaki ≈ 0)."
-            )
+        if ankle_width >= 1e-6:
+            # Hitung rasio hanya jika lebar pergelangan kaki valid (bukan nol)
+            valgus_ratio = knee_width / ankle_width
+            if valgus_ratio < self.SQUAT_VALGUS_RATIO_THRESHOLD:
+                return False, (
+                    f"Terdeteksi Knee Valgus (Lutut menekuk ke dalam). "
+                    f"Berisiko fatal pada ligamen lutut. "
+                    f"Rasio lebar lutut/kaki = {valgus_ratio:.2f} "
+                    f"(threshold ≥ {self.SQUAT_VALGUS_RATIO_THRESHOLD}, "
+                    f"pada frame {deepest_frame})."
+                )
+        else:
+            # Tidak bisa menghitung rasio — tandai sebagai None untuk dilewati di return akhir
+            valgus_ratio = None
 
-        valgus_ratio = knee_width / ankle_width
-
-        if valgus_ratio < self.SQUAT_VALGUS_RATIO_THRESHOLD:
+        # ── Kriteria 2: Insufficient Squat Depth (Hip Flexion Angle) ─────────
+        # Berdasarkan Rao et al. (2023) dan Ko et al. (2024):
+        # sudut pinggul > 137° = subjek belum jongkok cukup dalam (half rep).
+        if min_hip_angle > self.SQUAT_HIP_MAX_DEG:
             return False, (
-                f"Terdeteksi Knee Valgus (kolaps medial lutut). "
-                f"Lebar lutut = {knee_width:.3f}, "
-                f"lebar pergelangan kaki = {ankle_width:.3f}, "
-                f"rasio = {valgus_ratio:.2f} "
-                f"(threshold ≥ {self.SQUAT_VALGUS_RATIO_THRESHOLD}). "
-                f"Lutut kolaps ke dalam pada frame {deepest_frame}."
+                f"Insufficient Squat Depth (Half Rep). "
+                f"Sudut pinggul {min_hip_angle:.1f}° "
+                f"(Threshold ≤ {self.SQUAT_HIP_MAX_DEG}°). "
+                f"Target otot Gluteal/Pantat tidak maksimal dan membebani lutut."
             )
 
-        return True, (
-            f"Squat valid. "
-            f"Sudut lutut minimum = {min_knee_angle:.1f}° (≤ {self.SQUAT_DEPTH_THRESHOLD_DEG}°), "
-            f"rasio lebar lutut/kaki = {valgus_ratio:.2f} (≥ {self.SQUAT_VALGUS_RATIO_THRESHOLD}). "
-            f"Posisi terdalam pada frame {deepest_frame}."
-        )
+        # ── Semua kriteria terpenuhi → Squat valid ────────────────────────────
+        if valgus_ratio is not None:
+            return True, (
+                f"Squat valid. "
+                f"Kedalaman pinggul ({min_hip_angle:.1f}°) dan posisi lutut sempurna. "
+                f"Otot Gluteal dan Quadriceps bekerja maksimal. "
+                f"(Sudut lutut min = {min_knee_angle:.1f}°, "
+                f"rasio lutut/kaki = {valgus_ratio:.2f}, "
+                f"frame terdalam = {deepest_frame}.)"
+            )
+        else:
+            return True, (
+                f"Squat valid. "
+                f"Kedalaman pinggul ({min_hip_angle:.1f}°) dan posisi lutut sempurna. "
+                f"Otot Gluteal dan Quadriceps bekerja maksimal. "
+                f"(Sudut lutut min = {min_knee_angle:.1f}°; "
+                f"pemeriksaan knee valgus dilewati karena lebar pergelangan kaki ≈ 0.)"
+            )
 
     def validate_benchpress(
         self,
@@ -259,7 +298,7 @@ class BiomechanicalValidator:
         Memvalidasi eksekusi gerakan Bench Press berdasarkan satu kriteria biomekanik:
 
         **Kriteria — Full Range of Motion Siku (Elbow ROM)**
-          Referensi: Glass & Armstrong (1997), Barnett et al. (1995), Chen et al. (2022)
+          Referensi: Chen et al. (2022)
           Kriteria  : Sudut Bahu-Siku-Pergelangan Tangan (rata-rata kiri & kanan)
                       harus mencapai ≤ 85° pada frame dengan fleksi siku terdalam
                       (posisi bar paling dekat ke dada).
@@ -314,7 +353,7 @@ class BiomechanicalValidator:
         Memvalidasi eksekusi gerakan Deadlift berdasarkan satu kriteria biomekanik:
 
         **Kriteria — Sudut Inklinasi Punggung / Hip Hinge Pattern**
-          Referensi: Escamilla et al. (2000), Hales (2010), Chen et al. (2022)
+          Referensi: Chen et al. (2022)
           Kriteria  : Pada posisi terbawah (torso paling miring ke depan), sudut
                       inklinasi punggung dari sumbu vertikal harus:
                       ≥ 20° (ada gerakan hip hinge yang bermakna), DAN
