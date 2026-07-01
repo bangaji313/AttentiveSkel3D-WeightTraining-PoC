@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="Electron" modified="2026-05-19T00:00:00.000Z" agent="GitHub Copilot" version="21.0.0" type="device">
+  <diagram id="flowchart-attentiveskel3d" name="AttentiveSkel3D Flowchart">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 1 : Input Tensor                                  -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="2"
+          value="&lt;b style='font-size:13px;'&gt;[Input Tensor 64 × 33 × 3]&lt;/b&gt;&lt;br/&gt;
+&lt;hr style='border:1px solid #6c8ebf; margin:4px 0;'/&gt;
+&lt;span style='font-size:11px;'&gt;
+  &lt;i&gt;Analogi:&lt;/i&gt; MediaPipe sudah menemukan titik sendi.&lt;br/&gt;
+  Mesin &lt;b&gt;TIDAK MENCARI&lt;/b&gt; letak objek lagi.&lt;br/&gt;
+  &lt;i&gt;Teknis:&lt;/i&gt; Tensor shape [B, T=64, J=33, C=3] — (x, y, z) per joint.
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#dae8fc;strokeColor=#6c8ebf;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;
+                 verticalAlign=middle;
+                 shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="284" y="40" width="420" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 2 : 3D-CNN Backbone                               -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="3"
+          value="&lt;b style='font-size:13px;'&gt;[3D-CNN Backbone]&lt;/b&gt;&lt;br/&gt;
+&lt;hr style='border:1px solid #82b366; margin:4px 0;'/&gt;
+&lt;span style='font-size:11px;'&gt;
+  &lt;i&gt;Analogi:&lt;/i&gt; Otak Pemroses.&lt;br/&gt;
+  Menangkap pola &lt;b&gt;Ruang (Tulang)&lt;/b&gt; dan &lt;b&gt;Waktu (Frame)&lt;/b&gt; secara bersamaan.&lt;br/&gt;
+  &lt;i&gt;Teknis:&lt;/i&gt; Conv3D → BatchNorm → ReLU → MaxPool3D → Feature Map F.
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#d5e8d4;strokeColor=#82b366;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;
+                 verticalAlign=middle;
+                 shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="284" y="220" width="420" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 3 : Attention Mechanism Dasar                     -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="4"
+          value="&lt;b style='font-size:13px;'&gt;[Attention Mechanism Dasar]&lt;/b&gt;&lt;br/&gt;
+&lt;hr style='border:1px solid #d6b656; margin:4px 0;'/&gt;
+&lt;span style='font-size:11px;'&gt;
+  &lt;i&gt;Analogi:&lt;/i&gt; Buku Catatan Akuntansi.&lt;br/&gt;
+  Memberi &lt;b&gt;skor (Score Function)&lt;/b&gt; lalu diubah jadi&lt;br/&gt;
+  persentase &lt;b&gt;0%–100%&lt;/b&gt; oleh Softmax.&lt;br/&gt;
+  &lt;i&gt;Teknis:&lt;/i&gt; α = Softmax(W·F + b) → raw attention weights.
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#fff2cc;strokeColor=#d6b656;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;
+                 verticalAlign=middle;
+                 shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="284" y="400" width="420" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 4 : Biomechanical Spatial Prior                   -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="5"
+          value="&lt;b style='font-size:13px;'&gt;[Biomechanical Spatial Prior]&lt;/b&gt;&lt;br/&gt;
+&lt;hr style='border:1px solid #9673a6; margin:4px 0;'/&gt;
+&lt;span style='font-size:11px;'&gt;
+  &lt;i&gt;Analogi:&lt;/i&gt; Aturan Pakem Pelatih.&lt;br/&gt;
+  Mengalikan tebakan persentase mesin&lt;br/&gt;
+  dengan &lt;b&gt;aturan biomekanis baku&lt;/b&gt;.&lt;br/&gt;
+  &lt;i&gt;Teknis:&lt;/i&gt; P_bio ∈ ℝ^J — prior eksplisit per gerakan (BenchPress/Squat/Deadlift).
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#e1d5e7;strokeColor=#9673a6;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;
+                 verticalAlign=middle;
+                 shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="284" y="592" width="420" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 5 : Element-wise Fusion                           -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="6"
+          value="&lt;b style='font-size:13px;'&gt;[Element-wise Fusion]&lt;/b&gt;&lt;br/&gt;
+&lt;hr style='border:1px solid #b85450; margin:4px 0;'/&gt;
+&lt;span style='font-size:11px;'&gt;
+  &lt;i&gt;Analogi:&lt;/i&gt; Fokus Akhir.&lt;br/&gt;
+  Sendi penting &lt;b&gt;menyala merah&lt;/b&gt;,&lt;br/&gt;
+  noise dari tubuh lain &lt;b&gt;ditekan jadi nol&lt;/b&gt;.&lt;br/&gt;
+  &lt;i&gt;Teknis:&lt;/i&gt; α_final = α ⊙ P_bio → weighted feature context untuk klasifikasi.
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#f8cecc;strokeColor=#b85450;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;
+                 verticalAlign=middle;
+                 shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="284" y="784" width="420" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  EDGES (Arrows)                                         -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+
+        <!-- Node 1 → Node 2 -->
+        <mxCell id="7"
+          value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;
+                 exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+                 entryX=0.5;entryY=0;entryDx=0;entryDy=0;
+                 strokeColor=#6c8ebf;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="2" target="3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node 2 → Node 3 -->
+        <mxCell id="8"
+          value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;
+                 exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+                 entryX=0.5;entryY=0;entryDx=0;entryDy=0;
+                 strokeColor=#82b366;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="3" target="4" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node 3 → Node 4 -->
+        <mxCell id="9"
+          value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;
+                 exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+                 entryX=0.5;entryY=0;entryDx=0;entryDy=0;
+                 strokeColor=#d6b656;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="4" target="5" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node 4 → Node 5 -->
+        <mxCell id="10"
+          value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;
+                 exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+                 entryX=0.5;entryY=0;entryDx=0;entryDy=0;
+                 strokeColor=#9673a6;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="5" target="6" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

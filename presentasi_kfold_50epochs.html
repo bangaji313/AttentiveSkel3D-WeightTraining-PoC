@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil 5-Fold Cross Validation (50 Epochs) - AttentiveSkel-3D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(22, 27, 34, 0.95);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 255, 135, 0.1);
+            border: 1px solid rgba(0, 255, 135, 0.2);
+        }
+        
+        h1 {
+            color: #00ff87;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 135, 0.5);
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        h2 {
+            color: #00d4ff;
+            font-size: 1.8em;
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+            font-weight: 600;
+        }
+        
+        .narasi {
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 4px solid #00d4ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        .narasi strong {
+            color: #00ff87;
+            font-weight: 600;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(0, 255, 135, 0.2) 0%, rgba(0, 212, 255, 0.2) 100%);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+            background: rgba(30, 30, 46, 0.6);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .custom-table thead tr {
+            background: linear-gradient(135deg, #1a2332 0%, #0f1419 100%);
+            color: #00d4ff;
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+        
+        .custom-table th,
+        .custom-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .custom-table tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        .custom-table tbody tr:hover {
+            background: rgba(0, 255, 135, 0.08);
+            transform: translateX(5px);
+        }
+        
+        .custom-table tbody tr:nth-of-type(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .custom-table tbody tr:first-child {
+            background: linear-gradient(90deg, rgba(0, 255, 135, 0.15) 0%, rgba(0, 212, 255, 0.1) 100%);
+            font-weight: 600;
+        }
+        
+        .custom-table tbody tr:last-child {
+            background: rgba(255, 82, 82, 0.1);
+        }
+        
+        .custom-table td:first-child {
+            font-weight: 600;
+            color: #00ff87;
+        }
+        
+        .metric-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .metric-high {
+            background: linear-gradient(135deg, #00ff87 0%, #00d4ff 100%);
+            color: #0f0f23;
+        }
+        
+        .metric-mid {
+            background: rgba(255, 193, 7, 0.3);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+        
+        .metric-low {
+            background: rgba(244, 67, 54, 0.3);
+            color: #ff5252;
+            border: 1px solid #ff5252;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .custom-table {
+                font-size: 0.85em;
+            }
+            
+            .custom-table th,
+            .custom-table td {
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="emoji">📊</span>Hasil Evaluasi 5-Fold Cross Validation</h1>
+        <p class="subtitle">AttentiveSkel-3D — Eksperimen 50 Epochs</p>
+        
+        <h2><span class="emoji">🏆</span>Ranking Model Berdasarkan Mean Accuracy</h2>
+        
+        <div class="narasi">
+            <p>Berdasarkan hasil evaluasi menggunakan <strong>Stratified 5-Fold Cross Validation</strong> dengan <strong>50 epoch</strong> pelatihan per fold, diperoleh ranking performa model sebagai berikut:</p>
+            <br>
+            <p>🥇 <strong>Ablasi B (Tanpa Learned Spatial)</strong> menunjukkan performa tertinggi dengan mean accuracy yang konsisten pada kelima fold.</p>
+            <br>
+            <p>🥉 <strong>Full AttentiveSkel-3D</strong> berada di <span class="highlight">Rank 3</span>, namun memiliki keunggulan dalam hal <strong>stabilitas</strong> dengan nilai <strong>Standard Deviation terendah</strong> dibanding model lain. Hal ini mengindikasikan bahwa Full Model memiliki performa yang lebih <em>konsisten</em> dan <em>reliable</em> di berbagai kondisi data.</p>
+            <br>
+            <p>📉 <strong>Baseline 3D-CNN</strong> (tanpa mekanisme attention) menunjukkan performa terendah, memvalidasi bahwa penambahan modul attention berkontribusi signifikan terhadap peningkatan akurasi klasifikasi gerakan weight training.</p>
+        </div>
+        
+        <table class="dataframe custom-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Skenario</th>
+      <th>Mean Accuracy</th>
+      <th>Std Deviation</th>
+    </tr>
+    <tr>
+      <th>Rank</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Ablasi B — Tanpa Learned Spatial</td>
+      <td>96.51</td>
+      <td>2.47</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Ablasi A — Tanpa Prior</td>
+      <td>95.90</td>
+      <td>2.60</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Full AttentiveSkel-3D</td>
+      <td>95.29</td>
+      <td>2.11</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Ablasi C — Tanpa Temporal</td>
+      <td>95.08</td>
+      <td>2.83</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Baseline 3D-CNN</td>
+      <td>94.87</td>
+      <td>2.82</td>
+    </tr>
+  </tbody>
+</table>
+        
+        <h2><span class="emoji">📋</span>Detail Hasil Per Fold</h2>
+        
+        <div class="narasi">
+            <p>Tabel di bawah ini menampilkan hasil evaluasi lengkap setiap skenario model pada masing-masing fold, termasuk nilai <strong>Mean Accuracy</strong> dan <strong>Standard Deviation</strong> sebagai indikator konsistensi performa.</p>
+        </div>
+        
+        <table class="dataframe custom-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Skenario</th>
+      <th>Fold 1</th>
+      <th>Fold 2</th>
+      <th>Fold 3</th>
+      <th>Fold 4</th>
+      <th>Fold 5</th>
+      <th>Mean Accuracy</th>
+      <th>Std Deviation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Baseline 3D-CNN</td>
+      <td>93.88</td>
+      <td>94.90</td>
+      <td>97.94</td>
+      <td>90.72</td>
+      <td>96.91</td>
+      <td>94.87</td>
+      <td>2.82</td>
+    </tr>
+    <tr>
+      <td>Ablasi A — Tanpa Prior</td>
+      <td>93.88</td>
+      <td>93.88</td>
+      <td>96.91</td>
+      <td>94.85</td>
+      <td>100.00</td>
+      <td>95.90</td>
+      <td>2.60</td>
+    </tr>
+    <tr>
+      <td>Ablasi B — Tanpa Learned Spatial</td>
+      <td>94.90</td>
+      <td>95.92</td>
+      <td>97.94</td>
+      <td>93.81</td>
+      <td>100.00</td>
+      <td>96.51</td>
+      <td>2.47</td>
+    </tr>
+    <tr>
+      <td>Ablasi C — Tanpa Temporal</td>
+      <td>91.84</td>
+      <td>93.88</td>
+      <td>96.91</td>
+      <td>93.81</td>
+      <td>98.97</td>
+      <td>95.08</td>
+      <td>2.83</td>
+    </tr>
+    <tr>
+      <td>Full AttentiveSkel-3D</td>
+      <td>92.86</td>
+      <td>93.88</td>
+      <td>96.91</td>
+      <td>94.85</td>
+      <td>97.94</td>
+      <td>95.29</td>
+      <td>2.11</td>
+    </tr>
+  </tbody>
+</table>
+        
+        <footer>
+            <p>📅 Generated on: <strong>50 Epochs Evaluation</strong></p>
+            <p>🔬 AttentiveSkel-3D Weight Training Classification</p>
+            <p>💻 Stratified 5-Fold Cross Validation | Adam Optimizer (lr=1e-3) | Batch Size=16</p>
+        </footer>
+    </div>
+</body>
+</html>

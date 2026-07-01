@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="Electron" modified="2026-05-19T00:00:00.000Z" agent="GitHub Copilot" version="21.0.0" type="device">
+  <diagram id="dasar-atensi-qkv" name="Dasar Atensi Q K V">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 1 : Input Sequence                                -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="n1"
+          value="&lt;b style='font-size:14px;'&gt;Input Sequence&lt;/b&gt;&lt;br/&gt;
+&lt;span style='font-size:11px;'&gt;Data Awal yang akan diproses oleh mekanisme atensi&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#dae8fc;strokeColor=#6c8ebf;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;verticalAlign=middle;shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="390" y="40" width="420" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 2 : Pembuatan Parameter Dasar                     -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="n2"
+          value="&lt;b style='font-size:12px;'&gt;Pembuatan Parameter Dasar&lt;/b&gt;&lt;br/&gt;
+&lt;span style='font-size:10px;'&gt;3 Matriks Bobot Learnable (W_Q, W_K, W_V) dikalikan dengan Input Sequence&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#f5f5f5;strokeColor=#666666;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;verticalAlign=middle;shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="390" y="190" width="420" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 2A : Query (Q)                                     -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="nq"
+          value="&lt;b style='font-size:13px;'&gt;Query (Q)&lt;/b&gt;
+&lt;hr style='border:1px solid #1976d2; margin:4px 0;'/&gt;
+&lt;span style='font-size:10px;'&gt;
+  &lt;i&gt;Pertanyaan&lt;/i&gt;&lt;br/&gt;
+  Apa yang sedang&lt;br/&gt;
+  dicari oleh model?
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#e3f2fd;strokeColor=#1976d2;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;verticalAlign=middle;shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="60" y="370" width="220" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 2B : Key (K)                                       -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="nk"
+          value="&lt;b style='font-size:13px;'&gt;Key (K)&lt;/b&gt;
+&lt;hr style='border:1px solid #1976d2; margin:4px 0;'/&gt;
+&lt;span style='font-size:10px;'&gt;
+  &lt;i&gt;Kunci&lt;/i&gt;&lt;br/&gt;
+  Label identitas dari&lt;br/&gt;
+  setiap informasi
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#e3f2fd;strokeColor=#1976d2;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;verticalAlign=middle;shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="460" y="370" width="220" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 2C : Value (V)                                     -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="nv"
+          value="&lt;b style='font-size:13px;'&gt;Value (V)&lt;/b&gt;
+&lt;hr style='border:1px solid #1976d2; margin:4px 0;'/&gt;
+&lt;span style='font-size:10px;'&gt;
+  &lt;i&gt;Nilai&lt;/i&gt;&lt;br/&gt;
+  Isi informasi&lt;br/&gt;
+  sebenarnya
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#e3f2fd;strokeColor=#1976d2;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;verticalAlign=middle;shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="870" y="370" width="220" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 3 : Dot Product                                   -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="n3"
+          value="&lt;b style='font-size:12px;'&gt;Dot Product&lt;/b&gt;&lt;br/&gt;
+&lt;span style='font-size:10px;'&gt;
+  Perhitungan Skor Kecocokan Q dan K&lt;br/&gt;
+  &lt;i&gt;Score = Q · K&lt;sup&gt;T&lt;/sup&gt; / &amp;radic;d_k&lt;/i&gt;
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#f5f5f5;strokeColor=#666666;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;verticalAlign=middle;shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="220" y="580" width="360" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 4 : Softmax                                        -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="n4"
+          value="&lt;b style='font-size:12px;'&gt;Fungsi Softmax&lt;/b&gt;
+&lt;hr style='border:1px solid #888; margin:4px 0;'/&gt;
+&lt;span style='font-size:10px;'&gt;
+  &lt;i&gt;Analogi: Buku Catatan Akuntansi&lt;/i&gt;&lt;br/&gt;
+  Mengubah skor kecocokan menjadi&lt;br/&gt;
+  Persentase &lt;b&gt;0% - 100%&lt;/b&gt;
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#f5f5f5;strokeColor=#666666;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;verticalAlign=middle;shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="220" y="760" width="360" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 5 : Attention Weights                              -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="n5"
+          value="&lt;b style='font-size:12px;'&gt;Attention Weights&lt;/b&gt;&lt;br/&gt;
+&lt;span style='font-size:10px;'&gt;
+  Bobot Atensi (&amp;alpha;)&lt;br/&gt;
+  Seberapa penting setiap bagian input?
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#d5e8d4;strokeColor=#82b366;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;verticalAlign=middle;shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="240" y="970" width="320" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 6 : Perkalian (Fusion)                             -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="n6"
+          value="&lt;b style='font-size:12px;'&gt;Perkalian (Attention Weights &amp;times; Value)&lt;/b&gt;&lt;br/&gt;
+&lt;span style='font-size:10px;'&gt;
+  Output = &amp;alpha; &amp;middot; V&lt;br/&gt;
+  Bobot atensi diterapkan pada isi informasi
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#f5f5f5;strokeColor=#666666;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;verticalAlign=middle;shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="390" y="1150" width="420" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  NODE 7 : Context Vector (Output)                        -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="n7"
+          value="&lt;b style='font-size:14px;'&gt;Context Vector&lt;/b&gt;&lt;br/&gt;
+&lt;span style='font-size:11px;'&gt;
+  Informasi yang Paling Relevan&lt;br/&gt;
+  &lt;i&gt;Fokus Akhir Model&lt;/i&gt;
+&lt;/span&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;
+                 fillColor=#dae8fc;strokeColor=#6c8ebf;
+                 fontColor=#1a1a2e;align=center;
+                 arcSize=12;fontSize=12;verticalAlign=middle;shadow=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="390" y="1340" width="420" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  EDGES                                                   -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+
+        <!-- Node1 → Node2 -->
+        <mxCell id="e1" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#6c8ebf;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="n1" target="n2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node2 → Q -->
+        <mxCell id="e2q" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#999999;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="n2" target="nq" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node2 → K -->
+        <mxCell id="e2k" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#999999;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="n2" target="nk" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node2 → V -->
+        <mxCell id="e2v" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#999999;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="n2" target="nv" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Q → Dot Product -->
+        <mxCell id="eqn3" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#1976d2;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="nq" target="n3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- K → Dot Product -->
+        <mxCell id="ekn3" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#1976d2;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="nk" target="n3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Dot Product → Softmax -->
+        <mxCell id="e34" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#666666;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="n3" target="n4" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Softmax → Attention Weights -->
+        <mxCell id="e45" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#666666;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="n4" target="n5" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Attention Weights → Multiplication -->
+        <mxCell id="e56" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#82b366;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="n5" target="n6" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- V → Multiplication  (long path from right side) -->
+        <mxCell id="evn6" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#1976d2;strokeWidth=2;
+                 endArrow=block;endFill=1;
+                 exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+                 entryX=1;entryY=0.5;entryDx=0;entryDy=0;"
+          edge="1" source="nv" target="n6" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Multiplication → Context Vector -->
+        <mxCell id="e67" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;
+                 strokeColor=#6c8ebf;strokeWidth=2;
+                 endArrow=block;endFill=1;"
+          edge="1" source="n6" target="n7" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

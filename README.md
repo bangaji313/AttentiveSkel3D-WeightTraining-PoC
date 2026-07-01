@@ -266,6 +266,79 @@ Kriteria validasi gerakan dalam `BiomechanicalValidator` didasarkan **eksklusif*
 
 ---
 
+## 📈 Hasil Eksperimen dan Pembahasan
+
+Bagian ini merangkum temuan utama penelitian dari dua sudut evaluasi:
+
+1. Perbandingan **lima skenario arsitektur** (Baseline dan tiga ablasi terhadap Full Model)
+2. Evaluasi robust menggunakan **Stratified 5-Fold Cross Validation** pada konfigurasi **50 epoch** dan **100 epoch**
+
+### A. Definisi Lima Skenario Model
+
+| Skenario | Konfigurasi Modul |
+|---|---|
+| Baseline 3D-CNN | Tanpa seluruh modul attention |
+| Ablasi A — Tanpa Prior | Tanpa `biomechanical_spatial_prior` |
+| Ablasi B — Tanpa Learned Spatial | Tanpa `learned_spatial_attention` |
+| Ablasi C — Tanpa Temporal | Tanpa `temporal_attention` |
+| Full AttentiveSkel-3D | Seluruh modul attention aktif |
+
+Tujuan desain skenario di atas adalah mengisolasi kontribusi masing-masing komponen attention terhadap performa klasifikasi gerakan latihan beban.
+
+### B. Hasil 5-Fold Cross Validation (50 Epoch)
+
+Hasil ringkas pada konfigurasi 50 epoch (berdasarkan `kfold_50epochs_ranking.csv`) adalah sebagai berikut:
+
+| Rank | Skenario | Mean Accuracy | Std Deviation |
+|---|---|---:|---:|
+| 1 | Ablasi B — Tanpa Learned Spatial | 96.51% | 2.47% |
+| 2 | Ablasi A — Tanpa Prior | 95.90% | 2.60% |
+| 3 | Full AttentiveSkel-3D | 95.29% | **2.11%** |
+| 4 | Ablasi C — Tanpa Temporal | 95.08% | 2.83% |
+| 5 | Baseline 3D-CNN | 94.87% | 2.82% |
+
+Interpretasi akademis:
+
+- Secara **rata-rata akurasi**, Ablasi B berada pada peringkat tertinggi.
+- Namun, **Full AttentiveSkel-3D memiliki stabilitas terbaik** (Std Deviation terendah), yang menunjukkan generalisasi antarfold lebih konsisten.
+- Baseline berada di posisi terendah, menguatkan bahwa penambahan mekanisme attention memberikan keuntungan performa dan/atau stabilitas.
+
+### C. Hasil 5-Fold Cross Validation (100 Epoch)
+
+Hasil ringkas pada konfigurasi 100 epoch (berdasarkan `kfold_100epochs_ranking.csv`) adalah sebagai berikut:
+
+| Rank | Skenario | Mean Accuracy | Std Deviation |
+|---|---|---:|---:|
+| 1 | Ablasi A — Tanpa Prior | 95.29% | 3.65% |
+| 2 | Full AttentiveSkel-3D | 95.29% | 3.87% |
+| 3 | Ablasi B — Tanpa Learned Spatial | 95.08% | 3.02% |
+| 4 | Baseline 3D-CNN | 94.47% | 4.20% |
+| 5 | Ablasi C — Tanpa Temporal | 94.25% | 4.52% |
+
+### D. Komparasi 50 Epoch vs 100 Epoch
+
+Perbandingan langsung (`kfold_comparison_50_vs_100.csv`) menunjukkan pola konsisten berikut:
+
+- Nilai **Mean Accuracy** cenderung stagnan atau menurun tipis saat epoch dinaikkan ke 100.
+- Nilai **Std Deviation meningkat pada seluruh skenario** (delta positif), menandakan variansi performa antarfold makin besar.
+- Fenomena ini mengindikasikan kecenderungan **overfitting**: model menjadi lebih peka terhadap noise data latih dan kurang stabil pada data validasi.
+
+Secara praktis, konfigurasi **50 epoch** lebih disarankan karena:
+
+1. Stabilitas hasil lebih baik (deviasi lebih rendah)
+2. Efisiensi komputasi lebih tinggi (waktu latih lebih singkat)
+3. Trade-off akurasi-stabilitas lebih optimal untuk konteks implementasi nyata
+
+### E. Implikasi untuk Pengembangan Sistem
+
+Temuan ini memberi arahan lanjutan yang penting:
+
+- Penambahan epoch tidak selalu meningkatkan kualitas generalisasi.
+- Evaluasi model sebaiknya tidak hanya mengacu pada mean accuracy, tetapi juga pada metrik stabilitas (std deviation) lintas fold.
+- Arsitektur Full Model tetap relevan sebagai kandidat utama karena konsistensi performanya, khususnya untuk skenario deployment yang menuntut prediksi stabil.
+
+---
+
 ## 📄 Lisensi
 
 Repositori ini dikembangkan untuk keperluan akademis (Tugas Akhir). Segala bentuk penggunaan ulang harus mencantumkan atribusi yang sesuai kepada peneliti dan institusi.

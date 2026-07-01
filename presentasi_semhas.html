@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan Analisis Komprehensif Eksperimen Model AttentiveSkel-3D</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Exo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-0: #02060d;
+      --bg-1: #071426;
+      --bg-2: #0b1f35;
+      --panel: rgba(8, 20, 35, 0.84);
+      --panel-strong: rgba(9, 26, 45, 0.97);
+      --text: #ecf6ff;
+      --muted: #a7bfd6;
+      --line: rgba(110, 170, 220, 0.32);
+      --neon-blue: #38d6ff;
+      --neon-green: #52ffb0;
+      --warn: #ff8f72;
+      --good: #72ffba;
+      --shadow-soft: 0 20px 55px rgba(0, 10, 24, 0.5);
+      --shadow-neon: 0 0 0 1px rgba(56, 214, 255, 0.28), 0 0 38px rgba(56, 214, 255, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "Exo 2", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 15%, rgba(56, 214, 255, 0.16), transparent 40%),
+        radial-gradient(circle at 88% 8%, rgba(82, 255, 176, 0.12), transparent 35%),
+        radial-gradient(circle at 84% 86%, rgba(56, 214, 255, 0.1), transparent 45%),
+        linear-gradient(140deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(60, 120, 160, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(60, 120, 160, 0.08) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(circle at center, black 48%, transparent 94%);
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(36px);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb.a {
+      width: 240px;
+      height: 240px;
+      left: -70px;
+      top: 18vh;
+      background: radial-gradient(circle at center, var(--neon-blue), transparent 72%);
+      animation: driftA 9s ease-in-out infinite alternate;
+    }
+
+    .orb.b {
+      width: 280px;
+      height: 280px;
+      right: -100px;
+      bottom: 8vh;
+      background: radial-gradient(circle at center, var(--neon-green), transparent 74%);
+      animation: driftB 11s ease-in-out infinite alternate;
+    }
+
+    @keyframes driftA {
+      from {
+        transform: translateY(-14px) scale(0.95);
+      }
+      to {
+        transform: translateY(14px) scale(1.08);
+      }
+    }
+
+    @keyframes driftB {
+      from {
+        transform: translateY(14px) scale(0.96);
+      }
+      to {
+        transform: translateY(-16px) scale(1.04);
+      }
+    }
+
+    .presentation {
+      position: relative;
+      z-index: 1;
+      width: min(1240px, 95vw);
+      margin: 2.2vh auto;
+      padding: 1.25rem;
+      border-radius: 18px;
+      background: var(--panel);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(110, 170, 220, 0.25);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      font-size: 0.92rem;
+      text-transform: uppercase;
+    }
+
+    .topbar .badge {
+      border: 1px solid rgba(82, 255, 176, 0.35);
+      color: #c9ffe7;
+      border-radius: 999px;
+      padding: 0.35rem 0.85rem;
+      background: rgba(82, 255, 176, 0.1);
+      font-weight: 600;
+    }
+
+    .viewport {
+      position: relative;
+      min-height: clamp(500px, 72vh, 860px);
+      max-height: 78vh;
+      border-radius: 14px;
+      border: 1px solid rgba(56, 214, 255, 0.26);
+      background: linear-gradient(160deg, rgba(8, 20, 35, 0.82), rgba(6, 16, 29, 0.92));
+      box-shadow: var(--shadow-neon);
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: clamp(1rem, 2.5vw, 2.4rem);
+      overflow-y: auto;
+      opacity: 0;
+      transform: translateX(56px) scale(0.985);
+      transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .slide.before {
+      transform: translateX(-56px) scale(0.985);
+    }
+
+    .slide.after {
+      transform: translateX(56px) scale(0.985);
+    }
+
+    .slide-content {
+      width: min(1060px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+    }
+
+    .kicker {
+      color: #95f8d0;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "Orbitron", sans-serif;
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 3.2vw, 2.9rem);
+      color: #f0fbff;
+      text-wrap: balance;
+    }
+
+    h2 {
+      font-size: clamp(1.15rem, 2.2vw, 1.85rem);
+      color: #bef0ff;
+      text-wrap: balance;
+    }
+
+    h3 {
+      font-size: clamp(1rem, 1.8vw, 1.35rem);
+      color: #bbffdf;
+      margin-top: 0.3rem;
+    }
+
+    p,
+    li {
+      font-size: clamp(0.96rem, 1.45vw, 1.1rem);
+      line-height: 1.65;
+      color: #e6f2ff;
+    }
+
+    .subtitle {
+      color: #cde6fb;
+      font-size: clamp(1rem, 1.75vw, 1.25rem);
+      max-width: 960px;
+    }
+
+    .author {
+      display: inline-flex;
+      width: fit-content;
+      margin-top: 0.8rem;
+      font-weight: 700;
+      color: #d5fff0;
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      background: linear-gradient(120deg, rgba(56, 214, 255, 0.2), rgba(82, 255, 176, 0.2));
+      border: 1px solid rgba(82, 255, 176, 0.45);
+    }
+
+    .pulse {
+      height: 5px;
+      border-radius: 999px;
+      margin-top: 0.4rem;
+      background: linear-gradient(90deg, rgba(56, 214, 255, 0.18), rgba(56, 214, 255, 0.95), rgba(82, 255, 176, 0.95), rgba(82, 255, 176, 0.18));
+      background-size: 220% 100%;
+      animation: pulseRun 4s linear infinite;
+    }
+
+    @keyframes pulseRun {
+      from {
+        background-position: 100% 0;
+      }
+      to {
+        background-position: -100% 0;
+      }
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .stat-card {
+      background: rgba(8, 29, 48, 0.82);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0.9rem;
+      box-shadow: inset 0 0 24px rgba(35, 126, 191, 0.09);
+    }
+
+    .stat-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: clamp(1rem, 1.75vw, 1.3rem);
+      color: #dcf5ff;
+    }
+
+    .table-shell {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(8, 27, 47, 0.75);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 640px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 0.78rem 0.85rem;
+      border-bottom: 1px solid rgba(110, 170, 220, 0.2);
+      font-size: clamp(0.92rem, 1.35vw, 1.02rem);
+    }
+
+    th {
+      color: #9fe7ff;
+      background: rgba(56, 214, 255, 0.09);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    tbody tr:hover {
+      background: rgba(56, 214, 255, 0.08);
+    }
+
+    .total-row {
+      background: rgba(82, 255, 176, 0.12);
+      font-weight: 700;
+    }
+
+    .best-loss {
+      color: var(--good);
+      font-weight: 800;
+    }
+
+    .worst-loss {
+      color: #ffb5a4;
+      font-weight: 700;
+    }
+
+    .note {
+      background: rgba(8, 32, 52, 0.84);
+      border: 1px solid rgba(82, 255, 176, 0.35);
+      border-left: 4px solid var(--neon-green);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      color: #d7fff1;
+      margin-top: 0.4rem;
+    }
+
+    .image-frame {
+      text-align: center;
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px dashed rgba(82, 255, 176, 0.4);
+      background: rgba(8, 30, 50, 0.7);
+    }
+
+    .image-frame img {
+      width: 100%;
+      height: auto;
+      box-shadow: 0 14px 40px rgba(0, 8, 20, 0.45);
+      border: 1px solid rgba(110, 170, 220, 0.3);
+    }
+
+    .metric-band {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+      margin-top: 0.45rem;
+    }
+
+    .metric {
+      border-radius: 12px;
+      border: 1px solid rgba(56, 214, 255, 0.32);
+      background: rgba(9, 29, 50, 0.82);
+      padding: 0.9rem;
+    }
+
+    .metric small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.74rem;
+    }
+
+    .metric strong {
+      font-size: clamp(1.05rem, 1.8vw, 1.36rem);
+      color: #def5ff;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.8rem;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .nav-btn {
+      border: 1px solid rgba(56, 214, 255, 0.55);
+      background: linear-gradient(140deg, rgba(56, 214, 255, 0.2), rgba(82, 255, 176, 0.2));
+      color: #e9fbff;
+      font-family: "Orbitron", sans-serif;
+      letter-spacing: 0.06em;
+      font-size: 0.86rem;
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 0.7rem 1.1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 8px 26px rgba(0, 10, 24, 0.35);
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(56, 214, 255, 0.24);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .slide-meta {
+      display: grid;
+      justify-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .dots {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.36rem;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(82, 255, 176, 0.6);
+      background: rgba(82, 255, 176, 0.12);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .dot.active {
+      background: var(--neon-green);
+      transform: scale(1.12);
+    }
+
+    .progress-track {
+      height: 7px;
+      margin-top: 0.8rem;
+      border-radius: 999px;
+      background: rgba(110, 170, 220, 0.23);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 14.2857%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+      transition: width 0.35s ease;
+    }
+
+    .accent {
+      color: #9ef6de;
+      font-weight: 700;
+    }
+
+    .warning {
+      color: #ffc3b3;
+      font-weight: 700;
+    }
+
+    .footer-note {
+      margin-top: 0.25rem;
+      color: #96afc8;
+      font-size: 0.86rem;
+    }
+
+    @media (max-width: 980px) {
+      body {
+        overflow: auto;
+      }
+
+      .presentation {
+        margin: 0.8rem auto;
+        padding: 0.8rem;
+      }
+
+      .viewport {
+        min-height: 72vh;
+        max-height: none;
+      }
+
+      .stat-grid,
+      .metric-band {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .stat-grid,
+      .metric-band {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .slide {
+        padding: 0.9rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb a"></div>
+  <div class="orb b"></div>
+
+  <main class="presentation" aria-live="polite">
+    <div class="topbar">
+      <div>Single-File Web Presentation | AttentiveSkel-3D</div>
+      <span class="badge">Seminar Hasil</span>
+    </div>
+
+    <section class="viewport" id="viewport">
+      <article class="slide active" data-slide="1">
+        <div class="slide-content">
+          <p class="kicker">Slide 1 | Judul Presentasi</p>
+          <h1>Laporan Analisis Komprehensif Eksperimen Model AttentiveSkel-3D</h1>
+          <p class="subtitle">A Proof of Concept for Enhancing Weight Training Form Error Detection Using 3D-CNN and Biomechanical Attention Mechanism</p>
+          <div class="author">Maulana Seno Aji Yudhantara</div>
+          <div class="pulse"></div>
+          <p>Presentasi ini merangkum kualitas data, efisiensi arsitektur, bukti empiris studi ablasi, stabilitas pelatihan, kinerja generalisasi, serta interpretabilitas biomekanis model.</p>
+        </div>
+      </article>
+
+      <article class="slide after" data-slide="2">
+        <div class="slide-content">
+          <p class="kicker">Slide 2 | Ringkasan Dataset Akhir</p>
+          <h2>Representasi Data Berbasis Tensor Spasio-Temporal</h2>
+          <p>Dataset tidak menggunakan piksel citra mentah. Setiap video direpresentasikan sebagai tensor matriks spasio-temporal berukuran <span class="accent">64 frame x 33 titik sendi x 3 koordinat</span>.</p>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <span>Total Dataset</span>
+              <strong>487 video repetisi</strong>
+            </div>
+            <div class="stat-card">
+              <span>Distribusi Kelas</span>
+              <strong>303 Benar | 184 Salah</strong>
+            </div>
+            <div class="stat-card">
+              <span>Skema Split</span>
+              <strong>Subject-wise split</strong>
+            </div>
+          </div>
+          <div class="table-shell">
+            <table aria-label="Pembagian data train validation test">
+              <thead>
+                <tr>
+                  <th>Partisi</th>
+                  <th>Rasio</th>
+                  <th>Jumlah Sampel</th>
+                  <th>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Training</td>
+                  <td>70%</td>
+                  <td>340</td>
+                  <td>Digunakan untuk belajar pola gerakan</td>
+                </tr>
+                <tr>
+                  <td>Validation</td>
+                  <td>15%</td>
+                  <td>73</td>
+                  <td>Memantau performa saat pelatihan</td>
+                </tr>
+                <tr>
+                  <td>Testing</td>
+                  <td>15%</td>
+                  <td>74</td>
+                  <td>Uji akhir pada data benar-benar baru</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide after" data-slide="3">
+        <div class="slide-content">
+          <p class="kicker">Slide 3 | Efisiensi Komputasi</p>
+          <h2>Ultra-Lightweight: Beban Parameter Sangat Rendah</h2>
+          <div class="table-shell">
+            <table aria-label="Rincian parameter model">
+              <thead>
+                <tr>
+                  <th>Komponen</th>
+                  <th>Jumlah Parameter</th>
+                  <th>Fungsi Utama</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Backbone 3D-CNN</td>
+                  <td>101.858</td>
+                  <td>Ekstraksi fitur spasio-temporal inti</td>
+                </tr>
+                <tr>
+                  <td>Biomechanical Spatial Prior</td>
+                  <td>33</td>
+                  <td>Prior anatomi berbasis relevansi sendi</td>
+                </tr>
+                <tr>
+                  <td>Learned Spatial Attention</td>
+                  <td>8.352</td>
+                  <td>Belajar fokus antar-titik sendi secara adaptif</td>
+                </tr>
+                <tr>
+                  <td>Temporal Attention</td>
+                  <td>129</td>
+                  <td>Penekanan frame penting sepanjang waktu</td>
+                </tr>
+                <tr class="total-row">
+                  <td>Total Arsitektur Penuh (Full Model)</td>
+                  <td>110.372</td>
+                  <td>Ukuran file model sekitar 0.43 MB</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">Kesimpulan: penambahan 3 lapis atensi hanya menambah parameter secara sangat ringan, sehingga efisien dan realistis untuk deployment pada edge device.</p>
+        </div>
+      </article>
+
+      <article class="slide after" data-slide="4">
+        <div class="slide-content">
+          <p class="kicker">Slide 4 | Studi Ablasi</p>
+          <h2>Analisis Kombinasi Atensi pada Validation Set</h2>
+          <div class="table-shell">
+            <table aria-label="Perbandingan model ablation">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Konfigurasi</th>
+                  <th>Val Loss</th>
+                  <th>Val Acc</th>
+                  <th>Interpretasi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Model 1</td>
+                  <td>Baseline</td>
+                  <td>0.1271</td>
+                  <td>95.89%</td>
+                  <td>Titik acuan awal</td>
+                </tr>
+                <tr>
+                  <td>Model 2</td>
+                  <td>Ablasi A / Tanpa Prior</td>
+                  <td class="worst-loss">0.2183</td>
+                  <td>95.89%</td>
+                  <td class="warning">Memburuk drastis</td>
+                </tr>
+                <tr>
+                  <td>Model 3</td>
+                  <td>Ablasi B / Tanpa Learned Spatial</td>
+                  <td>0.1581</td>
+                  <td>98.63%</td>
+                  <td>Akurasi naik, loss belum optimal</td>
+                </tr>
+                <tr>
+                  <td>Model 4</td>
+                  <td>Ablasi C / Tanpa Temporal</td>
+                  <td>0.1343</td>
+                  <td>95.89%</td>
+                  <td>Stabil, namun tidak terbaik</td>
+                </tr>
+                <tr class="total-row">
+                  <td>Model 5</td>
+                  <td>Full AttentiveSkel-3D</td>
+                  <td class="best-loss">0.1049 (Terbaik/Terendah)</td>
+                  <td>95.89%</td>
+                  <td>Kombinasi 3 atensi paling meyakinkan</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">Sorotan utama: <span class="accent">Val Loss terendah pada Model 5</span> menjadi bukti bahwa penggabungan biomechanical prior, learned spatial attention, dan temporal attention menurunkan tingkat keraguan mesin secara paling efektif.</p>
+        </div>
+      </article>
+
+      <article class="slide after" data-slide="5">
+        <div class="slide-content">
+          <p class="kicker">Slide 5 | Kurva Pembelajaran</p>
+          <h2>Training Dynamics yang Sehat dan Stabil</h2>
+          <div class="image-frame">
+            <img src="data\Kurva_FullTrain_100Epocs.png" alt="Kurva Learning" style="max-width:80%; border-radius:8px;">
+          </div>
+          <p>Kurva Training Loss dan Validation Loss turun beriringan secara sehat. Gap antara akurasi train (100%) dan validation (97.26%) sangat tipis, sehingga tidak menunjukkan gejala overfitting yang berbahaya.</p>
+          <p class="note">Early Stopping menghentikan proses pelatihan secara optimal di Epoch 38, menjaga efisiensi waktu komputasi sekaligus mempertahankan generalisasi model.</p>
+        </div>
+      </article>
+
+      <article class="slide after" data-slide="6">
+        <div class="slide-content">
+          <p class="kicker">Slide 6 | Evaluasi Kinerja</p>
+          <h2>Performa pada Test Set Unseen Data</h2>
+          <p>Pengujian dilakukan pada <span class="accent">74 data</span> yang tidak pernah dilihat oleh mesin selama pelatihan maupun validasi. Model mencapai performa generalisasi yang sangat kuat.</p>
+          <div class="metric-band">
+            <div class="metric">
+              <small>Akurasi Global</small>
+              <strong>97.30%</strong>
+            </div>
+            <div class="metric">
+              <small>F1-Score Gerakan Benar</small>
+              <strong>0.98</strong>
+            </div>
+            <div class="metric">
+              <small>F1-Score Gerakan Salah</small>
+              <strong>0.95</strong>
+            </div>
+            <div class="metric">
+              <small>Kesalahan Prediksi</small>
+              <strong>2 dari 74</strong>
+            </div>
+          </div>
+          <p class="note">Rincian kesalahan hanya <span class="accent">1 False Positive</span> dan <span class="accent">1 False Negative</span>, menunjukkan keseimbangan deteksi antara dua kelas target.</p>
+        </div>
+      </article>
+
+      <article class="slide after" data-slide="7">
+        <div class="slide-content">
+          <p class="kicker">Slide 7 | Interpretabilitas</p>
+          <h2>Bukti Interpretabilitas sebagai Proof of Concept</h2>
+          <div class="image-frame">
+            <img src="data\processed\02_Perbandingan_Visualisasi_Learned_Spatial_Attention.png" alt="Visualisasi Atensi" style="max-width:80%; border-radius:8px;">
+          </div>
+          <p>Model terbukti dapat memusatkan perhatian pada sendi krusial saat klasifikasi gerakan: contoh pada Squat, bobot atensi tinggi muncul pada <span class="accent">Lutut (0.92)</span> dan <span class="accent">Pinggul (0.87)</span>.</p>
+          <p class="note">Kesimpulan utama: mekanisme atensi bersifat adaptif terhadap perubahan sudut kamera (Lateral vs Frontal), sehingga perilaku model menyerupai observasi pelatih profesional yang fokus pada titik biomekanis penting.</p>
+          <p class="footer-note">Terima kasih. Sesi tanya jawab dan diskusi evaluasi metodologi dapat dilanjutkan.</p>
+        </div>
+      </article>
+    </section>
+
+    <div class="controls">
+      <button class="nav-btn" id="prevBtn" type="button" aria-label="Slide sebelumnya">Previous</button>
+      <div class="slide-meta">
+        <div id="slideCounter">1 / 7</div>
+        <div class="dots" id="dots" aria-label="Indikator slide"></div>
+      </div>
+      <button class="nav-btn" id="nextBtn" type="button" aria-label="Slide berikutnya">Next</button>
+    </div>
+    <div class="progress-track" aria-hidden="true">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const slideCounter = document.getElementById('slideCounter');
+      const dotsContainer = document.getElementById('dots');
+      const progressFill = document.getElementById('progressFill');
+      const viewport = document.getElementById('viewport');
+
+      let currentIndex = 0;
+
+      slides.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'dot';
+        dot.setAttribute('aria-label', 'Ke slide ' + (index + 1));
+        dot.addEventListener('click', function () {
+          goToSlide(index);
+        });
+        dotsContainer.appendChild(dot);
+      });
+
+      const dots = Array.from(document.querySelectorAll('.dot'));
+
+      function render() {
+        slides.forEach((slide, index) => {
+          slide.classList.remove('active', 'before', 'after');
+          if (index === currentIndex) {
+            slide.classList.add('active');
+          } else if (index < currentIndex) {
+            slide.classList.add('before');
+          } else {
+            slide.classList.add('after');
+          }
+        });
+
+        dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === currentIndex);
+        });
+
+        slideCounter.textContent = (currentIndex + 1) + ' / ' + slides.length;
+        progressFill.style.width = (((currentIndex + 1) / slides.length) * 100).toFixed(2) + '%';
+
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.textContent = currentIndex === slides.length - 1 ? 'Restart' : 'Next';
+      }
+
+      function goToSlide(index) {
+        if (index < 0 || index >= slides.length || index === currentIndex) {
+          return;
+        }
+        currentIndex = index;
+        render();
+      }
+
+      prevBtn.addEventListener('click', function () {
+        goToSlide(currentIndex - 1);
+      });
+
+      nextBtn.addEventListener('click', function () {
+        if (currentIndex === slides.length - 1) {
+          currentIndex = 0;
+          render();
+          return;
+        }
+        goToSlide(currentIndex + 1);
+      });
+
+      document.addEventListener('keydown', function (event) {
+        const tag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : '';
+        if (tag === 'input' || tag === 'textarea') {
+          return;
+        }
+
+        if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') {
+          event.preventDefault();
+          if (currentIndex < slides.length - 1) {
+            goToSlide(currentIndex + 1);
+          } else {
+            currentIndex = 0;
+            render();
+          }
+        }
+
+        if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+          event.preventDefault();
+          if (currentIndex > 0) {
+            goToSlide(currentIndex - 1);
+          }
+        }
+      });
+
+      let touchStartX = null;
+
+      viewport.addEventListener('touchstart', function (event) {
+        if (event.changedTouches && event.changedTouches.length > 0) {
+          touchStartX = event.changedTouches[0].clientX;
+        }
+      }, { passive: true });
+
+      viewport.addEventListener('touchend', function (event) {
+        if (touchStartX === null || !event.changedTouches || event.changedTouches.length === 0) {
+          return;
+        }
+
+        const touchEndX = event.changedTouches[0].clientX;
+        const deltaX = touchEndX - touchStartX;
+        touchStartX = null;
+
+        if (Math.abs(deltaX) < 50) {
+          return;
+        }
+
+        if (deltaX < 0 && currentIndex < slides.length - 1) {
+          goToSlide(currentIndex + 1);
+        }
+
+        if (deltaX > 0 && currentIndex > 0) {
+          goToSlide(currentIndex - 1);
+        }
+      }, { passive: true });
+
+      render();
+    })();
+  </script>
+</body>
+</html>

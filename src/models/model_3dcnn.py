@@ -21,40 +21,97 @@ import torch.nn as nn
 
 class AttentiveSkel3D(nn.Module):
     """
-    AttentiveSkel-3D: 3D-CNN dengan Biomechanical Spatial Prior (BSP).
+    AttentiveSkel-3D: 3D-CNN dengan modul atensi biomekanikal granular.
 
-    Alur forward pass:
+    Alur forward pass (mode penuh):
         Input (B, 64, 33, 3)
-            → Reshape ke (B, 3, 64, 33, 1)         # Sesuaikan ke format Conv3d
-            → Biomechanical Spatial Prior (× BSP)   # Bobot per-sendi yang dipelajari
-            → Conv Block 1 (3→32 channels)          # Ekstraksi fitur level rendah
-            → Conv Block 2 (32→64 channels)         # Ekstraksi fitur level menengah
-            → Conv Block 3 (64→128 channels)        # Ekstraksi fitur level tinggi
-            → Global Average Pooling + Flatten      # Agregasi global
-            → Classifier Head (128→64→num_classes)  # Klasifikasi akhir
+            → Reshape ke (B, 3, 64, 33, 1)              # Sesuaikan ke format Conv3d
+            → Biomechanical Spatial Prior (× BSP)        # Bobot per-sendi learnable [opsional]
+            → Conv Block 1 (3→32 channels)               # Ekstraksi fitur level rendah
+            → Conv Block 2 (32→64 channels)              # Ekstraksi fitur level menengah
+            → Conv Block 3 (64→128 channels)             # Ekstraksi fitur level tinggi
+            → Learned Spatial Attention (× channel-wise) # Atensi spasial adaptif [opsional]
+            → Temporal Attention (× softmax per waktu)   # Pembobotan temporal [opsional]
+            → Global Average Pooling + Flatten           # Agregasi global
+            → Classifier Head (128→64→num_classes)       # Klasifikasi akhir
 
     Args:
-        num_classes (int): Jumlah kelas output.
-                           Default = 2 (Gerakan Benar / Gerakan Salah).
+        num_classes           (int)  : Jumlah kelas output. Default = 2.
+        use_attention         (bool) : Alias kompatibilitas mundur. Jika False, ketiga
+                                       flag di bawah diset False secara otomatis.
+                                       Default = True.
+        use_spatial_prior     (bool) : Aktifkan Biomechanical Spatial Prior (BSP) —
+                                       perkalian bobot per-sendi sebelum conv blocks.
+                                       Default = True.
+        use_learned_spatial   (bool) : Aktifkan Learned Spatial Attention — bobot
+                                       adaptif per-channel setelah conv_block_3.
+                                       Default = True.
+        use_temporal_attention (bool): Aktifkan Temporal Attention — pembobotan frame
+                                       berbasis softmax sepanjang dimensi waktu.
+                                       Default = True.
     """
 
-    def __init__(self, num_classes: int = 2):
+    def __init__(
+        self,
+        num_classes: int = 2,
+        use_attention: bool = True,
+        use_spatial_prior: bool = True,
+        use_learned_spatial: bool = True,
+        use_temporal_attention: bool = True,
+    ):
         super(AttentiveSkel3D, self).__init__()
+
+        # ----------------------------------------------------------------
+        # Simpan flag kontrol atensi
+        # ----------------------------------------------------------------
+        # use_attention=False sebagai override global (kompatibilitas mundur)
+        if not use_attention:
+            use_spatial_prior      = False
+            use_learned_spatial    = False
+            use_temporal_attention = False
+
+        self.use_attention          = use_attention
+        self.use_spatial_prior      = use_spatial_prior
+        self.use_learned_spatial    = use_learned_spatial
+        self.use_temporal_attention = use_temporal_attention
 
         # ----------------------------------------------------------------
         # Biomechanical Spatial Prior (BSP)
         # ----------------------------------------------------------------
         # Parameter learnable berukuran (1, 1, 1, 33, 1) yang akan di-broadcast
-        # dan dikalikan element-wise dengan feature map berbentuk (B, C, T, 33, 1).
-        # Dengan inisialisasi 1.0, semua sendi mulai dengan bobot yang sama;
-        # selama pelatihan, optimizer akan menyesuaikan bobot tiap sendi secara
-        # otomatis sehingga sendi yang lebih informatif mendapat nilai lebih tinggi.
-        #
-        # Dimensi: (Batch=1, Channel=1, Time=1, Landmark=33, Width=1)
-        # → akan di-broadcast ke (B, C, 64, 33, 1)
-        self.biomechanical_spatial_prior = nn.Parameter(
-            torch.ones(1, 1, 1, 33, 1)  # Inisialisasi semua bobot = 1.0
-        )
+        # dan dikalikan element-wise dengan tensor (B, C, T, 33, 1).
+        # Sigmoid memastikan bobot selalu positif (0–1).
+        # Hanya dialokasikan jika use_spatial_prior=True.
+        if self.use_spatial_prior:
+            self.biomechanical_spatial_prior = nn.Parameter(
+                torch.ones(1, 1, 1, 33, 1)  # Inisialisasi semua bobot = 1.0
+            )
+
+        # ----------------------------------------------------------------
+        # Learned Spatial Attention
+        # ----------------------------------------------------------------
+        # Channel Attention (SE-style) ringan: merangkum konteks global tiap channel
+        # via GAP lalu memprediksi bobot tiap channel dengan MLP kecil.
+        # Input : (B, 128, T', L', 1) → GAP → (B, 128) → MLP → (B, 128) → sigmoid
+        # Bobot di-broadcast kembali ke (B, 128, 1, 1, 1) untuk scaling.
+        if self.use_learned_spatial:
+            self.learned_spatial_attention = nn.Sequential(
+                nn.Linear(128, 32),
+                nn.ReLU(inplace=True),
+                nn.Linear(32, 128),
+                nn.Sigmoid(),
+            )
+
+        # ----------------------------------------------------------------
+        # Temporal Attention
+        # ----------------------------------------------------------------
+        # Menghasilkan skor kepentingan per-frame dari representasi global tiap frame.
+        # Input : (B, 128, T', 1, 1) → conv1d-like → (B, 1, T') → softmax → weights
+        # Pembobotan: x = x * weights → aggregasi penting temporal.
+        if self.use_temporal_attention:
+            self.temporal_attention = nn.Sequential(
+                nn.Conv3d(128, 1, kernel_size=(1, 1, 1), bias=True),
+            )
 
         # ----------------------------------------------------------------
         # Conv Block 1 — Ekstraksi fitur level rendah
@@ -157,17 +214,18 @@ class AttentiveSkel3D(nn.Module):
         x = x.unsqueeze(-1)          # (B, 3, 64, 33) → (B, 3, 64, 33, 1)
 
         # ------------------------------------------------------------------
-        # Langkah 2: Terapkan Biomechanical Spatial Prior (BSP)
+        # Langkah 2: Biomechanical Spatial Prior (BSP)
+        #            — hanya aktif jika use_spatial_prior=True
         # ------------------------------------------------------------------
-        # Kalikan feature map dengan bobot per-sendi yang dapat dipelajari.
-        # BSP shape : (1, 1,  1, 33, 1)
-        # x shape   : (B, 3, 64, 33, 1)
-        # Hasil broadcast: (B, 3, 64, 33, 1) — setiap sendi diskalakan per-landmark
-        #
-        # Sigmoid memastikan bobot selalu positif (0–1) sehingga model tidak
-        # dapat "menginversi" sinyal suatu sendi, hanya meredakannya.
-        bsp_weights = torch.sigmoid(self.biomechanical_spatial_prior)
-        x = x * bsp_weights          # Element-wise multiplication
+        if self.use_spatial_prior:
+            # Terapkan bobot per-sendi BSP (learnable).
+            # BSP shape : (1, 1,  1, 33, 1)
+            # x shape   : (B, 3, 64, 33, 1)
+            # Broadcast : (B, 3, 64, 33, 1) — tiap sendi diskalakan.
+            # Sigmoid memastikan bobot selalu positif (0–1).
+            bsp_weights = torch.sigmoid(self.biomechanical_spatial_prior)
+            x = x * bsp_weights      # Element-wise multiplication
+        # Jika use_spatial_prior=False: tensor x mengalir tanpa modifikasi BSP.
 
         # ------------------------------------------------------------------
         # Langkah 3: Ekstraksi fitur bertahap melalui 3 Conv Block
@@ -177,13 +235,42 @@ class AttentiveSkel3D(nn.Module):
         x = self.conv_block_3(x)     # (B, 128, 32, 8, 1)
 
         # ------------------------------------------------------------------
-        # Langkah 4: Global Average Pooling + Flatten
+        # Langkah 4: Learned Spatial Attention (Channel Attention SE-style)
+        #            — hanya aktif jika use_learned_spatial=True
+        # ------------------------------------------------------------------
+        if self.use_learned_spatial:
+            # GAP di seluruh dimensi spasial & temporal → vektor channel (B, 128)
+            # lalu MLP menghasilkan bobot per-channel, di-broadcast kembali.
+            # x shape : (B, 128, T', L', 1)
+            gap_feat = x.mean(dim=[2, 3, 4])              # (B, 128)
+            ch_weights = self.learned_spatial_attention(gap_feat)  # (B, 128) sigmoid
+            x = x * ch_weights.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1)
+            # (B, 128, T', L', 1) × (B, 128, 1, 1, 1) → broadcast scaling
+        # Jika use_learned_spatial=False: lewati sepenuhnya.
+
+        # ------------------------------------------------------------------
+        # Langkah 5: Temporal Attention
+        #            — hanya aktif jika use_temporal_attention=True
+        # ------------------------------------------------------------------
+        if self.use_temporal_attention:
+            # Prediksi skor kepentingan per-frame menggunakan konvolusi 1×1×1.
+            # x shape    : (B, 128, T', L', 1)
+            # scores     : (B, 1,   T', L', 1) → rata-rata spasial → (B, 1, T', 1, 1)
+            # softmax    : normalkan sepanjang dimensi waktu T'
+            scores = self.temporal_attention(x)            # (B, 1, T', L', 1)
+            scores = scores.mean(dim=[3, 4], keepdim=True) # (B, 1, T', 1, 1)
+            t_weights = torch.softmax(scores, dim=2)       # (B, 1, T', 1, 1) softmax T
+            x = x * t_weights                              # broadcast: (B, 128, T', L', 1)
+        # Jika use_temporal_attention=False: lewati pembobotan temporal.
+
+        # ------------------------------------------------------------------
+        # Langkah 6: Global Average Pooling + Flatten
         # ------------------------------------------------------------------
         x = self.global_avg_pool(x)  # (B, 128, 1, 1, 1)
         x = x.flatten(start_dim=1)   # (B, 128)
 
         # ------------------------------------------------------------------
-        # Langkah 5: Classifier Head → logit output
+        # Langkah 7: Classifier Head → logit output
         # ------------------------------------------------------------------
         x = self.classifier(x)       # (B, num_classes)
 
