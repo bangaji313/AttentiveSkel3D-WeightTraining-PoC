@@ -148,6 +148,8 @@ flowchart LR
 
 ## 📓 Struktur Notebook Eksperimen
 
+Seluruh tahapan eksperimen, mulai dari ekstraksi data hingga evaluasi mendalam, didokumentasikan secara terstruktur ke dalam beberapa *Jupyter Notebook* berikut:
+
 | # | Notebook | Deskripsi |
 |---|---|---|
 | 01 | `01_pose_extraction_test.ipynb` | Uji ekstraksi pose MediaPipe BlazePose dari video |
@@ -155,8 +157,32 @@ flowchart LR
 | 02b | `02b_auto_labeling_test.ipynb` | Simulasi & verifikasi sistem pelabelan otomatis berbasis biomekanika |
 | 03 | `03_model_architecture_test.ipynb` | Uji arsitektur AttentiveSkel-3D & parameter count |
 | 04 | `04_dataloader_test.ipynb` | Uji bulk processing, manifest CSV, & DataLoader PyTorch |
-| 05 | `05_training_test.ipynb` | Uji loop pelatihan, validasi, & penyimpanan checkpoint |
+| 05 | `05_training_test.ipynb` | Uji loop pelatihan, validasi, & penyimpanan checkpoint (Sanity Check) |
 | 06 | `06_attention_visualization.ipynb` | Visualisasi Biomechanical Attention — overlay heatmap per sendi |
+| 07 | `07_training_baseline.ipynb` | Pelatihan skenario *Baseline* (arsitektur 3D-CNN murni tanpa atensi) |
+| 08 | `08_training_ablation.ipynb` | Pelatihan skenario Studi Ablasi (pengujian modul atensi secara terpisah) |
+| 09 | `09_training_full_model.ipynb` | Pelatihan skenario model penuh (*Full AttentiveSkel-3D*) dengan semua atensi aktif |
+| 10 | `10_evaluation_metrics.ipynb` | Evaluasi kinerja pada *Test Set* (Akurasi, Presisi, Recall, F1-Score & Confusion Matrix) |
+| 11 | `11_kfold_cross_validation.ipynb` | Uji kestabilan & validasi model menggunakan *Stratified 5-Fold Cross Validation* |
+| 12 | `12_error_analysis.ipynb` | Bedah kasus misklasifikasi (*False Positive / False Negative*) secara biomekanis & visual |
+
+---
+
+## 📊 Dataset & Akses Publik (Kaggle & DOI)
+
+Sebagai bentuk transparansi akademis dan guna mendukung reproduksibilitas penelitian, dataset spasio-temporal dan *manifest auto-labeling* yang digunakan untuk melatih model ini telah dipublikasikan secara terbuka di platform Kaggle. 
+
+🔗 **Kaggle Repository:** [AttentiveSkel-3D Weight Training Error Dataset](https://www.kaggle.com/datasets/bangaji/attentiveskel-3d-weight-training-error-dataset/data)  
+🔗 **Official DOI:** [10.34740/KAGGLE/DSV/17721447](https://doi.org/10.34740/kaggle/dsv/17721447)  
+
+### Isi Dataset (*Dataset Content*)
+Dataset ini berisi kombinasi antara Data Primer (direkam menggunakan iPhone 14 Pro) dan Data Sekunder (dikurasi dari sumber publik), yang disegmentasi menjadi video-video gerakan repetisi tunggal. 
+
+1. **Video Mentah (.mp4):** 507 video repetisi tunggal yang menangkap tiga latihan dasar (*Bench Press*, *Squat*, *Deadlift*) dari sudut pandang frontal (depan) dan lateral (samping). Koleksi video mentah ini dibagi menjadi:
+   * **Dataset Primer (207 video):** Direkam secara mandiri menggunakan iPhone 14 Pro. Terdiri dari 100 video *Bench Press*, 73 video *Squat*, dan 34 video *Deadlift*. File-file tersebut mengikuti konvensi penamaan yang seragam, misalnya: `primer_benchpress_frontal_subjek01_rep1.mp4`.
+   * **Dataset Sekunder (300 video):** Dikurasi dari repositori publik Kaggle ["Workout/Exercises Video" karya Hasyim Abdillah](https://www.kaggle.com/datasets/hasyimabdillah/workoutfitness-video). Terdiri secara merata dari 100 video *Bench Press*, 100 video *Squat*, dan 100 video *Deadlift*. File-file tersebut mengikuti konvensi penamaan yang seragam, misalnya: `sekunder_benchpress_kaggle02_rep02.mp4`.
+2. **Tensor Spasio-Temporal (.npy):** 487 tensor *skeleton* valid yang berhasil diekstrak. Video mentah diproses melalui MediaPipe BlazePose untuk mengekstrak 33 *landmark* sendi 3D. Setiap tensor memiliki dimensi seragam berukuran `(64, 33, 3)`, yang merepresentasikan `(Frame, Landmark, Koordinat 3D (X, Y, Z))`.
+3. **Dataset Manifest (`dataset_manifest.csv`):** Metadata *ground-truth* yang berisi letak jalur (path) file tensor, label biner (`0` untuk Gerakan Benar, `1` untuk Gerakan Salah), serta alasan biomekanis (*reasoning*) dari sistem di balik penetapan label tersebut.
 
 ---
 
