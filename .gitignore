@@ -54,3 +54,9 @@ desktop.ini
 .idea/
 *.swp
 *.swo
+
+# ============================================================
+# Project-specific artifacts
+# ============================================================
+AttentiveSkel3D_Dataset.zip
+docs/
