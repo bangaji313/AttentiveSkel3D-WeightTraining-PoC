@@ -1,0 +1,6 @@
+Scenario,Absolute_Path,File_Exists,File_Size_MB,SHA256,State_Dict_Keys,Total_Parameters,Error
+Full Model,G:\data-aji\KULIAH\Semester 8\IFB500-TUGAS_AKHIR-AA\AttentiveSkel3D-WeightTraining-PoC\models\saved_models\AttentiveSkel3D_Final.pth,True,1.2923288345336914,5440164315d6d275,29,110823,None
+Baseline 3D-CNN,G:\data-aji\KULIAH\Semester 8\IFB500-TUGAS_AKHIR-AA\AttentiveSkel3D-WeightTraining-PoC\models\saved_models\baseline_3dcnn_model.pth,True,1.186819076538086,3224393f85793286,23,102342,None
+Ablasi A - No Prior,G:\data-aji\KULIAH\Semester 8\IFB500-TUGAS_AKHIR-AA\AttentiveSkel3D-WeightTraining-PoC\models\saved_models\ablasi_a_no_prior.pth,True,1.290421485900879,d13e665670e3ad61,28,110790,None
+Ablasi B - No Learned Spatial,G:\data-aji\KULIAH\Semester 8\IFB500-TUGAS_AKHIR-AA\AttentiveSkel3D-WeightTraining-PoC\models\saved_models\ablasi_b_no_learned.pth,True,1.1916723251342773,805634011271f1bd,25,102471,None
+Ablasi C - No Temporal,G:\data-aji\KULIAH\Semester 8\IFB500-TUGAS_AKHIR-AA\AttentiveSkel3D-WeightTraining-PoC\models\saved_models\ablasi_c_no_temporal.pth,True,1.2883186340332031,a739bd17cf24d8bc,27,110694,None

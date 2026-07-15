@@ -1,0 +1,11 @@
+Scenario_1,Scenario_2,L1_Distance_Logits,L2_Distance_Logits,Cosine_Similarity_Softmax,Pearson_Corr_Attention,Logits_Exact_Match,Softmax_Exact_Match,Attention_Exact_Match
+Full Model,Baseline 3D-CNN,8.852798,8.864483,0.28218844532966614,,False,False,False
+Full Model,Ablasi A - No Prior,1.6908789,1.7044816,0.39044278860092163,,False,False,False
+Full Model,Ablasi B - No Learned Spatial,0.14113267,0.17700996,0.9963176846504211,0.6774128446268151,False,False,False
+Full Model,Ablasi C - No Temporal,3.7366762,3.7875657,0.28404051065444946,0.7102025049534859,False,False,False
+Baseline 3D-CNN,Ablasi A - No Prior,7.1619196,7.165942,0.9933903813362122,,False,False,True
+Baseline 3D-CNN,Ablasi B - No Learned Spatial,8.711666,8.718619,0.36340317130088806,,False,False,False
+Baseline 3D-CNN,Ablasi C - No Temporal,5.1161222,5.2275915,0.999998152256012,,False,False,False
+Ablasi A - No Prior,Ablasi B - No Learned Spatial,1.5497462,1.55351,0.467938095331192,,False,False,False
+Ablasi A - No Prior,Ablasi C - No Temporal,2.0457976,2.2091508,0.9936102032661438,,False,False,False
+Ablasi B - No Learned Spatial,Ablasi C - No Temporal,3.5955436,3.6680336,0.36520150303840637,0.6193672916269861,False,False,False

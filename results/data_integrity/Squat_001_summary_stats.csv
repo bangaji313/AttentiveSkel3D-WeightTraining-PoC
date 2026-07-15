@@ -1,0 +1,15 @@
+Statistik,Nilai
+total_frame_raw,99
+total_frame_final,64
+jumlah_landmark_per_frame,33
+total_observasi,3267
+visibility_threshold,0.3
+jumlah_low_confidence,0
+pct_low_confidence,0.00%
+frame_dihapus,0
+pct_frame_dihapus,0.00%
+nilai_diinterpolasi,0
+nilai_zero_fill,0
+missing_ratio_per_frame_mean,0.00%
+missing_ratio_per_landmark_mean,0.00%
+keputusan_sampel,DIPERTAHANKAN

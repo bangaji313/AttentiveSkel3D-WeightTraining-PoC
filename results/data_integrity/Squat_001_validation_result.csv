@@ -1,0 +1,11 @@
+,value
+label,Squat_001
+shape,"(64, 33, 3)"
+shape_valid,True
+n_nan,0
+n_inf,0
+min,-4.962201118469238
+max,2.761699914932251
+mean,-0.44771212339401245
+std,1.2382289171218872
+status,LULUS
