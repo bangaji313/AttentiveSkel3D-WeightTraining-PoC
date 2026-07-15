@@ -31,7 +31,6 @@ ENV/
 # Machine Learning – Data & Model Weights
 # ============================================================
 /data/
-/models/saved_models/
 
 # ============================================================
 # Environment & Secrets
