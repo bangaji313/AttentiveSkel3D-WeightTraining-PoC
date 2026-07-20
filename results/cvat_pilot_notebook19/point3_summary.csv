@@ -1,0 +1,6 @@
+Metric,Value
+Sequence-level validator,Benar (0)
+Jumlah frame valid,85
+Jumlah frame invalid,14
+Rasio frame invalid,0.1414
+Frame terdalam (knee angle minimum),53

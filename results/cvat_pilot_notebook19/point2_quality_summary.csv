@@ -1,0 +1,9 @@
+Metric,Value
+Total original frames,99.0
+Frames with detected pose,99.0
+Pose detection ratio,1.0
+Video FPS,30.0
+Frame width,1080.0
+Frame height,1920.0
+Mean visibility on 12 CVAT joints,0.9751
+Mean coverage on 12 CVAT joints,1.0
