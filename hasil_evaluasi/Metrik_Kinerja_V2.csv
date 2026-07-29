@@ -1,0 +1,2 @@
+Model,Accuracy,F1_Macro,F1_Salah,Precision_Salah,Recall_Salah,TP,TN,FP,FN,Total_Frames
+best_model_full.pth,0.8803,0.8776,0.8956,0.9031,0.8883,2433,1736,261,306,4736
