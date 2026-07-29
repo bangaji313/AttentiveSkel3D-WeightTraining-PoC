@@ -57,6 +57,10 @@ def train_one_epoch(
         optimizer.zero_grad()            # Reset gradient sebelum perhitungan baru
         logits = model(batch_data)       # (B, num_classes) → logit mentah
 
+        # Ratakan dimensi untuk V2 (Per-Frame)
+        logits = logits.view(-1, 2)
+        batch_labels = batch_labels.view(-1)
+
         # --- Hitung loss ---
         loss = criterion(logits, batch_labels)
 
@@ -65,10 +69,10 @@ def train_one_epoch(
         optimizer.step()
 
         # --- Kumpulkan statistik ---
-        running_loss  += loss.item() * batch_data.size(0)   # Akumulasi loss total
+        running_loss  += loss.item() * batch_labels.size(0) # Akumulasi loss total
         preds          = logits.argmax(dim=1)               # Prediksi kelas
         correct_preds += (preds == batch_labels).sum().item()
-        total_samples += batch_data.size(0)
+        total_samples += batch_labels.size(0)
 
     # Hitung rata-rata loss dan akurasi keseluruhan epoch
     epoch_loss     = running_loss / total_samples
@@ -107,12 +111,17 @@ def evaluate_one_epoch(
             batch_labels = batch_labels.to(device)
 
             logits = model(batch_data)
+
+            # Ratakan dimensi untuk V2 (Per-Frame)
+            logits = logits.view(-1, 2)
+            batch_labels = batch_labels.view(-1)
+            
             loss   = criterion(logits, batch_labels)
 
-            running_loss  += loss.item() * batch_data.size(0)
+            running_loss  += loss.item() * batch_labels.size(0)
             preds          = logits.argmax(dim=1)
             correct_preds += (preds == batch_labels).sum().item()
-            total_samples += batch_data.size(0)
+            total_samples += batch_labels.size(0)
 
     epoch_loss     = running_loss / total_samples
     epoch_accuracy = correct_preds / total_samples
