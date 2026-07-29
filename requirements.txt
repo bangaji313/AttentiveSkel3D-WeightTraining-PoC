@@ -1,27 +1,45 @@
+# ============================================================
+# requirements.txt — AttentiveSkel-3D V2 (Per-Frame Architecture)
+#
+# Cara install:
+#   conda activate attentiveskel
+#   pip install -r requirements.txt
+#
+# Catatan GPU:
+#   Versi PyTorch di bawah dikompilasi untuk CUDA 12.1.
+#   Jika GPU Anda menggunakan CUDA versi lain, sesuaikan
+#   channel instalasi PyTorch di: https://pytorch.org/get-started/locally/
+# ============================================================
+
+# ── Deep Learning Framework ───────────────────────────────
 torch==2.5.1
 torchvision==0.20.1
 torchaudio==2.5.1
 
+# ── Pose Estimation & Computer Vision ─────────────────────
 mediapipe==0.10.14
 opencv-python==4.10.0.84
 
+# ── Data Science & Machine Learning ───────────────────────
 numpy==1.26.4
 pandas==2.2.3
 scipy==1.14.1
-scikit-learn==1.5.2
+scikit-learn==1.5.2         # StratifiedKFold, confusion_matrix, classification_report
 
+# ── Visualisasi ────────────────────────────────────────────
 matplotlib==3.9.2
 seaborn==0.13.2
-plotly==6.9.0
 
-streamlit==1.39.0
-imageio==2.37.3
-imageio-ffmpeg==0.6.0
+# ── Web Application (Demo Inferensi) ──────────────────────
+fastapi==0.115.5
+uvicorn[standard]==0.32.1   # ASGI server untuk FastAPI
+python-multipart==0.0.12    # Diperlukan untuk upload file di FastAPI
 
+# ── Jupyter Notebook ───────────────────────────────────────
 ipython==8.30.0
 jupyter==1.1.1
 notebook==7.2.2
 ipykernel==6.29.5
 
-# Optional but useful for markdown table export in audit scripts
-tabulate==0.9.0
+# ── Utilitas Tambahan ──────────────────────────────────────
+tabulate==0.9.0             # Export tabel ke markdown (opsional)

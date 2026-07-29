@@ -1,0 +1,6 @@
+﻿Skenario,BSP,Learned_Spatial,Temporal,Acc_Mean (%),Acc_Std (%),F1_Macro_Mean,F1_Macro_Std,F1_Binary_Mean,F1_Binary_Std
+Skenario 1 — Baseline,✗,✗,✗,91.32,0.96,0.9113,0.0092,0.9235,0.0108
+Skenario 2 — Full Model,✓,✓,✓,91.02,1.73,0.9079,0.0172,0.9216,0.0175
+Skenario 3a — Ablasi: BSP,✓,✗,✗,91.82,1.18,0.9163,0.0115,0.9281,0.0118
+Skenario 3b — Ablasi: BSP+LS,✓,✓,✗,91.82,1.75,0.9165,0.0171,0.9272,0.018
+Skenario 3c — Ablasi: BSP+Temp,✓,✗,✓,91.08,1.5,0.9086,0.0142,0.9218,0.0164
