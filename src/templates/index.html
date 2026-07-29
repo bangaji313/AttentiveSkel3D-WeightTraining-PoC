@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AttentiveSkel-3D | Demo Inferensi V2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:          #050d1b;
+            --surface:     #0c1a2e;
+            --surface-2:   #132038;
+            --border:      rgba(96,165,250,0.15);
+            --primary:     #3b82f6;
+            --primary-g:   rgba(59,130,246,0.3);
+            --accent:      #10b981;
+            --accent-g:    rgba(16,185,129,0.25);
+            --warn:        #f59e0b;
+            --danger:      #ef4444;
+            --text:        #e2e8f0;
+            --muted:       #64748b;
+            --faint:       #1e3050;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse 60% 40% at 10% 5%,  rgba(59,130,246,.13) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 90% 90%, rgba(16,185,129,.10) 0%, transparent 60%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 1.75rem 1.25rem 5rem;
+        }
+
+        /* ── Navbar ────────────────────────────────────── */
+        .nav {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 980px; margin: 0 auto 2.5rem;
+        }
+        .logo { display: flex; align-items: center; gap: .75rem; }
+        .logo-icon {
+            width:38px; height:38px; border-radius:10px;
+            background: linear-gradient(135deg,#3b82f6,#10b981);
+            display:flex; align-items:center; justify-content:center; font-size:1.15rem;
+        }
+        .logo-name { font-size:1.05rem; font-weight:700; }
+        .logo-sub  { font-size:.68rem; color:var(--muted); }
+        .badge {
+            font-size:.72rem; font-weight:600; letter-spacing:.06em;
+            padding:.28rem .75rem; border-radius:999px;
+            background:rgba(59,130,246,.12); border:1px solid rgba(59,130,246,.28); color:#60a5fa;
+        }
+
+        /* ── Layout ────────────────────────────────────── */
+        .wrap { max-width:980px; margin:0 auto; }
+        h1 {
+            font-size:1.9rem; font-weight:700; line-height:1.3;
+            background:linear-gradient(135deg,#93c5fd 0%,#6ee7b7 100%);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            margin-bottom:.4rem;
+        }
+        .sub { color:var(--muted); font-size:.92rem; margin-bottom:2rem; }
+
+        /* ── Card ──────────────────────────────────────── */
+        .card {
+            background:var(--surface); border:1px solid var(--border);
+            border-radius:14px; padding:1.6rem; margin-bottom:1.1rem;
+        }
+        .sec-label {
+            font-size:.72rem; font-weight:600; text-transform:uppercase;
+            letter-spacing:.08em; color:var(--muted); margin-bottom:.9rem;
+        }
+
+        /* ── Form Controls ─────────────────────────────── */
+        label { display:block; font-size:.87rem; font-weight:500; margin-bottom:.35rem; }
+        select {
+            width:100%; padding:.65rem 1rem; border-radius:8px;
+            background:var(--surface-2); border:1px solid var(--border);
+            color:var(--text); font-size:.9rem; font-family:'Inter',sans-serif;
+            outline:none; transition:border-color .2s, box-shadow .2s;
+        }
+        select:focus { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-g); }
+
+        /* ── Dropzone ──────────────────────────────────── */
+        .drop {
+            border:2px dashed var(--faint); border-radius:12px; padding:2.25rem 1.5rem;
+            text-align:center; cursor:pointer; background:rgba(12,26,46,.5);
+            transition:all .25s; position:relative;
+        }
+        .drop:hover, .drop.on { border-color:var(--primary); background:rgba(59,130,246,.07); box-shadow:0 0 22px var(--primary-g); }
+        .drop-icon { font-size:2.2rem; margin-bottom:.6rem; }
+        .drop-txt  { font-size:.9rem; }
+        .drop-txt span { color:var(--primary); font-weight:600; }
+        .drop-hint { font-size:.75rem; color:var(--muted); margin-top:.3rem; }
+        #file-input { display:none; }
+        .file-tag {
+            display:none; margin-top:.85rem; padding:.35rem .9rem;
+            background:rgba(16,185,129,.14); border:1px solid rgba(16,185,129,.3);
+            border-radius:999px; font-size:.78rem; color:var(--accent); font-weight:600;
+        }
+
+        /* ── Legend ────────────────────────────────────── */
+        .legend-row { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-top:.85rem; }
+        .legend-bar {
+            flex:1; min-width:100px; height:12px; border-radius:99px;
+            background:linear-gradient(to right,#1d4ed8,#0ea5e9,#eab308,#ef4444);
+            border:1px solid var(--border);
+        }
+        .legend-ends { display:flex; justify-content:space-between; font-size:.68rem; color:var(--muted); margin-top:.18rem; }
+        .legend-desc { font-size:.76rem; color:var(--muted); }
+
+        /* ── Btn ───────────────────────────────────────── */
+        .btn {
+            width:100%; padding:.85rem; border-radius:9px; border:none;
+            font-family:'Inter',sans-serif; font-size:.93rem; font-weight:600;
+            cursor:pointer; margin-top:1.1rem; letter-spacing:.02em; transition:all .2s;
+        }
+        .btn-primary {
+            background:linear-gradient(135deg,var(--primary),#1d4ed8); color:#fff;
+            box-shadow:0 4px 18px rgba(59,130,246,.32);
+        }
+        .btn-primary:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 6px 26px rgba(59,130,246,.44); }
+        .btn-primary:disabled { background:var(--faint); color:var(--muted); cursor:not-allowed; box-shadow:none; }
+
+        /* ─────────────────────────────────────────────────
+           PIPELINE STEPS
+        ───────────────────────────────────────────────── */
+        .pipeline-card { display:none; }
+
+        .pipeline-title {
+            font-size:.88rem; font-weight:600; color:var(--text);
+            display:flex; align-items:center; gap:.5rem; margin-bottom:1.1rem;
+        }
+        .pipe-dot {
+            width:8px; height:8px; border-radius:50%;
+            background:var(--primary); animation:blink 1s infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+        .steps-list { display:flex; flex-direction:column; gap:.6rem; }
+
+        .step-row {
+            display:flex; align-items:flex-start; gap:.85rem;
+            padding:.85rem 1rem; border-radius:10px; border:1px solid transparent;
+            background:var(--surface-2); transition:all .35s;
+        }
+        .step-row.active {
+            border-color:rgba(59,130,246,.4);
+            background:rgba(59,130,246,.08);
+            box-shadow:0 0 18px rgba(59,130,246,.15);
+        }
+        .step-row.done {
+            border-color:rgba(16,185,129,.35);
+            background:rgba(16,185,129,.06);
+        }
+
+        .step-icon {
+            width:36px; height:36px; border-radius:50%; flex-shrink:0;
+            display:flex; align-items:center; justify-content:center;
+            font-size:1rem; font-weight:700; border:2px solid var(--faint);
+            color:var(--muted); background:var(--surface);
+            transition:all .35s;
+        }
+        .step-row.active .step-icon {
+            border-color:var(--primary); color:var(--primary);
+            animation:pulse-ring .9s infinite;
+        }
+        @keyframes pulse-ring {
+            0%   { box-shadow:0 0 0 0   rgba(59,130,246,.6); }
+            70%  { box-shadow:0 0 0 8px rgba(59,130,246,0);  }
+            100% { box-shadow:0 0 0 0   rgba(59,130,246,0);  }
+        }
+        .step-row.done .step-icon {
+            background:var(--accent); border-color:var(--accent); color:#fff; font-size:1.1rem;
+        }
+
+        .step-body { flex:1; }
+        .step-name {
+            font-size:.88rem; font-weight:600;
+            color:var(--muted); transition:color .3s;
+        }
+        .step-row.active .step-name, .step-row.done .step-name { color:var(--text); }
+        .step-detail {
+            font-size:.76rem; color:var(--muted); margin-top:.2rem;
+            font-family:'JetBrains Mono', monospace; display:none;
+            animation:fadeIn .3s ease;
+        }
+        .step-row.active .step-detail, .step-row.done .step-detail { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+
+        /* Spinner inside active step icon */
+        .spin-svg {
+            width:18px; height:18px;
+            animation:spin .8s linear infinite;
+        }
+        @keyframes spin { to{transform:rotate(360deg)} }
+
+        /* Progress bar under pipeline */
+        .prog-bar-wrap { height:4px; background:var(--faint); border-radius:99px; margin-top:1rem; overflow:hidden; }
+        .prog-bar { height:100%; background:linear-gradient(90deg,var(--primary),var(--accent)); border-radius:99px; transition:width .5s ease; width:0%; }
+
+        /* ─────────────────────────────────────────────────
+           RESULT
+        ───────────────────────────────────────────────── */
+        .result-card { display:none; animation:up .5s ease forwards; }
+        @keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+
+        video {
+            width:100%; border-radius:10px; border:1px solid var(--border);
+            background:#000; margin-top:.9rem;
+        }
+
+        .meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:.65rem; margin-top:1rem; }
+        .meta-chip {
+            background:var(--surface-2); border:1px solid var(--border); border-radius:10px;
+            padding:.7rem; text-align:center;
+        }
+        .meta-chip .v { font-size:1.35rem; font-weight:700; color:var(--primary); }
+        .meta-chip .l { font-size:.7rem; color:var(--muted); margin-top:.18rem; }
+        .meta-chip.green .v { color:var(--accent); }
+        .meta-chip.red   .v { color:var(--danger); }
+
+        /* ── Error ─────────────────────────────────────── */
+        .err {
+            display:none; background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3);
+            border-radius:9px; padding:.85rem 1.1rem; margin-top:.9rem;
+            color:#fca5a5; font-size:.87rem;
+        }
+
+        .divider { height:1px; background:var(--border); margin:1.25rem 0; }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="logo">
+        <div class="logo-icon">🧠</div>
+        <div>
+            <div class="logo-name">AttentiveSkel-3D</div>
+            <div class="logo-sub">Weight Training Posture AI</div>
+        </div>
+    </div>
+    <div class="badge">V2 · Per-Frame</div>
+</nav>
+
+<div class="wrap">
+
+    <h1>Demo Inferensi &amp; Atensi Sendi</h1>
+    <p class="sub">Unggah video latihan, pilih model, dan saksikan AI menganalisis postur <em>per-frame</em> lengkap dengan heatmap perhatian sendi secara real-time.</p>
+
+    <!-- Config -->
+    <div class="card">
+        <div class="sec-label">⚙ Konfigurasi</div>
+
+        <div style="margin-bottom:.95rem">
+            <label for="model-select">Model yang Digunakan</label>
+            <select id="model-select"><option value="">⏳ Memuat daftar model…</option></select>
+        </div>
+
+        <div>
+            <label>Unggah Video Latihan</label>
+            <div class="drop" id="dropzone">
+                <div class="drop-icon">🎬</div>
+                <div class="drop-txt">Seret &amp; lepas, atau <span>klik untuk memilih</span></div>
+                <div class="drop-hint">Format MP4 · Pastikan seluruh tubuh terlihat kamera</div>
+                <input type="file" id="file-input" accept="video/mp4,video/*">
+            </div>
+            <div class="file-tag" id="file-tag"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="sec-label">🎨 Panduan Warna Heatmap</div>
+        <div class="legend-row">
+            <div style="flex:1">
+                <div class="legend-bar"></div>
+                <div class="legend-ends"><span>Rendah</span><span>Tinggi</span></div>
+            </div>
+            <div class="legend-desc">Titik sendi <strong style="color:#ef4444">merah &amp; besar</strong> = model sangat memperhatikan sendi itu.<br>Efek <em>glow</em> muncul saat atensi sangat tinggi.</div>
+        </div>
+
+        <button class="btn btn-primary" id="submit-btn" disabled>🚀 Mulai Analisis Video</button>
+        <div class="err" id="err"></div>
+    </div>
+
+    <!-- Pipeline Steps -->
+    <div class="card pipeline-card" id="pipeline-card">
+        <div class="pipeline-title">
+            <div class="pipe-dot"></div>
+            Proses Pipeline Berjalan…
+        </div>
+
+        <div class="steps-list" id="steps-list">
+            <!-- Diisi JavaScript -->
+        </div>
+
+        <div class="prog-bar-wrap">
+            <div class="prog-bar" id="prog-bar"></div>
+        </div>
+    </div>
+
+    <!-- Result -->
+    <div class="card result-card" id="result-card">
+        <div class="sec-label">✅ Hasil Analisis</div>
+        <video id="out-video" controls autoplay loop playsinline muted></video>
+        <div class="meta-grid" id="meta-grid"></div>
+    </div>
+
+</div>
+
+<script>
+/* ── Definisi 4 Tahapan Pipeline ──────────────────────── */
+const STEPS = [
+    {
+        icon: "1",
+        name: "Tahap 1 — Memuat Model AI",
+        hint: "Membaca file bobot (.pth) ke memori GPU/CPU"
+    },
+    {
+        icon: "2",
+        name: "Tahap 2 — Ekstraksi Pose (MediaPipe)",
+        hint: "Mengekstrak 33 titik sendi per-frame dari video mentah"
+    },
+    {
+        icon: "3",
+        name: "Tahap 3 — Preprocessing & Inferensi",
+        hint: "Membentuk tensor (64×33×3) → Forward pass AttentiveSkel-3D"
+    },
+    {
+        icon: "4",
+        name: "Tahap 4 — Rendering Video Heatmap",
+        hint: "Menggambar visualisasi atensi sendi tiap-frame"
+    }
+];
+
+/* ── State ────────────────────────────────────────────── */
+let currentFile  = null;
+let currentStep  = 0;  // 0 = belum mulai, 1-4 = tahap aktif
+
+/* ── DOM refs ─────────────────────────────────────────── */
+const modelSelect  = document.getElementById('model-select');
+const dropzone     = document.getElementById('dropzone');
+const fileInput    = document.getElementById('file-input');
+const fileTag      = document.getElementById('file-tag');
+const submitBtn    = document.getElementById('submit-btn');
+const pipelineCard = document.getElementById('pipeline-card');
+const stepsList    = document.getElementById('steps-list');
+const progBar      = document.getElementById('prog-bar');
+const resultCard   = document.getElementById('result-card');
+const outVideo     = document.getElementById('out-video');
+const errDiv       = document.getElementById('err');
+const metaGrid     = document.getElementById('meta-grid');
+
+/* ── Build step rows ──────────────────────────────────── */
+function buildSteps() {
+    stepsList.innerHTML = '';
+    STEPS.forEach((s, i) => {
+        const row = document.createElement('div');
+        row.className = 'step-row';
+        row.id = `step-row-${i + 1}`;
+        row.innerHTML = `
+            <div class="step-icon" id="step-icon-${i+1}">${s.icon}</div>
+            <div class="step-body">
+                <div class="step-name">${s.name}</div>
+                <div class="step-detail" id="step-detail-${i+1}">${s.hint}</div>
+            </div>`;
+        stepsList.appendChild(row);
+    });
+}
+
+/* ── Activate step (in-progress) ─────────────────────── */
+function activateStep(stepNum) {
+    const row  = document.getElementById(`step-row-${stepNum}`);
+    const icon = document.getElementById(`step-icon-${stepNum}`);
+    if (!row) return;
+    row.classList.add('active');
+    // Replace number with spinner SVG
+    icon.innerHTML = `
+        <svg class="spin-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>`;
+    progBar.style.width = `${((stepNum - 1) / 4) * 100}%`;
+}
+
+/* ── Complete step ────────────────────────────────────── */
+function completeStep(stepNum, detail) {
+    const row    = document.getElementById(`step-row-${stepNum}`);
+    const icon   = document.getElementById(`step-icon-${stepNum}`);
+    const detDiv = document.getElementById(`step-detail-${stepNum}`);
+    if (!row) return;
+    row.classList.remove('active');
+    row.classList.add('done');
+    icon.innerHTML = '✓';
+    if (detail) detDiv.textContent = detail;
+    progBar.style.width = `${(stepNum / 4) * 100}%`;
+}
+
+/* ── Fetch model list ─────────────────────────────────── */
+fetch('/api/models')
+    .then(r => r.json())
+    .then(d => {
+        modelSelect.innerHTML = '';
+        if (!d.models.length) {
+            modelSelect.innerHTML = '<option value="">Tidak ada model ditemukan</option>';
+            return;
+        }
+        d.models.forEach(m => {
+            const o = document.createElement('option');
+            o.value = m; o.textContent = m;
+            if (m.includes('full')) o.selected = true;
+            modelSelect.appendChild(o);
+        });
+        checkReady();
+    });
+
+/* ── Drag & Drop ──────────────────────────────────────── */
+['dragenter','dragover','dragleave','drop'].forEach(ev =>
+    dropzone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); })
+);
+['dragenter','dragover'].forEach(ev => dropzone.addEventListener(ev, () => dropzone.classList.add('on')));
+['dragleave','drop'].forEach(ev => dropzone.addEventListener(ev, () => dropzone.classList.remove('on')));
+dropzone.addEventListener('drop', e => { if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+dropzone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+
+function handleFile(f) {
+    if (!f.type.startsWith('video/')) { alert('Harap unggah file video!'); return; }
+    currentFile = f;
+    fileTag.textContent = `📎 ${f.name}  (${(f.size/1024/1024).toFixed(1)} MB)`;
+    fileTag.style.display = 'inline-block';
+    checkReady();
+}
+function checkReady() {
+    submitBtn.disabled = !(currentFile && modelSelect.value);
+}
+modelSelect.addEventListener('change', checkReady);
+
+/* ── Submit → SSE ─────────────────────────────────────── */
+submitBtn.addEventListener('click', async () => {
+    if (!currentFile || !modelSelect.value) return;
+
+    // Reset UI
+    errDiv.style.display    = 'none';
+    resultCard.style.display = 'none';
+    pipelineCard.style.display = 'block';
+    submitBtn.disabled      = true;
+    outVideo.src            = '';
+    metaGrid.innerHTML      = '';
+    progBar.style.width     = '0%';
+    buildSteps();
+
+    // Build multipart form
+    const fd = new FormData();
+    fd.append('video', currentFile);
+    fd.append('model_name', modelSelect.value);
+
+    let lastStep = 0;
+
+    try {
+        const resp = await fetch('/api/predict/stream', { method: 'POST', body: fd });
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let buf = '';
+
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+
+            buf += decoder.decode(value, { stream: true });
+            const lines = buf.split('\n');
+            buf = lines.pop(); // keep incomplete line
+
+            for (const line of lines) {
+                if (!line.startsWith('data:')) continue;
+                const raw = line.slice(5).trim();
+                if (!raw) continue;
+
+                let event;
+                try { event = JSON.parse(raw); } catch { continue; }
+
+                if (event.done) {
+                    // Finish progress bar
+                    progBar.style.width = '100%';
+                    setTimeout(() => { pipelineCard.style.display = 'none'; }, 600);
+
+                    if (event.success) {
+                        outVideo.src = event.video_url + '?t=' + Date.now();
+                        resultCard.style.display = 'block';
+                        metaGrid.innerHTML = [
+                            { v: event.n_benar, l: 'Frame BENAR', cls: 'green' },
+                            { v: event.n_salah, l: 'Frame SALAH', cls: 'red'   },
+                            { v: 64,            l: 'Total Frame', cls: ''      },
+                            { v: modelSelect.value.replace('best_model_','').replace('.pth','').toUpperCase(), l: 'Model', cls: '' }
+                        ].map(c => `<div class="meta-chip ${c.cls}"><div class="v">${c.v}</div><div class="l">${c.l}</div></div>`).join('');
+                        resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                        errDiv.textContent = '⚠ Error: ' + event.error;
+                        errDiv.style.display = 'block';
+                    }
+                    submitBtn.disabled = false;
+                    break;
+                }
+
+                // Progress event
+                const step = event.step;
+                const msg  = event.message || '';
+                const det  = event.detail  || '';
+
+                // Done with previous step
+                if (step > lastStep && lastStep > 0) {
+                    // Mark previous step done if message starts with ✓
+                }
+                
+                if (msg.startsWith('✓')) {
+                    completeStep(step, det);
+                } else {
+                    // New step starting
+                    if (step !== lastStep) {
+                        activateStep(step);
+                        lastStep = step;
+                    }
+                    if (det) {
+                        const detEl = document.getElementById(`step-detail-${step}`);
+                        if (detEl) detEl.textContent = det;
+                    }
+                }
+            }
+        }
+    } catch (ex) {
+        pipelineCard.style.display = 'none';
+        errDiv.textContent = '⚠ Terjadi kesalahan jaringan: ' + ex.message;
+        errDiv.style.display = 'block';
+        submitBtn.disabled = false;
+    }
+});
+</script>
+</body>
+</html>
