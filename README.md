@@ -1,260 +1,441 @@
 <div align="center">
 
-# 🏋️ AttentiveSkel3D — Weight Training Form Error Detection
+# 🏋️ AttentiveSkel-3D V2 — Per-Frame Weight Training Form Analysis
 
-### *A Proof of Concept for Enhancing Weight Training Form Error Detection*
-### *Using 3D-CNN and Biomechanical Attention Mechanism*
+### *Proof of Concept: Klasifikasi Kualitas Gerakan Latihan Beban Berbasis Evaluasi Per-Frame*
+### *3D-CNN dengan Biomechanical Spatial Prior, Learned Spatial Attention & Temporal Attention*
 
 <br/>
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![MediaPipe](https://img.shields.io/badge/MediaPipe-BlazePose-0097A7?style=for-the-badge&logo=google&logoColor=white)](https://google.github.io/mediapipe/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
 [![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?style=for-the-badge&logo=jupyter&logoColor=white)](https://jupyter.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Active%20Research-brightgreen?style=for-the-badge)]()
-[![Model Size](https://img.shields.io/badge/Model%20Size-~0.39%20MB-blue?style=for-the-badge)]()
+[![Branch](https://img.shields.io/badge/Branch-v2--per--frame--ai-blueviolet?style=for-the-badge)]()
+[![Model Size](https://img.shields.io/badge/Model%20Size-0.44%20MB-blue?style=for-the-badge)]()
+[![Params](https://img.shields.io/badge/Parameters-110%2C372-orange?style=for-the-badge)]()
 
 <br/>
 
-> **Tugas Akhir — Program Studi Informatika**
+> **Tugas Akhir — Program Studi Informatika**  
 > Institut Teknologi Nasional (ITENAS) Bandung · 2026
 
 </div>
 
 ---
 
-## 🧠 Apa Ini & Mengapa Penting?
+## 🎯 Latar Belakang & Motivasi
 
-Pernahkah Anda pergi ke gym dan berlatih sendirian tanpa pelatih? Tanpa bimbingan yang tepat, sangat mudah melakukan gerakan yang **salah** — dan kesalahan yang terlihat sepele seperti lutut masuk ke dalam saat squat, punggung membungkuk saat deadlift, atau siku terlalu terbuka saat bench press, dapat berujung pada **cedera serius** yang mengganggu aktivitas sehari-hari bahkan dalam jangka panjang.
+Kesalahan postur saat latihan beban — seperti lutut jatuh ke dalam saat *squat*, punggung membungkuk saat *deadlift*, atau *range of motion* siku yang kurang saat *bench press* — adalah sumber utama cedera akut maupun kronis di pusat kebugaran. Tanpa bimbingan pelatih berpengalaman, pengguna tidak menyadari kapan tepatnya kesalahan tersebut terjadi dalam satu repetisi.
 
-Sayangnya, **jasa pelatih pribadi (personal trainer)** tidak terjangkau oleh semua orang. Di sinilah proyek ini hadir sebagai solusi.
+**Sistem V2 ini menjawab pertanyaan yang lebih spesifik:**  
+> *"Bukan hanya apakah gerakan ini salah, tapi **di frame ke-berapa** kesalahan itu terjadi?"*
 
-### 🎯 Solusi: Pelatih Virtual Berbasis AI
-
-**AttentiveSkel-3D** adalah sistem kecerdasan buatan yang bertindak layaknya seorang pelatih virtual. Cukup rekam latihan Anda menggunakan **kamera biasa** (tidak perlu sensor khusus), dan sistem ini akan:
-
-| Gerakan | Yang Dideteksi |
-|---|---|
-| 🦵 **Squat** | Kedalaman squat kurang memadai, *knee valgus* (lutut jatuh ke dalam) |
-| 🏗️ **Deadlift** | Punggung membungkuk berlebihan (*spine flexion*), posisi tidak netral |
-| 🏋️ **Bench Press** | *Range of motion* siku kurang penuh, sudut lengan tidak optimal |
-
-Sistem secara otomatis mengklasifikasikan setiap repetisi sebagai **Benar ✅** atau **Salah ❌**, memberikan umpan balik berbasis biomekanika yang selama ini hanya bisa diberikan oleh pelatih berpengalaman.
+Perubahan mendasar dari V1: sistem tidak lagi memberikan **satu label per video** (evaluasi global), melainkan menghasilkan **64 prediksi independen per video** — satu prediksi untuk setiap titik waktu dalam gerakan.
 
 ---
 
-## ⚙️ Bagaimana Cara Kerjanya? *(Penjelasan Teknis)*
+## ⚙️ Perubahan Arsitektur: V1 → V2
 
-### 1. 🎥 Pipeline Pemrosesan Data
+### Masalah Fundamental pada V1
 
-Sistem memproses video latihan melalui serangkaian tahap yang terstruktur:
+Arsitektur V1 menggunakan **Global Average Pooling (GAP)** pada dimensi temporal yang menghancurkan semua informasi *kapan* sesuatu terjadi:
 
-```
-Video .mp4  (data/raw/<Exercise>/)
-      │
-      ▼  [MediaPipe BlazePose — model_complexity=2]
-      │  Ekstraksi 33 pose keypoints per frame → (T, 33, 4) [x, y, z, visibility]
-      │
-      ▼  [Preprocessing & Smoothing — src/data/preprocess.py]
-      │  • Imputasi landmark hilang (interpolasi linier)
-      │  • Smoothing temporal (Savitzky-Golay filter)
-      │  • Normalisasi spasial (hip-centered, unit-scale)
-      │  • Resampling temporal ke 64 frame tetap
-      │
-      ▼  Tensor Siap Model: (64, 33, 3)  — 64 frame × 33 landmark × [x, y, z]
-      │
-      ▼  [BiomechanicalValidator — Auto Ground Truth Labeling]
-         Evaluasi sudut sendi berdasarkan referensi jurnal biomekanika:
-         • Chen (2022) — Squat depth & Deadlift spine alignment
-         • Rao (2023)  — Knee valgus detection
-         • Ko (2024)   — Bench Press elbow ROM & Deadlift criteria
-         → Label: 0 (Benar) atau 1 (Salah)
+```python
+# V1 — Satu label, informasi waktu hilang
+x = x.mean(dim=[2, 3, 4])  # (B, 128, T', L', 1) → (B, 128)
+x = classifier(x)           # (B, 128) → (B, 2)  ← satu prediksi per video
 ```
 
-### 2. 🤖 Arsitektur Model: AttentiveSkel-3D
+### Solusi pada V2: Satu Bedah Operasi
 
-Model dirancang **ringan** namun **cerdas** dengan menggabungkan dua komponen utama:
+Satu perubahan kode, dampak fundamental:
 
-#### 🔷 Biomechanical Attention Module
+```diff
+# V1 — GAP menghancurkan temporal
+- x = x.mean(dim=[2, 3, 4])    # (B, 128, T', L', 1) → (B, 128)
+- x = self.classifier(x)       # (B, 128) → (B, 2)
 
-Sebelum data masuk ke jaringan konvolusi, modul atensi biomekanik memberikan **bobot berbeda** kepada setiap sendi tubuh. Sendi yang kritis secara biomekanika (misalnya lutut dan pinggul untuk squat) mendapat perhatian lebih tinggi, sehingga model berfokus pada informasi yang paling relevan.
-
-Mekanisme atensi terdiri dari tiga komponen:
-- **Spatial Prior Mask** — *learnable parameter* `(1,1,1,33,1)` yang secara implisit mempelajari kepentingan relatif tiap dari 33 sendi tubuh
-- **Learned Spatial Attention** — dioptimasi bersama seluruh parameter model via *backpropagation*
-- **Temporal Attention** — representasi spatio-temporal memungkinkan model menangkap pola gerakan lintas waktu
-
-#### 🔷 3D-CNN Backbone
-
-Setelah dibobot oleh modul atensi, data diproses oleh tiga blok konvolusi 3D yang menangkap pola spasial (konfigurasi sendi) dan temporal (pergerakan antar frame) secara bersamaan:
-
-```
-Input (B, 64, 33, 3)
-  → Permute + Unsqueeze → (B, 3, 64, 33, 1)
-  → ×sigmoid(Spatial Prior)              ← Biomechanical Attention
-  → Conv3D Block 1: 3→32 ch, kernel(3,3,1), BN, ReLU, MaxPool
-  → Conv3D Block 2: 32→64 ch, kernel(3,3,1), BN, ReLU, MaxPool
-  → Conv3D Block 3: 64→128 ch, kernel(3,3,1), BN, ReLU, AdaptiveAvgPool
-  → Flatten → Linear(128→64) → ReLU → Dropout(0.4) → Linear(64→2)
-  → Output: [logit_Benar, logit_Salah]
+# V2 — Pool hanya landmark, pertahankan temporal
++ x = self.landmark_pool(x)    # AdaptiveAvgPool3d(None,1,1) → (B, 128, T', 1, 1)
++ x = F.interpolate(...)       # T' → 64 frame (upsample)
++ x = x.permute(0, 2, 1)       # (B, 64, 128)
++ x = self.classifier(x)       # (B, 64, 128) → (B, 64, 2)  ← per frame!
 ```
 
-#### 📊 Efisiensi Model
+| Aspek | V1 | V2 |
+|---|---|---|
+| Label granularitas | 1 label / video | **64 label / video** |
+| Shape output | `(B, 2)` | `(B, 64, 2)` |
+| Resolusi temporal | Hilang (GAP) | **Dipertahankan** |
+| Sinyal gradien / video | 1 | **64** |
+| Temporal heatmap | ✗ | ✓ |
+
+---
+
+## 🤖 Arsitektur Model: `AttentiveSkel3DPerFrame`
+
+### Alur Tensor Lengkap
+
+```
+INPUT:  (B, 64, 33, 3)   — Batch × 64 Frame × 33 Landmark × 3 Koordinat XYZ
+    │
+    ├─ Reshape → (B, 3, 64, 33, 1)
+    │
+    ├─ [BSP] Biomechanical Spatial Prior  ← 33 parameter learnable, sigmoid
+    │         (1,1,1,33,1) × input        ← Bobot per sendi tubuh
+    │
+    ├─ Conv Block 1: Conv3d(3→32, kernel(3,3,1)) + BN + ReLU + MaxPool(1,2,1)
+    │                (B, 3, 64, 33, 1) → (B, 32, 64, 16, 1)   ← landmark: 33→16
+    │
+    ├─ Conv Block 2: Conv3d(32→64, kernel(3,3,1)) + BN + ReLU + MaxPool(2,2,1)
+    │                (B, 32, 64, 16, 1) → (B, 64, 32, 8, 1)   ← waktu: 64→32
+    │
+    ├─ Conv Block 3: Conv3d(64→128, kernel(3,3,1)) + BN + ReLU  (tanpa pool)
+    │                (B, 64, 32, 8, 1) → (B, 128, 32, 8, 1)
+    │
+    ├─ [LS] Learned Spatial Attention    ← SE-style MLP: GAP → Linear(128→32→128) → Sigmoid
+    │         Bobot per channel, broadcast ke (B, 128, 32, 8, 1)
+    │
+    ├─ [TA] Temporal Attention           ← Conv3d(128→1, 1×1×1) → Softmax(dim=time)
+    │         Frame lebih penting diperkuat, frame kurang penting diredam
+    │
+    ├─ AdaptiveAvgPool3d(None, 1, 1)     ← Pool HANYA landmark. Waktu TETAP!
+    │   (B, 128, 32, 8, 1) → (B, 128, 32, 1, 1)
+    │
+    ├─ Interpolate bilinear → 64 frame   ← Kembalikan resolusi temporal ke 64
+    │   (B, 128, 64, 1) → squeeze → (B, 128, 64)
+    │
+    ├─ Permute → (B, 64, 128)
+    │
+    └─ Classifier: Linear(128→64) → ReLU → Dropout(0.4) → Linear(64→2)
+
+OUTPUT: (B, 64, 2)   — 64 pasang logit per frame [logit_Benar, logit_Salah]
+```
+
+### Profil Parameter
+
+| Komponen | Parameter | % Total | Keterangan |
+|---|:---:|:---:|---|
+| `conv_block_3` | **73,984** | **67.0%** | Fitur high-level (64→128 channel) |
+| `conv_block_2` | 18,560 | 16.8% | Fitur menengah (32→64 channel) |
+| `classifier` | 8,386 | 7.6% | Head linear per-frame |
+| `learned_spatial_attention` | 8,352 | 7.6% | MLP SE-style |
+| `conv_block_1` | 928 | 0.8% | Fitur level rendah (3→32 channel) |
+| `temporal_attention` | 129 | 0.1% | Conv 1×1×1 skoring temporal |
+| `biomechanical_spatial_prior` | **33** | **0.03%** | 33 skalar (satu per sendi) |
+| **TOTAL** | **110,372** | **100%** | |
+
+### Efisiensi Komputasi
 
 | Metrik | Nilai |
 |---|---|
-| Total Parameter | **101.891** |
-| Ukuran Model | **~0.39 MB** |
-| Input Tensor | `(B, 64, 33, 3)` |
-| Output | 2 kelas (Benar / Salah) |
-| Framework | PyTorch 2.x |
-
-Model ini dirancang untuk dapat berjalan cepat bahkan tanpa GPU khusus, menjadikannya kandidat kuat untuk *deployment* pada perangkat *edge* atau aplikasi mobile di masa depan.
+| Total Parameter | **110,372** |
+| MACs (*Multiply-Accumulate*) | **39.62 Juta** |
+| Ukuran File Model (.pth) | **0.44 MB** |
+| Estimasi Total Memori | 3.16 MB |
+| Perbandingan ResNet-18 | 106× lebih ringan |
 
 ---
 
-## 🗺️ Diagram Arsitektur Pipeline
+## 🔬 Tiga Modul Atensi
 
-```mermaid
-flowchart LR
-    A([🎥 Input Video\n.mp4]) --> B[MediaPipe\nBlazePose\nPose Extraction]
-    B --> C[/"Sekuens Skeleton 3D\n(T × 33 × 4)"/]
-    C --> D[Preprocessing\n& Smoothing\nNormalisasi + Resample]
-    D --> E[/"Spatio-Temporal\nTensor\n64 × 33 × 3"/]
-    E --> F[[Biomechanical\nAttention Module\nSpatial Prior Mask]]
-    F --> G[[3D-CNN\nBackbone\n3 Conv3D Blocks]]
-    G --> H[Global\nAverage\nPooling]
-    H --> I[Fully Connected\nClassifier\n128→64→2]
-    I --> J{Klasifikasi}
-    J --> K([✅ Benar\nLabel: 0])
-    J --> L([❌ Salah\nLabel: 1])
+### 1. Biomechanical Spatial Prior (BSP) — *Explainable AI*
 
-    style A fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style E fill:#7B68EE,stroke:#4B3BAA,color:#fff
-    style F fill:#E8534A,stroke:#B03028,color:#fff
-    style G fill:#E8534A,stroke:#B03028,color:#fff
-    style J fill:#F5A623,stroke:#C07800,color:#fff
-    style K fill:#27AE60,stroke:#1A7A42,color:#fff
-    style L fill:#E74C3C,stroke:#A93226,color:#fff
+Modul paling ringan namun paling dapat diinterpretasikan: **33 parameter** yang masing-masing menjadi bobot skalar untuk satu sendi MediaPipe BlazePose. Setelah sigmoid, nilainya ∈ [0, 1] — sendi dengan nilai mendekati 1 mendapat penguatan, nilai mendekati 0 diredam.
+
+**Hasil bobot BSP tertinggi setelah pelatihan (Skenario 2 — Full Model):**
+
+| Peringkat | Sendi | Bobot BSP | Makna Biomekanik |
+|:---:|---|:---:|---|
+| #1 | **Right Knee** | 0.7742 | Lutut kanan — titik kritis squat & deadlift |
+| #2 | **Right Elbow** | 0.7693 | Siku kanan — ROM wajib bench press & row |
+| #5 | **Left Knee** | 0.7551 | Simetri bilateral lutut kiri |
+| #7 | **Left Elbow** | 0.7496 | Simetri bilateral siku kiri |
+| #8 | **Right Shoulder** | 0.7444 | Bahu — sumbu gerakan utama |
+| #33 | Left Pinky | 0.6633 | Jari kelingking — tidak relevan biomekanikal |
+
+> Model secara **mandiri menemukan** sendi yang paling relevan secara biomekanis — tanpa instruksi eksplisit. Ini membuktikan *Explainable AI* yang berakar pada domain knowledge.
+
+### 2. Learned Spatial Attention (SE-Style)
+
+Implementasi teknik *Squeeze-and-Excitation (Hu et al., 2018)*: model belajar channel representasi mana yang paling informatif untuk membedakan gerakan benar vs salah. MLP `128→32→128` dengan rasio kompresi 4× menyeimbangkan kapasitas dan efisiensi (8.352 parameter).
+
+### 3. Temporal Attention
+
+Conv3d `128→1` dengan kernel `(1,1,1)` diikuti Softmax pada dimensi waktu. Softmax memaksa model "memilih" frame mana yang paling kritis — jumlah bobot seluruh frame = 1. Frame di sekitar puncak gerakan (eksentrik-konsentrik) cenderung mendapat bobot lebih tinggi (129 parameter).
+
+---
+
+## 📦 Dataset & Auto-Labeling Biomekanik
+
+### Dataset
+
+| Atribut | Nilai |
+|---|---|
+| Total video | **487** |
+| Total frame (unit prediksi) | **31.168** (487 × 64) |
+| Distribusi BENAR | 209 video (42.9%) |
+| Distribusi SALAH | 278 video (57.1%) |
+| Gerakan yang dicakup | Squat, Deadlift, Bench Press, Barbell Row |
+| Format tensor | `.npy` berukuran `(64, 33, 3)` per video |
+
+🔗 **Kaggle Dataset:** [AttentiveSkel-3D Weight Training Error Dataset](https://www.kaggle.com/datasets/bangaji/attentiveskel-3d-weight-training-error-dataset/data)  
+🔗 **DOI:** [10.34740/KAGGLE/DSV/17721447](https://doi.org/10.34740/kaggle/dsv/17721447)
+
+### Pipeline Pra-pemrosesan
+
+```
+Video .mp4
+  → MediaPipe BlazePose (model_complexity=2)
+  → Array mentah (N_frame × 33 × 4) — x, y, z, visibility
+  → Filtering: imputasi landmark hilang (interpolasi linier, gap ≤ 5 frame)
+  → Smoothing: filter median kernel-3 sepanjang sumbu temporal
+  → Normalisasi Spasial: hip-centered (0,0,0), scale = panjang torso
+  → Resampling Temporal: N_frame → 64 frame tetap (interpolasi bilinear)
+  → Tensor (64, 33, 3) disimpan sebagai .npy
 ```
 
-**Secara sederhana:** Video latihan Anda "dibaca" oleh sistem kamera, posisi 33 titik tubuh dilacak setiap saat, lalu pola gerakan tersebut dianalisis oleh AI yang sudah dilatih untuk membedakan gerakan benar dan salah — persis seperti seorang pelatih yang mengamati dan menilai teknik Anda.
+### Auto-Labeling Berbasis Biomechanical Validator
 
-**Secara teknis:** Video diproses frame-by-frame oleh MediaPipe BlazePose menghasilkan tensor `(T, 33, 4)`. Setelah preprocessing (interpolasi, smoothing Savitzky-Golay, normalisasi hip-centered, resampling), tensor berukuran tetap `(64, 33, 3)` dibentuk. Tensor ini dimodulasi oleh *Spatial Prior Mask* berukuran `(1,1,1,33,1)` via sigmoid sebelum memasuki tiga blok Conv3D dengan kernel `(3,3,1)` yang mengekstraksi fitur spatio-temporal. Representasi akhir di-*pool* dan diklasifikasikan oleh MLP dua lapis dengan Dropout(0.4) sebagai regularisasi.
+Label diberikan **per-frame** secara otomatis menggunakan `BiomechanicalValidator` yang menghitung sudut sendi dari koordinat 3D landmark. Threshold didasarkan pada tiga literatur:
+
+| Gerakan | Kriteria | Threshold | Sumber |
+|---|---|---|---|
+| **Squat** | Sudut pinggul (Bahu-Pinggul-Lutut) di posisi terdalam | ≤ 137° | Rao et al. (2023) |
+| **Squat** | Rasio lebar lutut / pergelangan kaki (*knee valgus*) | ≥ 0.85 | Rao et al. (2023) |
+| **Squat** | Sudut lutut (Pinggul-Lutut-Ankle) | ≤ 100° | Chen et al. (2022) |
+| **Bench Press** | Sudut siku saat bar paling rendah | ≤ 85° | Ko et al. (2024) |
+| **Deadlift** | Inklinasi punggung dari vertikal | 20° ≤ θ ≤ 60° | Ko et al. (2024) |
+
+Output validator: array `(64,)` berisi `0` (BENAR) atau `1` (SALAH) per frame — disimpan sebagai `*_labels.npy`.
 
 ---
 
-## 📓 Struktur Notebook Eksperimen
+## 📊 Hasil Eksperimen
 
-Seluruh tahapan eksperimen, mulai dari ekstraksi data hingga evaluasi mendalam, didokumentasikan secara terstruktur ke dalam beberapa *Jupyter Notebook* berikut:
+### Konfigurasi Pelatihan
 
-| # | Notebook | Deskripsi |
+| Parameter | Nilai |
+|---|---|
+| Optimizer | Adam |
+| Learning Rate | 1e-3 |
+| Weight Decay | 1e-4 |
+| LR Scheduler | ReduceLROnPlateau (patience=5, factor=0.5) |
+| Loss Function | CrossEntropyLoss (per-frame flattening: B×64 gradien/batch) |
+| Batch Size | 16 video (= 1.024 prediksi frame per iterasi) |
+| Epochs | 100 |
+| Dropout | 0.4 |
+| Dataset Split | 70% Train / 15% Val / 15% Test (seed=42) |
+
+### 5 Skenario Ablation Study
+
+| ID | Skenario | BSP | LS | Temporal | File Bobot |
+|---|---|:---:|:---:|:---:|---|
+| S1 | Baseline | ✗ | ✗ | ✗ | `best_model_baseline.pth` |
+| S2 | Full Model | ✓ | ✓ | ✓ | `best_model_v2.pth` |
+| S3a | Ablasi: BSP | ✓ | ✗ | ✗ | `best_model_ablasi_a.pth` |
+| S3b | Ablasi: BSP+LS | ✓ | ✓ | ✗ | `best_model_ablasi_b.pth` |
+| S3c | Ablasi: BSP+Temp | ✓ | ✗ | ✓ | `best_model_ablasi_c.pth` |
+
+### A. Evaluasi Test Set (4.736 Frame)
+
+| Skenario | Accuracy | F1 Macro | F1 Binary | Precision | Recall |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **S1 — Baseline** | **90.94%** | **0.9066** | **0.9229** | 0.9087 | 0.9376 |
+| S2 — Full Model | 88.03% | 0.8776 | 0.8956 | **0.9031** | 0.8883 |
+| S3a — Ablasi: BSP | 90.31% | 0.9002 | 0.9171 | 0.9077 | 0.9266 |
+| S3b — Ablasi: BSP+LS | 88.43% | 0.8812 | 0.9003 | 0.8971 | 0.9036 |
+| **S3c — Ablasi: BSP+Temp** | 89.67% | 0.8924 | 0.9141 | 0.8808 | **0.9500** |
+
+### B. 5-Fold Stratified Cross-Validation (100 Epoch per Fold)
+
+| Skenario | Acc. Mean | Acc. Std | F1 Macro Mean | F1 Binary Mean |
+|---|:---:|:---:|:---:|:---:|
+| S1 — Baseline | 91.32% | ±0.96% | 0.9113 | 0.9235 |
+| S2 — Full Model | 91.02% | ±1.73% | 0.9079 | 0.9216 |
+| **S3a — Ablasi: BSP** | **91.82%** | ±1.18% | **0.9163** | **0.9281** |
+| S3b — Ablasi: BSP+LS | **91.82%** | ±1.75% | **0.9165** | 0.9272 |
+| S3c — Ablasi: BSP+Temp | 91.08% | ±1.50% | 0.9086 | 0.9218 |
+
+### C. Confusion Matrix — Test Set
+
+| Skenario | TP | TN | FP | FN | FPR | FNR |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| S1 — Baseline | 2.568 | 1.739 | 258 | 171 | 12.9% | 6.2% |
+| S2 — Full Model | 2.433 | 1.736 | 261 | **306** | 13.1% | **11.2%** |
+| S3a — Ablasi: BSP | 2.538 | 1.739 | 258 | 201 | 12.9% | 7.3% |
+| S3b — Ablasi: BSP+LS | 2.475 | 1.713 | 284 | 264 | 14.2% | 9.6% |
+| **S3c — Ablasi: BSP+Temp** | **2.602** | 1.645 | **352** | **137** | **17.6%** | **5.0%** |
+
+### D. Kontribusi Marginal Per Modul Atensi
+
+| Perbandingan | Variabel | Δ Accuracy | Keterangan |
+|---|---|:---:|---|
+| S1 vs S3a | Kontribusi BSP | **+0.50%** | Peningkatan nyata, hanya +33 parameter |
+| S3a vs S3b | Kontribusi LS | **0.00%** | Tidak ubah mean, namun std meningkat |
+| S3a vs S3c | Kontribusi Temporal | **−0.74%** | Akurasi turun, tapi Recall naik +2.34% |
+| S1 vs S2 | Semua modul | **−0.30%** | Penalti kompleksitas pada dataset medium |
+
+> **Temuan kunci:** BSP adalah modul paling *cost-effective* — 33 parameter memberikan +0.50% akurasi K-Fold dengan peningkatan stabilitas (std rendah). Full Model justru mengalami penalti kompleksitas, fenomena umum pada dataset berukuran sedang (~487 video).
+
+### E. Rekomendasi Deployment
+
+| Use Case | Skenario | Alasan |
 |---|---|---|
-| 01 | `01_pose_extraction_test.ipynb` | Uji ekstraksi pose MediaPipe BlazePose dari video |
-| 02 | `02_data_preprocessing_test.ipynb` | Uji pipeline preprocessing & normalisasi skeleton |
-| 02b | `02b_auto_labeling_test.ipynb` | Simulasi & verifikasi sistem pelabelan otomatis berbasis biomekanika |
-| 03 | `03_model_architecture_test.ipynb` | Uji arsitektur AttentiveSkel-3D & parameter count |
-| 04 | `04_dataloader_test.ipynb` | Uji bulk processing, manifest CSV, & DataLoader PyTorch |
-| 05 | `05_training_test.ipynb` | Uji loop pelatihan, validasi, & penyimpanan checkpoint (Sanity Check) |
-| 06 | `06_attention_visualization.ipynb` | Visualisasi Biomechanical Attention — overlay heatmap per sendi |
-| 07 | `07_training_baseline.ipynb` | Pelatihan skenario *Baseline* (arsitektur 3D-CNN murni tanpa atensi) |
-| 08 | `08_training_ablation.ipynb` | Pelatihan skenario Studi Ablasi (pengujian modul atensi secara terpisah) |
-| 09 | `09_training_full_model.ipynb` | Pelatihan skenario model penuh (*Full AttentiveSkel-3D*) dengan semua atensi aktif |
-| 10 | `10_evaluation_metrics.ipynb` | Evaluasi kinerja pada *Test Set* (Akurasi, Presisi, Recall, F1-Score & Confusion Matrix) |
-| 11 | `11_kfold_cross_validation.ipynb` | Uji kestabilan & validasi model menggunakan *Stratified 5-Fold Cross Validation* |
-| 12 | `12_error_analysis.ipynb` | Bedah kasus misklasifikasi (*False Positive / False Negative*) secara biomekanis & visual |
+| **Akurasi & stabilitas terbaik** | S3a — Ablasi BSP | K-Fold 91.82%, std ±1.18%, efisien |
+| **Deteksi cedera (minimasi FN)** | S3c — BSP+Temporal | Recall 95%, FN hanya 137 frame |
+| **Riset & interpretabilitas** | S2 — Full Model | Semua bobot atensi dapat divisualisasikan |
 
 ---
 
-## 📊 Dataset & Akses Publik (Kaggle & DOI)
-
-Sebagai bentuk transparansi akademis dan guna mendukung reproduksibilitas penelitian, dataset spasio-temporal dan *manifest auto-labeling* yang digunakan untuk melatih model ini telah dipublikasikan secara terbuka di platform Kaggle. 
-
-🔗 **Kaggle Repository:** [AttentiveSkel-3D Weight Training Error Dataset](https://www.kaggle.com/datasets/bangaji/attentiveskel-3d-weight-training-error-dataset/data)  
-🔗 **Official DOI:** [10.34740/KAGGLE/DSV/17721447](https://doi.org/10.34740/kaggle/dsv/17721447)  
-
-### Isi Dataset (*Dataset Content*)
-Dataset ini berisi kombinasi antara Data Primer (direkam menggunakan iPhone 14 Pro) dan Data Sekunder (dikurasi dari sumber publik), yang disegmentasi menjadi video-video gerakan repetisi tunggal. 
-
-1. **Video Mentah (.mp4):** 507 video repetisi tunggal yang menangkap tiga latihan dasar (*Bench Press*, *Squat*, *Deadlift*) dari sudut pandang frontal (depan) dan lateral (samping). Koleksi video mentah ini dibagi menjadi:
-   * **Dataset Primer (207 video):** Direkam secara mandiri menggunakan iPhone 14 Pro. Terdiri dari 100 video *Bench Press*, 73 video *Squat*, dan 34 video *Deadlift*. File-file tersebut mengikuti konvensi penamaan yang seragam, misalnya: `primer_benchpress_frontal_subjek01_rep1.mp4`.
-   * **Dataset Sekunder (300 video):** Dikurasi dari repositori publik Kaggle ["Workout/Exercises Video" karya Hasyim Abdillah](https://www.kaggle.com/datasets/hasyimabdillah/workoutfitness-video). Terdiri secara merata dari 100 video *Bench Press*, 100 video *Squat*, dan 100 video *Deadlift*. File-file tersebut mengikuti konvensi penamaan yang seragam, misalnya: `sekunder_benchpress_kaggle02_rep02.mp4`.
-2. **Tensor Spasio-Temporal (.npy):** 487 tensor *skeleton* valid yang berhasil diekstrak. Video mentah diproses melalui MediaPipe BlazePose untuk mengekstrak 33 *landmark* sendi 3D. Setiap tensor memiliki dimensi seragam berukuran `(64, 33, 3)`, yang merepresentasikan `(Frame, Landmark, Koordinat 3D (X, Y, Z))`.
-3. **Dataset Manifest (`dataset_manifest.csv`):** Metadata *ground-truth* yang berisi letak jalur (path) file tensor, label biner (`0` untuk Gerakan Benar, `1` untuk Gerakan Salah), serta alasan biomekanis (*reasoning*) dari sistem di balik penetapan label tersebut.
-
----
-
-## 🗂️ Struktur Folder
+## 🗂️ Struktur Proyek V2
 
 ```
-AttentiveSkel3D-WeightTraining-PoC/
-│
-├── data/                        # ⚠️  Diabaikan oleh Git (.gitignore)
-│   ├── raw/
-│   │   ├── Squat/               # Video .mp4 gerakan Squat
-│   │   ├── Deadlift/            # Video .mp4 gerakan Deadlift
-│   │   └── BenchPress/          # Video .mp4 gerakan Bench Press
-│   └── processed/
-│       ├── tensors/             # File .npy hasil ekstraksi & preprocessing
-│       └── manifest.csv         # Label otomatis + audit trail per sampel
-│
-├── notebooks/                   # Jupyter Notebook eksperimen (01 s.d. 06)
+Release_V2_AttentiveSkel3D/
 │
 ├── src/
 │   ├── data/
-│   │   ├── extract_pose.py      # Ekstraksi 33 keypoints via MediaPipe
-│   │   ├── preprocess.py        # Smoothing, normalisasi, resampling
-│   │   ├── build_dataset.py     # Pipeline bulk processing + auto-labeling
-│   │   ├── dataset.py           # PyTorch Dataset & DataLoader
-│   │   └── biomechanics_validator.py  # Validator otomatis berbasis jurnal
+│   │   ├── extract_pose.py           # Ekstraksi 33 landmark via MediaPipe
+│   │   ├── preprocess.py             # Filtering, smoothing, normalisasi, resampling
+│   │   ├── biomechanics_validator.py # Auto-labeling per-frame (threshold ilmiah)
+│   │   ├── build_manifest.py         # Pipeline bulk processing & manifest CSV
+│   │   ├── manifest_v2.csv           # Metadata dataset: path tensor + label
+│   │   └── dataset_v2.py             # PyTorch Dataset & DataLoader (per-frame)
+│   │
 │   └── models/
-│       ├── model_3dcnn.py       # Arsitektur AttentiveSkel-3D
-│       └── train.py             # Training loop & checkpoint saving
+│       ├── arsitektur_v2.py          # AttentiveSkel3DPerFrame (3 modul atensi)
+│       ├── train_v2.py               # Training loop per-frame (B×64 gradien/iter)
+│       ├── evaluate_v2.py            # Evaluasi semua skenario → CSV metrik
+│       └── kfold_semua_skenario_v2.py # 5-Fold CV untuk 5 skenario
 │
-├── models/
-│   └── saved_models/            # ⚠️  Bobot .pth, diabaikan oleh Git
+├── notebooks/
+│   ├── 01_train_scenario2_full_model.ipynb
+│   ├── 02_train_scenario1_baseline.ipynb
+│   ├── 03_train_scenario3_ablation.ipynb
+│   ├── 04_Bedah_Arsitektur_V2_PerFrame.ipynb    # Torchinfo + sanity check
+│   ├── 05_Evaluasi_Semua_Skenario_V2.ipynb      # Evaluasi test set 5 skenario
+│   ├── 06_KFold_Semua_Skenario_V2.ipynb         # 5-Fold CV 5 skenario
+│   ├── 07_Pembuktian_Kinerja_Bimbingan.ipynb    # Pembuktian per-frame
+│   └── 08_Visualisasi_Atensi_3Panel_PerGerakan.ipynb  # Heatmap 3D Squat/DL/BP
 │
-├── .gitignore
-├── requirements.txt
-└── README.md
+├── bobot_model/
+│   ├── best_model_baseline.pth    # S1 — Tanpa atensi
+│   ├── best_model_v2.pth          # S2 — Full Model (BSP+LS+Temporal)
+│   ├── best_model_ablasi_a.pth    # S3a — BSP saja
+│   ├── best_model_ablasi_b.pth    # S3b — BSP + Learned Spatial
+│   ├── best_model_ablasi_c.pth    # S3c — BSP + Temporal
+│   ├── curve_s1_baseline.png      # Kurva training S1
+│   ├── curve_s2_full_model.png    # Kurva training S2
+│   └── curve_s3_ablation_comparison.png  # Kurva perbandingan S3
+│
+├── hasil_evaluasi/
+│   ├── Perbandingan_Metrik_Semua_Skenario_V2.csv
+│   ├── KFold_Hasil_Per_Fold_V2.csv
+│   ├── KFold_Ringkasan_Semua_Skenario_V2.csv
+│   ├── Confusion_Matrix_Semua_Skenario_V2.csv
+│   ├── Bobot_Atensi_Per_Skenario_V2.csv
+│   └── Bobot_Atensi_Lutut_Siku_V2.csv
+│
+├── Diagram_V2/
+│   ├── 01_Prapemrosesan_Pelabelan_PerFrame.xml
+│   ├── 02_Arsitektur_AttentiveSkel3D_PerFrame.xml
+│   ├── 03_TrainingLoop_Loss_PerFrame.xml
+│   └── 04_Demo_Inferensi_App.xml
+│
+└── web_app/
+    ├── app_v2.py                  # Server FastAPI + SSE endpoint
+    ├── inference_core_v2.py       # Pipeline inferensi end-to-end
+    └── templates/index_v2.html    # Frontend dark-mode
 ```
 
 ---
 
-## 🚀 Instalasi & Menjalankan Proyek
+## 🌐 Aplikasi Demo Inferensi
+
+Sistem dilengkapi **web application** berbasis FastAPI yang memvisualisasikan prediksi per-frame secara real-time menggunakan teknologi *Server-Sent Events* (SSE).
+
+### Alur Pipeline (4 Tahap Streaming)
+
+```
+Upload Video .mp4
+    │
+    ▼  [Tahap 1] Muat model .pth ke CUDA (deteksi arsitektur otomatis)
+    │
+    ▼  [Tahap 2] MediaPipe BlazePose ekstrak pose → (N_frame × 33 × 4)
+    │
+    ▼  [Tahap 3] Preprocessing → Inferensi → (1, 64, 2) logit per frame
+    │            Hasil: 64 prediksi biner + probabilitas kelas SALAH
+    │
+    ▼  [Tahap 4] Render video heatmap dengan OpenCV:
+                 - Skeleton overlay (garis abu-abu antar landmark)
+                 - Heatmap atensi BSP (COLORMAP_TURBO, power-amplifikasi ×4)
+                 - Panel status: "BENAR" (hijau) / "SALAH" (merah) + confidence %
+```
+
+### Menjalankan Aplikasi
 
 ```bash
-# 1. Clone repositori
-git clone https://github.com/bangaji313/AttentiveSkel3D-WeightTraining-PoC.git
-cd AttentiveSkel3D-WeightTraining-PoC
+# Pastikan environment aktif
+conda activate attentiveskel
 
-# 2. Buat dan aktifkan virtual environment
-python -m venv .venv
-.venv\Scripts\activate        # Windows
-# source .venv/bin/activate   # Linux / macOS
+# Jalankan server FastAPI
+cd Release_V2_AttentiveSkel3D
+python web_app/app_v2.py
 
-# 3. Install semua dependensi
-pip install -r requirements.txt
-
-# 4. Jalankan notebook eksperimen secara berurutan
-jupyter notebook notebooks/
+# Buka browser → http://localhost:8080
 ```
-
-> **Catatan:** Letakkan video latihan di `data/raw/<NamaLatihan>/` (contoh: `data/raw/Squat/video1.mp4`). Sistem akan secara otomatis mengekstraksi pose dan memberikan label via `BiomechanicalValidator`.
 
 ---
 
-## 🔬 Referensi Biomekanika
+## 🚀 Instalasi & Setup
 
-Kriteria validasi gerakan dalam `BiomechanicalValidator` didasarkan **eksklusif** pada tiga publikasi ilmiah berikut:
+```bash
+# 1. Clone repositori (branch V2)
+git clone -b v2-per-frame-ai https://github.com/bangaji313/AttentiveSkel3D-WeightTraining-PoC.git
+cd AttentiveSkel3D-WeightTraining-PoC
+
+# 2. Buat environment conda (disarankan)
+conda create -n attentiveskel python=3.10 -y
+conda activate attentiveskel
+
+# 3. Install dependensi
+pip install -r requirements.txt
+
+# 4. Jalankan notebook eksperimen (urutan 01 → 08)
+jupyter notebook Release_V2_AttentiveSkel3D/notebooks/
+```
+
+> **Catatan:** Data tensor `.npy` dan bobot model `.pth` tidak di-commit ke repositori. Unduh dari Kaggle atau jalankan pipeline preprocessing terlebih dahulu.
+
+---
+
+## 📓 Panduan Notebook
+
+| Notebook | Tujuan |
+|---|---|
+| `01` | Pelatihan Skenario 2 — Full Model |
+| `02` | Pelatihan Skenario 1 — Baseline |
+| `03` | Pelatihan Skenario 3a/3b/3c — Ablation Study |
+| `04` | Bedah arsitektur V2 (Torchinfo + Forward Pass Sanity Check) |
+| `05` | Evaluasi metrik test set untuk semua 5 skenario |
+| `06` | 5-Fold Stratified Cross-Validation untuk semua 5 skenario |
+| `07` | Pembuktian evaluasi per-frame untuk bimbingan akademis |
+| `08` | Visualisasi heatmap atensi BSP — 3 panel 3D (Squat/Deadlift/Bench Press) |
+
+---
+
+## 📚 Referensi Ilmiah
 
 | Referensi | Kontribusi dalam Sistem |
 |---|---|
-| Chen et al. (2022) | Threshold kedalaman squat (knee angle ≥ 100°) & alignment tulang belakang deadlift |
-| Rao et al. (2023) | Deteksi *knee valgus* (rasio lebar lutut-per-pinggul < 0.85) |
-| Ko et al. (2024) | *Elbow ROM* bench press (angle ≤ 85°) & kriteria deadlift |
+| Chen et al. (2022) | Threshold kedalaman squat (sudut lutut ≤ 100°) |
+| Rao et al. (2023) | Deteksi *knee valgus* (rasio lebar lutut/ankle ≥ 0.85), hip angle ≤ 137° |
+| Ko et al. (2024) | Elbow ROM bench press (≤ 85°), inklinasi punggung deadlift (20°–60°) |
+| Hu et al. (2018) | *Squeeze-and-Excitation Networks* — dasar Learned Spatial Attention |
 
 ---
 
@@ -292,82 +473,9 @@ Kriteria validasi gerakan dalam `BiomechanicalValidator` didasarkan **eksklusif*
 
 ---
 
-## 📈 Hasil Eksperimen dan Pembahasan
-
-Bagian ini merangkum temuan utama penelitian dari dua sudut evaluasi:
-
-1. Perbandingan **lima skenario arsitektur** (Baseline dan tiga ablasi terhadap Full Model)
-2. Evaluasi robust menggunakan **Stratified 5-Fold Cross Validation** pada konfigurasi **50 epoch** dan **100 epoch**
-
-### A. Definisi Lima Skenario Model
-
-| Skenario | Konfigurasi Modul |
-|---|---|
-| Baseline 3D-CNN | Tanpa seluruh modul attention |
-| Ablasi A — Tanpa Prior | Tanpa `biomechanical_spatial_prior` |
-| Ablasi B — Tanpa Learned Spatial | Tanpa `learned_spatial_attention` |
-| Ablasi C — Tanpa Temporal | Tanpa `temporal_attention` |
-| Full AttentiveSkel-3D | Seluruh modul attention aktif |
-
-Tujuan desain skenario di atas adalah mengisolasi kontribusi masing-masing komponen attention terhadap performa klasifikasi gerakan latihan beban.
-
-### B. Hasil 5-Fold Cross Validation (50 Epoch)
-
-Hasil ringkas pada konfigurasi 50 epoch (berdasarkan `kfold_50epochs_ranking.csv`) adalah sebagai berikut:
-
-| Rank | Skenario | Mean Accuracy | Std Deviation |
-|---|---|---:|---:|
-| 1 | Ablasi B — Tanpa Learned Spatial | 96.51% | 2.47% |
-| 2 | Ablasi A — Tanpa Prior | 95.90% | 2.60% |
-| 3 | Full AttentiveSkel-3D | 95.29% | **2.11%** |
-| 4 | Ablasi C — Tanpa Temporal | 95.08% | 2.83% |
-| 5 | Baseline 3D-CNN | 94.87% | 2.82% |
-
-Interpretasi akademis:
-
-- Secara **rata-rata akurasi**, Ablasi B berada pada peringkat tertinggi.
-- Namun, **Full AttentiveSkel-3D memiliki stabilitas terbaik** (Std Deviation terendah), yang menunjukkan generalisasi antarfold lebih konsisten.
-- Baseline berada di posisi terendah, menguatkan bahwa penambahan mekanisme attention memberikan keuntungan performa dan/atau stabilitas.
-
-### C. Hasil 5-Fold Cross Validation (100 Epoch)
-
-Hasil ringkas pada konfigurasi 100 epoch (berdasarkan `kfold_100epochs_ranking.csv`) adalah sebagai berikut:
-
-| Rank | Skenario | Mean Accuracy | Std Deviation |
-|---|---|---:|---:|
-| 1 | Ablasi A — Tanpa Prior | 95.29% | 3.65% |
-| 2 | Full AttentiveSkel-3D | 95.29% | 3.87% |
-| 3 | Ablasi B — Tanpa Learned Spatial | 95.08% | 3.02% |
-| 4 | Baseline 3D-CNN | 94.47% | 4.20% |
-| 5 | Ablasi C — Tanpa Temporal | 94.25% | 4.52% |
-
-### D. Komparasi 50 Epoch vs 100 Epoch
-
-Perbandingan langsung (`kfold_comparison_50_vs_100.csv`) menunjukkan pola konsisten berikut:
-
-- Nilai **Mean Accuracy** cenderung stagnan atau menurun tipis saat epoch dinaikkan ke 100.
-- Nilai **Std Deviation meningkat pada seluruh skenario** (delta positif), menandakan variansi performa antarfold makin besar.
-- Fenomena ini mengindikasikan kecenderungan **overfitting**: model menjadi lebih peka terhadap noise data latih dan kurang stabil pada data validasi.
-
-Secara praktis, konfigurasi **50 epoch** lebih disarankan karena:
-
-1. Stabilitas hasil lebih baik (deviasi lebih rendah)
-2. Efisiensi komputasi lebih tinggi (waktu latih lebih singkat)
-3. Trade-off akurasi-stabilitas lebih optimal untuk konteks implementasi nyata
-
-### E. Implikasi untuk Pengembangan Sistem
-
-Temuan ini memberi arahan lanjutan yang penting:
-
-- Penambahan epoch tidak selalu meningkatkan kualitas generalisasi.
-- Evaluasi model sebaiknya tidak hanya mengacu pada mean accuracy, tetapi juga pada metrik stabilitas (std deviation) lintas fold.
-- Arsitektur Full Model tetap relevan sebagai kandidat utama karena konsistensi performanya, khususnya untuk skenario deployment yang menuntut prediksi stabil.
-
----
-
 ## 📄 Lisensi
 
-Repositori ini dikembangkan untuk keperluan akademis (Tugas Akhir). Segala bentuk penggunaan ulang harus mencantumkan atribusi yang sesuai kepada peneliti dan institusi.
+Repositori ini dikembangkan untuk keperluan akademis (Tugas Akhir). Segala bentuk penggunaan ulang harus mencantumkan atribusi yang sesuai.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
