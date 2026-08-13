@@ -462,7 +462,7 @@ jupyter notebook Release_V2_AttentiveSkel3D/notebooks/
   <td><strong>Dosen Penguji</strong></td>
   <td>
     1. Dr. sc. Lisa Kristiana, S.T., M.T., Ph.D.<br/>
-    2. Prof. Dr. Edi Triono Nuryatno, B.Sc. M.Sc, MACS CT.
+    2. Dr. Edi Triono Nuryatno, B.Sc. M.Sc, MACS CT.
   </td>
 </tr>
 <tr>
