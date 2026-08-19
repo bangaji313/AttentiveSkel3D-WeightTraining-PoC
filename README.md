@@ -77,7 +77,7 @@ Kesalahan postur saat latihan beban (*weight training*) — seperti lutut kolaps
 
 Untuk menjamin prinsip keterbukaan ilmiah dan keterulangan riset (*reproducibility*), seluruh video rekaman mentah bersolusi tinggi (HD) telah dipublikasikan secara terbuka di platform Kaggle:
 
-- 🔗 **Kaggle Dataset:** [AttentiveSkel-3D Weight Training Error Dataset V2](https://www.kaggle.com/datasets/bangaji/attentiveskel-3d-weight-training-error-dataset)
+- 🔗 **Kaggle Dataset:** [AttentiveSkel3D-WeightTraining Dataset Per-Frame](https://www.kaggle.com/datasets/bangaji/attentiveskel3d-weighttraining-dataset-per-frame)
 - 📌 **DOI Publikasi:** [`10.34740/kaggle/dsv/19043769`](https://doi.org/10.34740/kaggle/dsv/19043769)
 - 📊 **Cakupan Data:** 487 video latihan beban (total 507 video raw) yang mencakup 3 jenis latihan utama (*Bench Press*, *Deadlift*, *Squat*) dari sudut pandang *Frontal*, *Lateral*, dan *Sekunder*.
 
