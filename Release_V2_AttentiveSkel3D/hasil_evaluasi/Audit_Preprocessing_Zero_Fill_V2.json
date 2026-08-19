@@ -1,0 +1,448 @@
+{
+  "metadata": {
+    "total_video_diaudit": 487,
+    "total_frame_dataset": 31168,
+    "total_landmark_frame_dataset": 1028544,
+    "total_zero_filled_landmark_frames": 114869,
+    "overall_zero_fill_rate_pct": 11.17,
+    "total_frames_with_corrupted_validator_joints": 4672,
+    "overall_corrupted_validator_frames_pct": 14.99
+  },
+  "distribusi_per_latihan": {
+    "benchpress": {
+      "total_video": 187,
+      "persentase_zero_fill_pct": 16.59,
+      "frame_validator_terdampak": 2632,
+      "persentase_frame_val_terdampak_pct": 21.99
+    },
+    "squat": {
+      "total_video": 171,
+      "persentase_zero_fill_pct": 4.91,
+      "frame_validator_terdampak": 2040,
+      "persentase_frame_val_terdampak_pct": 18.64
+    },
+    "deadlift": {
+      "total_video": 129,
+      "persentase_zero_fill_pct": 11.6,
+      "frame_validator_terdampak": 0,
+      "persentase_frame_val_terdampak_pct": 0.0
+    }
+  },
+  "distribusi_per_camera_view": {
+    "frontal": {
+      "total_video": 166,
+      "persentase_zero_fill_pct": 11.09,
+      "frame_validator_terdampak": 578,
+      "persentase_frame_val_terdampak_pct": 5.44
+    },
+    "lateral": {
+      "total_video": 40,
+      "persentase_zero_fill_pct": 19.29,
+      "frame_validator_terdampak": 334,
+      "persentase_frame_val_terdampak_pct": 13.05
+    },
+    "sekunder_kaggle": {
+      "total_video": 281,
+      "persentase_zero_fill_pct": 10.06,
+      "frame_validator_terdampak": 3760,
+      "persentase_frame_val_terdampak_pct": 20.91
+    }
+  },
+  "top_10_video_zero_fill_terbanyak": [
+    {
+      "nama_dataset": "Squat_096",
+      "nama_video_mentah": "sekunder_sekunder_squat_kaggle22_rep22.mp4",
+      "jenis_latihan": "squat",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "Deadlift_027",
+      "nama_video_mentah": "primer_deadlift_lateral_subjek01_rep33.mp4",
+      "jenis_latihan": "deadlift",
+      "camera_view": "lateral",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 0
+    },
+    {
+      "nama_dataset": "BenchPress_109",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle09_rep09.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "BenchPress_124",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle23_rep23.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "BenchPress_127",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle26_rep26.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "Squat_102",
+      "nama_video_mentah": "sekunder_sekunder_squat_kaggle28_rep28.mp4",
+      "jenis_latihan": "squat",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "BenchPress_143",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle42_rep42.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "BenchPress_157",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle56_rep56.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "BenchPress_158",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle57_rep57.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "Squat_111",
+      "nama_video_mentah": "sekunder_sekunder_squat_kaggle37_rep37.mp4",
+      "jenis_latihan": "squat",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    }
+  ],
+  "top_10_video_validator_terdampak_terbanyak": [
+    {
+      "nama_dataset": "BenchPress_114",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle13_rep13.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 23.39,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "Squat_169",
+      "nama_video_mentah": "sekunder_sekunder_squat_kaggle95_rep95.mp4",
+      "jenis_latihan": "squat",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 20.08,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "Squat_116",
+      "nama_video_mentah": "sekunder_sekunder_squat_kaggle42_rep42.mp4",
+      "jenis_latihan": "squat",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 22.59,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "BenchPress_192",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle91_rep91.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 14.3,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "Squat_168",
+      "nama_video_mentah": "sekunder_sekunder_squat_kaggle94_rep94.mp4",
+      "jenis_latihan": "squat",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 19.37,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "BenchPress_127",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle26_rep26.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "BenchPress_132",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle31_rep31.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 16.76,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "BenchPress_134",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle33_rep33.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 17.95,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "Squat_132",
+      "nama_video_mentah": "sekunder_sekunder_squat_kaggle58_rep58.mp4",
+      "jenis_latihan": "squat",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 19.98,
+      "frame_validator_terdampak": 64
+    },
+    {
+      "nama_dataset": "BenchPress_143",
+      "nama_video_mentah": "sekunder_sekunder_benchpress_kaggle42_rep42.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "sekunder_kaggle",
+      "persentase_zero_fill_pct": 27.27,
+      "frame_validator_terdampak": 64
+    }
+  ],
+  "rekapitulasi_33_landmark": [
+    {
+      "landmark_id": 0,
+      "landmark_name": "NOSE",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 1,
+      "landmark_name": "LEFT_EYE_INNER",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 2,
+      "landmark_name": "LEFT_EYE",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 3,
+      "landmark_name": "LEFT_EYE_OUTER",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 4,
+      "landmark_name": "RIGHT_EYE_INNER",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 5,
+      "landmark_name": "RIGHT_EYE",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 6,
+      "landmark_name": "RIGHT_EYE_OUTER",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 7,
+      "landmark_name": "LEFT_EAR",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 8,
+      "landmark_name": "RIGHT_EAR",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 9,
+      "landmark_name": "MOUTH_LEFT",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 10,
+      "landmark_name": "MOUTH_RIGHT",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 11,
+      "landmark_name": "LEFT_SHOULDER",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 12,
+      "landmark_name": "RIGHT_SHOULDER",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 13,
+      "landmark_name": "LEFT_ELBOW",
+      "total_zero_filled_frames": 4552,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 14.6
+    },
+    {
+      "landmark_id": 14,
+      "landmark_name": "RIGHT_ELBOW",
+      "total_zero_filled_frames": 4100,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 13.15
+    },
+    {
+      "landmark_id": 15,
+      "landmark_name": "LEFT_WRIST",
+      "total_zero_filled_frames": 4725,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 15.16
+    },
+    {
+      "landmark_id": 16,
+      "landmark_name": "RIGHT_WRIST",
+      "total_zero_filled_frames": 2796,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 8.97
+    },
+    {
+      "landmark_id": 17,
+      "landmark_name": "LEFT_PINKY",
+      "total_zero_filled_frames": 4518,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 14.5
+    },
+    {
+      "landmark_id": 18,
+      "landmark_name": "RIGHT_PINKY",
+      "total_zero_filled_frames": 2711,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 8.7
+    },
+    {
+      "landmark_id": 19,
+      "landmark_name": "LEFT_INDEX",
+      "total_zero_filled_frames": 4497,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 14.43
+    },
+    {
+      "landmark_id": 20,
+      "landmark_name": "RIGHT_INDEX",
+      "total_zero_filled_frames": 2788,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 8.95
+    },
+    {
+      "landmark_id": 21,
+      "landmark_name": "LEFT_THUMB",
+      "total_zero_filled_frames": 4723,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 15.15
+    },
+    {
+      "landmark_id": 22,
+      "landmark_name": "RIGHT_THUMB",
+      "total_zero_filled_frames": 2945,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 9.45
+    },
+    {
+      "landmark_id": 23,
+      "landmark_name": "LEFT_HIP",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 24,
+      "landmark_name": "RIGHT_HIP",
+      "total_zero_filled_frames": 0,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 0.0
+    },
+    {
+      "landmark_id": 25,
+      "landmark_name": "LEFT_KNEE",
+      "total_zero_filled_frames": 9333,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 29.94
+    },
+    {
+      "landmark_id": 26,
+      "landmark_name": "RIGHT_KNEE",
+      "total_zero_filled_frames": 8512,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 27.31
+    },
+    {
+      "landmark_id": 27,
+      "landmark_name": "LEFT_ANKLE",
+      "total_zero_filled_frames": 10099,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 32.4
+    },
+    {
+      "landmark_id": 28,
+      "landmark_name": "RIGHT_ANKLE",
+      "total_zero_filled_frames": 10604,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 34.02
+    },
+    {
+      "landmark_id": 29,
+      "landmark_name": "LEFT_HEEL",
+      "total_zero_filled_frames": 8436,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 27.07
+    },
+    {
+      "landmark_id": 30,
+      "landmark_name": "RIGHT_HEEL",
+      "total_zero_filled_frames": 9600,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 30.8
+    },
+    {
+      "landmark_id": 31,
+      "landmark_name": "LEFT_FOOT_INDEX",
+      "total_zero_filled_frames": 9500,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 30.48
+    },
+    {
+      "landmark_id": 32,
+      "landmark_name": "RIGHT_FOOT_INDEX",
+      "total_zero_filled_frames": 10430,
+      "total_frames_dataset": 31168,
+      "persentase_zero_fill_pct": 33.46
+    }
+  ]
+}

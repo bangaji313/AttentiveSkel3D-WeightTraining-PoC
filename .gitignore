@@ -74,3 +74,14 @@ Release_V2_AttentiveSkel3D/data_sementara/
 *.avi
 *.mkv
 
+# ============================================================
+# Scratch / Temporary Root Scripts
+# ============================================================
+/audit_*.py
+/copy_*.py
+/find_*.py
+/inspect_*.py
+/test_*.py
+
+
+
