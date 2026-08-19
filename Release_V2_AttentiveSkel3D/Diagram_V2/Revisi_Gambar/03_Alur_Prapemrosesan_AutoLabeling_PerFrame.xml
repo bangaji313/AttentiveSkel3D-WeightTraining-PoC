@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- JUDUL -->
+    <mxCell id="title" value="Alur Pra-pemrosesan Data dan Auto-Labeling Biomekanik Per-Frame" style="text;html=1;align=center;fontStyle=1;fontSize=22;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+      <mxGeometry x="0" y="20" width="1600" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="subtitle" value="Proses paralel pembentukan tensor spasio-temporal dan pelabelan otomatis berbasis analisis sudut sendi" style="text;html=1;align=center;fontSize=12;fontStyle=2;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+      <mxGeometry x="0" y="55" width="1600" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- ═════════════════ START & INPUT ═════════════════ -->
+    <mxCell id="start" value="Mulai" style="ellipse;whiteSpace=wrap;html=1;fillColor=#34495E;strokeColor=#2C3E50;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="740" y="100" width="120" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="input" value="Dataset Video&#xa;Latihan Beban (.mp4)" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#D4E6F1;strokeColor=#2980B9;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="725" y="180" width="150" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a_s_i" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="start" target="input"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="bp" value="Ekstraksi Pose 3D&#xa;(MediaPipe BlazePose)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#2980B9;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="700" y="280" width="200" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a_i_bp" value="Frame-by-frame" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=10;" edge="1" parent="1" source="input" target="bp"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- ═════════════════ SPLIT ═════════════════ -->
+    <!-- Paralel Line (Fork) -->
+    <mxCell id="fork" value="" style="line;strokeWidth=4;strokeColor=#34495E;fillColor=none;" vertex="1" parent="1">
+      <mxGeometry x="380" y="360" width="840" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="a_bp_fork" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=none;endFill=0;" edge="1" parent="1" source="bp">
+      <mxGeometry relative="1" as="geometry">
+        <targetPoint x="800" y="365" />
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="L_head" value="Jalur A: Pra-pemrosesan Data Skeleton" style="text;html=1;align=center;fontStyle=1;fontSize=12;strokeColor=none;fillColor=none;fontColor=#2980B9;" vertex="1" parent="1">
+      <mxGeometry x="380" y="380" width="300" height="20" as="geometry" />
+    </mxCell>
+    <mxCell id="R_head" value="Jalur B: Auto-Labeling Biomekanis" style="text;html=1;align=center;fontStyle=1;fontSize=12;strokeColor=none;fillColor=none;fontColor=#C0392B;" vertex="1" parent="1">
+      <mxGeometry x="920" y="380" width="300" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- ═════════════════ JALUR KIRI (PREPROCESSING) ═════════════════ -->
+    <mxCell id="a_fork_L1" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry"><sourcePoint x="530" y="365" /><targetPoint x="530" y="420" /></mxGeometry>
+    </mxCell>
+
+    <mxCell id="s1" value="① Filtering &amp; Confidence Check&#xa;(Hapus titik dengan visibility &lt; 0.3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2F8;strokeColor=#5499C7;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="410" y="420" width="240" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="s2" value="② Interpolasi Temporal&#xa;(Isi titik hilang antar frame)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2F8;strokeColor=#5499C7;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="410" y="500" width="240" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a_s12" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="s1" target="s2"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="s3" value="③ Smoothing Temporal&#xa;(Reduksi noise koordinat)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2F8;strokeColor=#5499C7;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="410" y="580" width="240" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a_s23" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="s2" target="s3"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="s4" value="④ Normalisasi Spasial&#xa;(Koordinat berbasis Hip-Centered)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2F8;strokeColor=#5499C7;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="410" y="660" width="240" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a_s34" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="s3" target="s4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="s5" value="⑤ Resampling Temporal&#xa;(Interpolasi menjadi 64 frame tetap)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2F8;strokeColor=#5499C7;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="410" y="740" width="240" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a_s45" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="s4" target="s5"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="out_tensor" value="Tensor Skeleton 3D&#xa;Shape: (64 × 33 × 3)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#A9CCE3;strokeColor=#1F618D;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="455" y="830" width="150" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a_s5_out" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="s5" target="out_tensor"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- ═════════════════ JALUR KANAN (AUTO-LABELING) ═════════════════ -->
+    <mxCell id="a_fork_R1" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry"><sourcePoint x="1070" y="365" /><targetPoint x="1070" y="420" /></mxGeometry>
+    </mxCell>
+
+    <mxCell id="bv1" value="Ekstraksi Fitur Biomekanik&#xa;(Perhitungan Sudut Sendi per Frame)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#CB4335;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="930" y="420" width="280" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- Decision -->
+    <mxCell id="dec" value="Apakah semua parameter&#xa;sudut memenuhi kriteria&#xa;biomekanika gerakan?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#F1C40F;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="930" y="520" width="280" height="100" as="geometry" />
+    </mxCell>
+    <mxCell id="a_bv1_dec" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="bv1" target="dec"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- Yes/No branches -->
+    <mxCell id="lbl0" value="label[t] = 0&#xa;(Form Benar)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="840" y="680" width="140" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="lbl1" value="label[t] = 1&#xa;(Form Salah)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1160" y="680" width="140" height="50" as="geometry" />
+    </mxCell>
+
+    <mxCell id="a_yes" value="Ya" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#27AE60;strokeWidth=2;endArrow=block;endFill=1;fontColor=#27AE60;fontSize=11;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="dec" target="lbl0">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points"><mxPoint x="910" y="570" /></Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="a_no" value="Tidak" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#C0392B;strokeWidth=2;endArrow=block;endFill=1;fontColor=#C0392B;fontSize=11;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="dec" target="lbl1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points"><mxPoint x="1230" y="570" /></Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Join Labels -->
+    <mxCell id="lbl_join" value="" style="line;strokeWidth=3;strokeColor=#34495E;fillColor=none;" vertex="1" parent="1">
+      <mxGeometry x="910" y="770" width="320" height="10" as="geometry" />
+    </mxCell>
+    <mxCell id="a_lbl0_j" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=none;endFill=0;" edge="1" parent="1" source="lbl0">
+      <mxGeometry relative="1" as="geometry"><targetPoint x="910" y="775" /></mxGeometry>
+    </mxCell>
+    <mxCell id="a_lbl1_j" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=none;endFill=0;" edge="1" parent="1" source="lbl1">
+      <mxGeometry relative="1" as="geometry"><targetPoint x="1230" y="775" /></mxGeometry>
+    </mxCell>
+
+    <mxCell id="out_label" value="Array Label Biner&#xa;Shape: (64,)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#F5B7B1;strokeColor=#CB4335;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="995" y="830" width="150" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a_j_outl" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry"><sourcePoint x="1070" y="775" /><targetPoint x="1070" y="830" /></mxGeometry>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

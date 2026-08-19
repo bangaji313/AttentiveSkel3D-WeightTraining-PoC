@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <mxCell id="title" value="Mekanisme Internal Tiga Lapis Atensi Biomekanis" style="text;html=1;align=center;fontStyle=1;fontSize=22;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+      <mxGeometry x="0" y="20" width="1600" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="subtitle" value="Diagram alir operasi perkalian elemen-wise (fusion) antara tensor fitur dan bobot atensi" style="text;html=1;align=center;fontSize=12;fontStyle=2;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+      <mxGeometry x="0" y="55" width="1600" height="20" as="geometry" />
+    </mxCell>
+
+    <mxCell id="db_f" value="Tensor Fitur (F)&#xa;Input dari Lapisan Konvolusi" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#A9CCE3;strokeColor=#1F618D;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="100" y="320" width="160" height="80" as="geometry" />
+    </mxCell>
+
+    <mxCell id="fork" value="" style="line;strokeWidth=4;strokeColor=#34495E;fillColor=none;" vertex="1" parent="1">
+      <mxGeometry x="340" y="160" width="10" height="400" as="geometry" />
+    </mxCell>
+    <mxCell id="a_f_fork" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=2;endArrow=none;endFill=0;" edge="1" parent="1" source="db_f">
+      <mxGeometry relative="1" as="geometry"><targetPoint x="345" y="360" /></mxGeometry>
+    </mxCell>
+
+    <!-- Jalur 1: BSP -->
+    <mxCell id="a_fork_bsp" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry"><sourcePoint x="345" y="160" /><targetPoint x="440" y="160" /></mxGeometry>
+    </mxCell>
+    <mxCell id="p_bsp" value="Biomechanical Spatial Prior&#xa;(Inisialisasi Bobot Berdasarkan Sendi)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#CB4335;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="440" y="130" width="220" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="p_bsp_act" value="Sigmoid Activation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5EEF8;strokeColor=#AF7AC5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="720" y="140" width="140" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="a_bsp1" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="p_bsp" target="p_bsp_act"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="w_bsp" value="Bobot Prior Sendi (P)&#xa;Dimensi: V (Landmark)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#FDEDEC;strokeColor=#E74C3C;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="920" y="135" width="200" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a_bsp2" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="p_bsp_act" target="w_bsp"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- Jalur 2: Learned Spatial -->
+    <mxCell id="a_fork_ls" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry"><sourcePoint x="345" y="360" /><targetPoint x="440" y="360" /></mxGeometry>
+    </mxCell>
+    <mxCell id="p_ls" value="Learned Spatial (Squeeze &amp; Excitation)&#xa;(Global Avg Pool + 2-Layer MLP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#F1C40F;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="440" y="330" width="220" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="p_ls_act" value="Sigmoid Activation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5EEF8;strokeColor=#AF7AC5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="720" y="340" width="140" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="a_ls1" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="p_ls" target="p_ls_act"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="w_ls" value="Bobot Spatial (A_s)&#xa;Dimensi: C (Channel)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#FEF9E7;strokeColor=#F1C40F;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="920" y="335" width="200" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a_ls2" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="p_ls_act" target="w_ls"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- Jalur 3: Temporal -->
+    <mxCell id="a_fork_t" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry"><sourcePoint x="345" y="560" /><targetPoint x="440" y="560" /></mxGeometry>
+    </mxCell>
+    <mxCell id="p_t" value="Temporal Attention&#xa;(Conv1x1 + Spatial Mean)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="440" y="530" width="220" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="p_t_act" value="Softmax Activation&#xa;(Σ = 1.0)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5EEF8;strokeColor=#AF7AC5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="720" y="540" width="140" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="a_t1" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="p_t" target="p_t_act"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="w_t" value="Bobot Temporal (A_t)&#xa;Dimensi: T (Frame)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#EAFAF1;strokeColor=#27AE60;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="920" y="535" width="200" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a_t2" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="p_t_act" target="w_t"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- FUSION -->
+    <mxCell id="mult_icon" value="ⓧ Perkalian Element-wise (Broadcasted)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#F8F9F9;strokeColor=#B3B6B7;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1200" y="325" width="150" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="a_w1_f" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="w_bsp" target="mult_icon"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="a_w2_f" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="w_ls" target="mult_icon"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="a_w3_f" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="w_t" target="mult_icon"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- F Bypass Line (Skip connection style) -->
+    <mxCell id="a_f_bypass" value="F Asli" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#2980B9;strokeWidth=2;endArrow=block;endFill=1;fontSize=10;" edge="1" parent="1" source="db_f" target="mult_icon">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="180" y="680" />
+          <mxPoint x="1275" y="680" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="db_out" value="Tensor Output (F')&#xa;Fitur yang Diperkuat" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#A9CCE3;strokeColor=#1F618D;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1420" y="320" width="150" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="a_mult_out" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="mult_icon" target="db_out"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+  </root>
+</mxGraphModel>

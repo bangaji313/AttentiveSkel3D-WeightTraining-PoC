@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- JUDUL DIAGRAM -->
+    <mxCell id="title" value="Alur Metodologi Penelitian" style="text;html=1;align=center;fontStyle=1;fontSize=22;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+      <mxGeometry x="0" y="20" width="1600" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="subtitle" value="Pengembangan Sistem Klasifikasi Kualitas Gerakan Latihan Beban Per-Frame Berbasis Skeleton 3D (AttentiveSkel-3D V2)" style="text;html=1;align=center;fontSize=12;fontStyle=2;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+      <mxGeometry x="0" y="55" width="1600" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- ═════════════════ SWIMLANES (KOLOM FASE) ═════════════════ -->
+    <!-- Kolom 1 -->
+    <mxCell id="col1_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8F9F9;strokeColor=#D5D8DC;" vertex="1" parent="1"><mxGeometry x="60" y="120" width="340" height="680" as="geometry" /></mxCell>
+    <mxCell id="col1_hd" value="FASE 1&#xa;Pengumpulan Dataset" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2E86C1;strokeColor=#2874A6;fontColor=#ffffff;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="60" y="120" width="340" height="40" as="geometry" /></mxCell>
+
+    <!-- Kolom 2 -->
+    <mxCell id="col2_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F9EBEA;strokeColor=#D98880;" vertex="1" parent="1"><mxGeometry x="430" y="120" width="340" height="680" as="geometry" /></mxCell>
+    <mxCell id="col2_hd" value="FASE 2&#xa;Pra-pemrosesan &amp; Pelabelan" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#C0392B;strokeColor=#922B21;fontColor=#ffffff;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="430" y="120" width="340" height="40" as="geometry" /></mxCell>
+
+    <!-- Kolom 3 -->
+    <mxCell id="col3_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FEF9E7;strokeColor=#F7DC6F;" vertex="1" parent="1"><mxGeometry x="800" y="120" width="340" height="680" as="geometry" /></mxCell>
+    <mxCell id="col3_hd" value="FASE 3&#xa;Pengembangan Model" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D4AC0D;strokeColor=#B18904;fontColor=#ffffff;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="800" y="120" width="340" height="40" as="geometry" /></mxCell>
+
+    <!-- Kolom 4 -->
+    <mxCell id="col4_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAFAF1;strokeColor=#7DCEA0;" vertex="1" parent="1"><mxGeometry x="1170" y="120" width="340" height="680" as="geometry" /></mxCell>
+    <mxCell id="col4_hd" value="FASE 4&#xa;Evaluasi &amp; Analisis" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#27AE60;strokeColor=#1E8449;fontColor=#ffffff;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="1170" y="120" width="340" height="40" as="geometry" /></mxCell>
+
+    <!-- ═════════════════ FASE 1: NODES & ARROWS ═════════════════ -->
+    <mxCell id="n1_start" value="Mulai" style="ellipse;whiteSpace=wrap;html=1;fillColor=#34495E;strokeColor=#2C3E50;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="170" y="190" width="120" height="40" as="geometry" />
+    </mxCell>
+
+    <mxCell id="n1_1" value="Pengambilan Video Data Primer&#xa;(Perekaman Mandiri)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2F8;strokeColor=#5499C7;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="90" y="270" width="130" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="n1_2" value="Pengumpulan Data Sekunder&#xa;(Dataset Publik Kaggle)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2F8;strokeColor=#5499C7;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="240" y="270" width="130" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- Arrow Start to Split -->
+    <mxCell id="a1_s_split" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=none;endFill=0;" edge="1" parent="1" source="n1_start">
+      <mxGeometry relative="1" as="geometry">
+        <targetPoint x="230" y="250" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="a1_split_L" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry"><sourcePoint x="230" y="250" /><targetPoint x="155" y="270" /></mxGeometry>
+    </mxCell>
+    <mxCell id="a1_split_R" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry"><sourcePoint x="230" y="250" /><targetPoint x="305" y="270" /></mxGeometry>
+    </mxCell>
+
+    <mxCell id="n1_3" value="Kurasi &amp; Pemotongan Video&#xa;(1 Video = 1 Repetisi Gerakan)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#2980B9;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="115" y="370" width="230" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows converge -->
+    <mxCell id="a1_13" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n1_1" target="n1_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="a1_23" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n1_2" target="n1_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="n1_4" value="Kategorisasi Jenis Gerakan&#xa;(Squat, Deadlift, Bench Press)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4E6F1;strokeColor=#2980B9;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="115" y="460" width="230" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a1_34" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n1_3" target="n1_4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="n1_db" value="Dataset Video Mentah&#xa;Latihan Beban (.mp4)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#A9CCE3;strokeColor=#1F618D;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="145" y="550" width="170" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="a1_4db" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n1_4" target="n1_db"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- Transition F1 -> F2 -->
+    <mxCell id="a1_t2" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#2E86C1;strokeWidth=2.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <sourcePoint x="230" y="620" />
+        <targetPoint x="600" y="180" />
+        <Array as="points">
+          <mxPoint x="230" y="750" />
+          <mxPoint x="400" y="750" />
+          <mxPoint x="400" y="150" />
+          <mxPoint x="600" y="150" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- ═════════════════ FASE 2: NODES & ARROWS ═════════════════ -->
+    <mxCell id="n2_1" value="Ekstraksi Skeleton 3D&#xa;(MediaPipe BlazePose)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#E74C3C;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="495" y="180" width="210" height="50" as="geometry" />
+    </mxCell>
+
+    <mxCell id="n2_2" value="Pra-pemrosesan Data Landmark&#xa;(Filtering, Interpolasi, Smoothing,&#xa;Normalisasi, Resampling)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5B7B1;strokeColor=#CB4335;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="495" y="270" width="210" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="a2_12" value="Frame-by-frame" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=10;" edge="1" parent="1" source="n2_1" target="n2_2"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- SPLIT KE LABELING & TENSOR -->
+    <mxCell id="n2_tensor" value="Pembentukan Tensor Skeleton&#xa;Shape: (64 × 33 × 3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1948A;strokeColor=#B03A2E;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="450" y="370" width="145" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="n2_label" value="Auto-Labeling Biomekanis&#xa;(Hitung Sudut Sendi Per Frame)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1948A;strokeColor=#B03A2E;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="615" y="370" width="150" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="a2_split_L" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n2_2" target="n2_tensor">
+      <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="600" y="350" /><mxPoint x="523" y="350" /></Array></mxGeometry>
+    </mxCell>
+    <mxCell id="a2_split_R" value="Proses Paralel" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=10;" edge="1" parent="1" source="n2_2" target="n2_label">
+      <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="600" y="350" /><mxPoint x="690" y="350" /></Array></mxGeometry>
+    </mxCell>
+
+    <mxCell id="n2_3" value="Penyatuan Pasangan Data&#xa;Tensor (.npy) &amp; Array Label (.npy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6B0AA;strokeColor=#943126;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="495" y="470" width="210" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a2_t3" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n2_tensor" target="n2_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="a2_l3" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n2_label" target="n2_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="n2_db" value="Dataset Preprocessed&#xa;Siap Latih" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#E6B0AA;strokeColor=#922B21;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="515" y="550" width="170" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="a2_3db" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n2_3" target="n2_db"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- Transition F2 -> F3 -->
+    <mxCell id="a2_t3_main" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#C0392B;strokeWidth=2.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <sourcePoint x="600" y="620" />
+        <targetPoint x="970" y="180" />
+        <Array as="points">
+          <mxPoint x="600" y="750" />
+          <mxPoint x="770" y="750" />
+          <mxPoint x="770" y="150" />
+          <mxPoint x="970" y="150" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- ═════════════════ FASE 3: NODES & ARROWS ═════════════════ -->
+    <mxCell id="n3_1" value="Perancangan Arsitektur Model&#xa;AttentiveSkel-3D V2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#F1C40F;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="865" y="180" width="210" height="50" as="geometry" />
+    </mxCell>
+
+    <mxCell id="n3_2" value="Integrasi Tiga Lapis Atensi:&#xa;BSP, Learned Spatial, Temporal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F9E79F;strokeColor=#D4AC0D;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="865" y="270" width="210" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a3_12" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n3_1" target="n3_2"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="n3_3" value="Pembagian Skenario Eksperimen&#xa;(Baseline vs Model Ber-Atensi)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7DC6F;strokeColor=#B18904;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="865" y="360" width="210" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a3_23" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n3_2" target="n3_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="n3_4" value="Proses Pelatihan Model&#xa;(Stratified 5-Fold Cross-Validation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4D03F;strokeColor=#9A7D0A;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="850" y="450" width="240" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a3_34" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n3_3" target="n3_4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="n3_doc" value="Bobot Model Terlatih&#xa;(.pt / .pth)" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#F4D03F;strokeColor=#7D6608;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="890" y="540" width="160" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="a3_4d" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n3_4" target="n3_doc"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <!-- Transition F3 -> F4 -->
+    <mxCell id="a3_t4" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#D4AC0D;strokeWidth=2.5;endArrow=block;endFill=1;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <sourcePoint x="970" y="610" />
+        <targetPoint x="1340" y="180" />
+        <Array as="points">
+          <mxPoint x="970" y="750" />
+          <mxPoint x="1140" y="750" />
+          <mxPoint x="1140" y="150" />
+          <mxPoint x="1340" y="150" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- ═════════════════ FASE 4: NODES & ARROWS ═════════════════ -->
+    <mxCell id="n4_1" value="Evaluasi Metrik Kinerja&#xa;(Akurasi, F1-Score, Recall)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4EFDF;strokeColor=#52BE80;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1235" y="180" width="210" height="50" as="geometry" />
+    </mxCell>
+
+    <mxCell id="n4_2" value="Uji Coba pada Test Set Independen" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9DFBF;strokeColor=#27AE60;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1235" y="270" width="210" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a4_12" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n4_1" target="n4_2"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="n4_3" value="Studi Ablasi Modul Atensi&#xa;(Menganalisis Kontribusi Tiap Modul)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7DCEA0;strokeColor=#1E8449;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1225" y="360" width="230" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a4_23" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n4_2" target="n4_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="n4_4" value="Analisis Interpretabilitas (XAI)&#xa;Visualisasi Bobot Atensi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#52BE80;strokeColor=#196F3D;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1225" y="450" width="230" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="a4_34" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n4_3" target="n4_4"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="n4_doc" value="Laporan Hasil &amp;&#xa;Kesimpulan Penelitian" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#27AE60;strokeColor=#145A32;fontColor=#ffffff;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1260" y="540" width="160" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="a4_4d" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n4_4" target="n4_doc"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+    <mxCell id="n4_end" value="Selesai" style="ellipse;whiteSpace=wrap;html=1;fillColor=#34495E;strokeColor=#2C3E50;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1280" y="650" width="120" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="a4_de" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#555;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n4_doc" target="n4_end"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+  </root>
+</mxGraphModel>

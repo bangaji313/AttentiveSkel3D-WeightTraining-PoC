@@ -1,0 +1,140 @@
+<mxfile host="app.diagrams.net" modified="2026-07-29" version="21.0.0">
+  <diagram name="Demo Inferensi Web App" id="diagram-04">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- JUDUL -->
+        <mxCell id="title" value="Alur Aplikasi Demo Inferensi — AttentiveSkel-3D V2 (FastAPI + SSE)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#1a237e;" vertex="1" parent="1">
+          <mxGeometry x="80" y="20" width="900" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- LEGENDA AKTOR -->
+        <mxCell id="leg_user" value="👤 Pengguna" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#388e3c;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="110" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_server" value="⚙️ Server (FastAPI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="440" y="80" width="130" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_model" value="🧠 Model AI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#6a1b9a;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="790" y="80" width="110" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════ FASE 1: UPLOAD ══════════════════ -->
+        <mxCell id="phase1" value="FASE 1 — Input Pengguna" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=11;fontColor=#1b5e20;" vertex="1" parent="1">
+          <mxGeometry x="50" y="140" width="300" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user_upload" value="👤 Pengguna membuka Web App&#xa;Antarmuka dark-mode (index_v2.html)&#xa;Upload video latihan beban (.mp4)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="50" y="165" width="280" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="select_model" value="Pilih Skenario Model&#xa;(Dropdown: Full Model / Baseline / Ablasi A/B/C)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#388e3c;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="255" width="280" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="post_req" value="POST /api/predict/stream&#xa;(multipart/form-data: video + model_name)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=15;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="335" width="280" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════ FASE 2: EKSTRAKSI ══════════════════ -->
+        <mxCell id="phase2" value="FASE 2 — Ekstraksi &amp; Pra-pemrosesan (Server)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=11;fontColor=#0d47a1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="140" width="400" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sse_progress1" value="SSE → Emit: {stage: 1, persen: 0%}&#xa;Status: 'Ekstraksi Pose Dimulai...'" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffde7;strokeColor=#f57f17;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="390" y="165" width="260" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mediapipe2" value="⚙️ MediaPipe BlazePose&#xa;Proses tiap frame video&#xa;Hasilkan: (N_frame, 33, 4) per frame&#xa;Durasi: ~30-60 detik" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="390" y="220" width="260" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sse_progress2" value="SSE → Emit: {stage: 2, persen: 50%}&#xa;Status: 'Preprocessing...'" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffde7;strokeColor=#f57f17;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="390" y="305" width="260" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="preprocess2" value="⚙️ Preprocessing Tensor&#xa;Filtering → Normalisasi → Resample 64 frame&#xa;Output: Tensor (1, 64, 33, 3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="390" y="360" width="260" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════ FASE 3: INFERENSI ══════════════════ -->
+        <mxCell id="phase3" value="FASE 3 — Inferensi Model AI" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=11;fontColor=#4a148c;" vertex="1" parent="1">
+          <mxGeometry x="700" y="140" width="350" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sse_progress3" value="SSE → Emit: {stage: 3, persen: 75%}&#xa;Status: 'Inferensi Model...'" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffde7;strokeColor=#f57f17;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="715" y="165" width="260" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="model_infer" value="🧠 AttentiveSkel3DPerFrame&#xa;model.eval() → no_grad()&#xa;Forward Pass: (1,64,33,3) → (1,64,2)&#xa;Softmax → probabilitas per frame&#xa;argmax → 64 prediksi biner" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#6a1b9a;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="715" y="220" width="260" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════ FASE 4: SSE STREAM ══════════════════ -->
+        <mxCell id="phase4" value="FASE 4 — Server-Sent Events (SSE) Real-time" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=11;fontColor=#bf360c;" vertex="1" parent="1">
+          <mxGeometry x="50" y="465" width="500" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sse_stream" value="Server-Sent Events (SSE)&#xa;GET /api/predict/stream — koneksi persistent&#xa;Format: data: {stage, progress, message, result}&#xa;Emit 4 event: Pose → Preprocessing → Inferensi → Render&#xa;Tanpa polling — push data secara real-time ke browser" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;fontSize=10;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="490" width="400" height="85" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sse_progress4" value="SSE → Emit: {stage: 4, persen: 90%}&#xa;Status: 'Rendering Heatmap...'" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffde7;strokeColor=#f57f17;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="500" y="510" width="260" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════ FASE 5: RENDERING ══════════════════ -->
+        <mxCell id="heatmap_render" value="⚙️ Rendering Heatmap Video&#xa;• Overlay warna per frame: Hijau (BENAR) / Merah (SALAH)&#xa;• Power Amplification (norm^4) untuk kontras visual&#xa;• Anotasi teks status 'BENAR / SALAH' per frame&#xa;• Highlight sendi kritis (lutut, pinggul) jika SALAH&#xa;Output: video MP4 dengan overlay heatmap atensi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="500" y="565" width="400" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sse_done" value="SSE → Emit: {stage: 4, persen: 100%, result: {video_url, stats}}&#xa;Koneksi SSE ditutup." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffde7;strokeColor=#f57f17;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="500" y="675" width="400" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════ FASE 5: OUTPUT ══════════════════ -->
+        <mxCell id="phase5" value="FASE 5 — Visualisasi Output di Browser Pengguna" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=11;fontColor=#1b5e20;" vertex="1" parent="1">
+          <mxGeometry x="50" y="735" width="500" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="output_video" value="🎥 Video Hasil dengan Overlay Heatmap&#xa;• Background hijau/merah sesuai prediksi frame&#xa;• Teks 'BENAR' / 'SALAH' + probabilitas (%) tampil per frame" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#388e3c;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="760" width="340" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="output_stats" value="📊 Panel Statistik&#xa;• Distribusi BENAR vs SALAH (pie / bar)&#xa;• Persen akurasi per gerakan&#xa;• Daftar frame bermasalah (hotspot)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#388e3c;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="760" width="280" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="output_heatmap" value="🟠 Heatmap Atensi Sendi&#xa;• Warna merah terang pada sendi kritis&#xa;  (lutut, pinggul) di frame SALAH&#xa;• Intensitas ≈ bobot BSP model" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#388e3c;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="730" y="760" width="280" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- END -->
+        <mxCell id="end" value="SESI INFERENSI SELESAI" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1e1e1e;strokeColor=#1e1e1e;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="860" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- KONEKTOR -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="user_upload" target="select_model" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="select_model" target="post_req" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="HTTP POST" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="post_req" target="sse_progress1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sse_progress1" target="mediapipe2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="mediapipe2" target="sse_progress2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sse_progress2" target="preprocess2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="preprocess2" target="sse_progress3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sse_progress3" target="model_infer" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="model_infer" target="sse_progress4" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sse_progress4" target="heatmap_render" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="heatmap_render" target="sse_done" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <!-- SSE stream konektor (garis putus-putus ke pengguna) -->
+        <mxCell id="e12" value="SSE Push" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#f57f17;fontColor=#f57f17;" edge="1" source="sse_stream" target="output_video" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sse_done" target="sse_stream" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="output_video" target="end" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e15" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="output_stats" target="end" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="output_heatmap" target="end" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
