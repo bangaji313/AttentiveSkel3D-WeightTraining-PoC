@@ -1,0 +1,405 @@
+{
+  "metadata": {
+    "total_video": 487,
+    "total_frames_audited": 31168,
+    "deskripsi": "Perbandingan label V1 (biner paksa) vs V2 Shadow Validator (3 status: BENAR, SALAH, INVALID_POSE)"
+  },
+  "ringkasan_transisi_global": {
+    "total_frame": 31168,
+    "unchanged_BENAR": 9652,
+    "unchanged_SALAH": 16844,
+    "BENAR_to_SALAH": 0,
+    "SALAH_to_BENAR": 0,
+    "BENAR_to_INVALID": 3860,
+    "SALAH_to_INVALID": 812,
+    "persentase_SALAH_to_INVALID_pct": 2.61,
+    "persentase_total_unchanged_pct": 85.01
+  },
+  "breakdown_per_exercise": {
+    "benchpress": {
+      "total": 11968,
+      "unchanged_BENAR": 1111,
+      "unchanged_SALAH": 8225,
+      "BENAR_to_SALAH": 0,
+      "SALAH_to_BENAR": 0,
+      "BENAR_to_INVALID": 2124,
+      "SALAH_to_INVALID": 508
+    },
+    "squat": {
+      "total": 10944,
+      "unchanged_BENAR": 5110,
+      "unchanged_SALAH": 3794,
+      "BENAR_to_SALAH": 0,
+      "SALAH_to_BENAR": 0,
+      "BENAR_to_INVALID": 1736,
+      "SALAH_to_INVALID": 304
+    },
+    "deadlift": {
+      "total": 8256,
+      "unchanged_BENAR": 3431,
+      "unchanged_SALAH": 4825,
+      "BENAR_to_SALAH": 0,
+      "SALAH_to_BENAR": 0,
+      "BENAR_to_INVALID": 0,
+      "SALAH_to_INVALID": 0
+    }
+  },
+  "breakdown_per_view": {
+    "Primer Frontal": {
+      "total": 10624,
+      "unchanged_BENAR": 3058,
+      "unchanged_SALAH": 6988,
+      "BENAR_to_SALAH": 0,
+      "SALAH_to_BENAR": 0,
+      "BENAR_to_INVALID": 413,
+      "SALAH_to_INVALID": 165
+    },
+    "Primer Lateral": {
+      "total": 2560,
+      "unchanged_BENAR": 591,
+      "unchanged_SALAH": 1635,
+      "BENAR_to_SALAH": 0,
+      "SALAH_to_BENAR": 0,
+      "BENAR_to_INVALID": 334,
+      "SALAH_to_INVALID": 0
+    },
+    "Sekunder": {
+      "total": 17984,
+      "unchanged_BENAR": 6003,
+      "unchanged_SALAH": 8221,
+      "BENAR_to_SALAH": 0,
+      "SALAH_to_BENAR": 0,
+      "BENAR_to_INVALID": 3113,
+      "SALAH_to_INVALID": 647
+    }
+  },
+  "20_contoh_SALAH_to_INVALID": [
+    {
+      "sample_no": 1,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 37,
+      "frame_temporal_display_1_64": 38,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 2,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 38,
+      "frame_temporal_display_1_64": 39,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 3,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 39,
+      "frame_temporal_display_1_64": 40,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 4,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 40,
+      "frame_temporal_display_1_64": 41,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 5,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 41,
+      "frame_temporal_display_1_64": 42,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 6,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 42,
+      "frame_temporal_display_1_64": 43,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 7,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 43,
+      "frame_temporal_display_1_64": 44,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 8,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 44,
+      "frame_temporal_display_1_64": 45,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 9,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 45,
+      "frame_temporal_display_1_64": 46,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 10,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 46,
+      "frame_temporal_display_1_64": 47,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 11,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 47,
+      "frame_temporal_display_1_64": 48,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_WRIST']"
+    },
+    {
+      "sample_no": 12,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 57,
+      "frame_temporal_display_1_64": 58,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "RIGHT_ELBOW",
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['RIGHT_ELBOW', 'LEFT_WRIST']"
+    },
+    {
+      "sample_no": 13,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 58,
+      "frame_temporal_display_1_64": 59,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "RIGHT_ELBOW",
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['RIGHT_ELBOW', 'LEFT_WRIST']"
+    },
+    {
+      "sample_no": 14,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 59,
+      "frame_temporal_display_1_64": 60,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "RIGHT_ELBOW",
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['RIGHT_ELBOW', 'LEFT_WRIST']"
+    },
+    {
+      "sample_no": 15,
+      "nama_dataset": "BenchPress_002",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep10.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 60,
+      "frame_temporal_display_1_64": 61,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "RIGHT_ELBOW",
+        "LEFT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['RIGHT_ELBOW', 'LEFT_WRIST']"
+    },
+    {
+      "sample_no": 16,
+      "nama_dataset": "BenchPress_003",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep11.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 35,
+      "frame_temporal_display_1_64": 36,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "RIGHT_ELBOW",
+        "RIGHT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['RIGHT_ELBOW', 'RIGHT_WRIST']"
+    },
+    {
+      "sample_no": 17,
+      "nama_dataset": "BenchPress_003",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep11.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 36,
+      "frame_temporal_display_1_64": 37,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "RIGHT_ELBOW",
+        "RIGHT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['RIGHT_ELBOW', 'RIGHT_WRIST']"
+    },
+    {
+      "sample_no": 18,
+      "nama_dataset": "BenchPress_003",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep11.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 45,
+      "frame_temporal_display_1_64": 46,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "RIGHT_ELBOW",
+        "RIGHT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['RIGHT_ELBOW', 'RIGHT_WRIST']"
+    },
+    {
+      "sample_no": 19,
+      "nama_dataset": "BenchPress_007",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep15.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 6,
+      "frame_temporal_display_1_64": 7,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "RIGHT_WRIST"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['RIGHT_WRIST']"
+    },
+    {
+      "sample_no": 20,
+      "nama_dataset": "BenchPress_007",
+      "nama_video_mentah": "primer_benchpress_frontal_subjek01_rep15.mp4",
+      "jenis_latihan": "benchpress",
+      "camera_view": "Primer Frontal",
+      "frame_temporal_idx_0_63": 15,
+      "frame_temporal_display_1_64": 16,
+      "status_v1": "SALAH",
+      "status_v2": "INVALID_POSE",
+      "transisi": "SALAH->INVALID",
+      "sendi_invalid": [
+        "LEFT_ELBOW"
+      ],
+      "keterangan": "Invalid/Zero-filled joints: ['LEFT_ELBOW']"
+    }
+  ]
+}
