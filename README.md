@@ -12,7 +12,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![MediaPipe](https://img.shields.io/badge/MediaPipe-BlazePose-0097A7?style=for-the-badge&logo=google&logoColor=white)](https://google.github.io/mediapipe/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.x-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
-[![Kaggle DOI](https://img.shields.io/badge/Kaggle%20DOI-10.34740%2Fkaggle%2Fdsv%2F19041891-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://doi.org/10.34740/kaggle/dsv/19041891)
+[![Kaggle DOI](https://img.shields.io/badge/Kaggle%20DOI-10.34740%2Fkaggle%2Fdsv%2F19043769-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://doi.org/10.34740/kaggle/dsv/19043769)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Branch](https://img.shields.io/badge/Branch-v2--per--frame--ai-blueviolet?style=for-the-badge)]()
 [![Model Size](https://img.shields.io/badge/Model%20Size-0.44%20MB-blue?style=for-the-badge)]()
@@ -78,7 +78,7 @@ Kesalahan postur saat latihan beban (*weight training*) — seperti lutut kolaps
 Untuk menjamin prinsip keterbukaan ilmiah dan keterulangan riset (*reproducibility*), seluruh video rekaman mentah bersolusi tinggi (HD) telah dipublikasikan secara terbuka di platform Kaggle:
 
 - 🔗 **Kaggle Dataset:** [AttentiveSkel-3D Weight Training Error Dataset V2](https://www.kaggle.com/datasets/bangaji/attentiveskel-3d-weight-training-error-dataset)
-- 📌 **DOI Publikasi:** [`10.34740/kaggle/dsv/19041891`](https://doi.org/10.34740/kaggle/dsv/19041891)
+- 📌 **DOI Publikasi:** [`10.34740/kaggle/dsv/19043769`](https://doi.org/10.34740/kaggle/dsv/19043769)
 - 📊 **Cakupan Data:** 487 video latihan beban (total 507 video raw) yang mencakup 3 jenis latihan utama (*Bench Press*, *Deadlift*, *Squat*) dari sudut pandang *Frontal*, *Lateral*, dan *Sekunder*.
 
 ---
