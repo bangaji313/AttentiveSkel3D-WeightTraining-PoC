@@ -61,3 +61,16 @@ AttentiveSkel3D_Dataset.zip
 docs/
 results/dataset_visual_audit/
 
+# ============================================================
+# Data Sementara (video & tensor demo — file besar, jangan push)
+# ============================================================
+Release_V2_AttentiveSkel3D/data_sementara/
+
+# ============================================================
+# Large binary / dataset files
+# ============================================================
+*.npy
+*.mp4
+*.avi
+*.mkv
+
