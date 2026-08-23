@@ -1,0 +1,51 @@
+# ============================================================
+# .gitignore — Release_V2_AttentiveSkel3D
+# ============================================================
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Large binary / media — TIDAK di-push
+# Tensor (.npy) cukup kecil (~25KB each), BOLEH di-push untuk demo
+# Video sementara output inferensi TIDAK di-push
+data_sementara/
+*.mp4
+*.avi
+*.mkv
+
+# Large CSVs di data/ yang terlalu besar
+data/Bukti_Wujud_Tensor_V2.csv
+
+# Large CSVs di src/data/ yang terlalu besar
+src/data/Bukti_Wujud_Tensor_V2.csv
+src/data/Pemetaan_Detail_Per_Frame_V2.csv
+src/data/Pemetaan_Detail_Per_Frame_V2.json
+
+# Dataset zip
+*.zip
