@@ -1,542 +1,395 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AttentiveSkel-3D | Demo Inferensi V2</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg:          #050d1b;
-            --surface:     #0c1a2e;
-            --surface-2:   #132038;
-            --border:      rgba(96,165,250,0.15);
-            --primary:     #3b82f6;
-            --primary-g:   rgba(59,130,246,0.3);
-            --accent:      #10b981;
-            --accent-g:    rgba(16,185,129,0.25);
-            --warn:        #f59e0b;
-            --danger:      #ef4444;
-            --text:        #e2e8f0;
-            --muted:       #64748b;
-            --faint:       #1e3050;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            background-image:
-                radial-gradient(ellipse 60% 40% at 10% 5%,  rgba(59,130,246,.13) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 40% at 90% 90%, rgba(16,185,129,.10) 0%, transparent 60%);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 1.75rem 1.25rem 5rem;
-        }
-
-        /* ── Navbar ────────────────────────────────────── */
-        .nav {
-            display: flex; align-items: center; justify-content: space-between;
-            max-width: 980px; margin: 0 auto 2.5rem;
-        }
-        .logo { display: flex; align-items: center; gap: .75rem; }
-        .logo-icon {
-            width:38px; height:38px; border-radius:10px;
-            background: linear-gradient(135deg,#3b82f6,#10b981);
-            display:flex; align-items:center; justify-content:center; font-size:1.15rem;
-        }
-        .logo-name { font-size:1.05rem; font-weight:700; }
-        .logo-sub  { font-size:.68rem; color:var(--muted); }
-        .badge {
-            font-size:.72rem; font-weight:600; letter-spacing:.06em;
-            padding:.28rem .75rem; border-radius:999px;
-            background:rgba(59,130,246,.12); border:1px solid rgba(59,130,246,.28); color:#60a5fa;
-        }
-
-        /* ── Layout ────────────────────────────────────── */
-        .wrap { max-width:980px; margin:0 auto; }
-        h1 {
-            font-size:1.9rem; font-weight:700; line-height:1.3;
-            background:linear-gradient(135deg,#93c5fd 0%,#6ee7b7 100%);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-            margin-bottom:.4rem;
-        }
-        .sub { color:var(--muted); font-size:.92rem; margin-bottom:2rem; }
-
-        /* ── Card ──────────────────────────────────────── */
-        .card {
-            background:var(--surface); border:1px solid var(--border);
-            border-radius:14px; padding:1.6rem; margin-bottom:1.1rem;
-        }
-        .sec-label {
-            font-size:.72rem; font-weight:600; text-transform:uppercase;
-            letter-spacing:.08em; color:var(--muted); margin-bottom:.9rem;
-        }
-
-        /* ── Form Controls ─────────────────────────────── */
-        label { display:block; font-size:.87rem; font-weight:500; margin-bottom:.35rem; }
-        select {
-            width:100%; padding:.65rem 1rem; border-radius:8px;
-            background:var(--surface-2); border:1px solid var(--border);
-            color:var(--text); font-size:.9rem; font-family:'Inter',sans-serif;
-            outline:none; transition:border-color .2s, box-shadow .2s;
-        }
-        select:focus { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-g); }
-
-        /* ── Dropzone ──────────────────────────────────── */
-        .drop {
-            border:2px dashed var(--faint); border-radius:12px; padding:2.25rem 1.5rem;
-            text-align:center; cursor:pointer; background:rgba(12,26,46,.5);
-            transition:all .25s; position:relative;
-        }
-        .drop:hover, .drop.on { border-color:var(--primary); background:rgba(59,130,246,.07); box-shadow:0 0 22px var(--primary-g); }
-        .drop-icon { font-size:2.2rem; margin-bottom:.6rem; }
-        .drop-txt  { font-size:.9rem; }
-        .drop-txt span { color:var(--primary); font-weight:600; }
-        .drop-hint { font-size:.75rem; color:var(--muted); margin-top:.3rem; }
-        #file-input { display:none; }
-        .file-tag {
-            display:none; margin-top:.85rem; padding:.35rem .9rem;
-            background:rgba(16,185,129,.14); border:1px solid rgba(16,185,129,.3);
-            border-radius:999px; font-size:.78rem; color:var(--accent); font-weight:600;
-        }
-
-        /* ── Legend ────────────────────────────────────── */
-        .legend-row { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-top:.85rem; }
-        .legend-bar {
-            flex:1; min-width:100px; height:12px; border-radius:99px;
-            background:linear-gradient(to right,#1d4ed8,#0ea5e9,#eab308,#ef4444);
-            border:1px solid var(--border);
-        }
-        .legend-ends { display:flex; justify-content:space-between; font-size:.68rem; color:var(--muted); margin-top:.18rem; }
-        .legend-desc { font-size:.76rem; color:var(--muted); }
-
-        /* ── Btn ───────────────────────────────────────── */
-        .btn {
-            width:100%; padding:.85rem; border-radius:9px; border:none;
-            font-family:'Inter',sans-serif; font-size:.93rem; font-weight:600;
-            cursor:pointer; margin-top:1.1rem; letter-spacing:.02em; transition:all .2s;
-        }
-        .btn-primary {
-            background:linear-gradient(135deg,var(--primary),#1d4ed8); color:#fff;
-            box-shadow:0 4px 18px rgba(59,130,246,.32);
-        }
-        .btn-primary:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 6px 26px rgba(59,130,246,.44); }
-        .btn-primary:disabled { background:var(--faint); color:var(--muted); cursor:not-allowed; box-shadow:none; }
-
-        /* ─────────────────────────────────────────────────
-           PIPELINE STEPS
-        ───────────────────────────────────────────────── */
-        .pipeline-card { display:none; }
-
-        .pipeline-title {
-            font-size:.88rem; font-weight:600; color:var(--text);
-            display:flex; align-items:center; gap:.5rem; margin-bottom:1.1rem;
-        }
-        .pipe-dot {
-            width:8px; height:8px; border-radius:50%;
-            background:var(--primary); animation:blink 1s infinite;
-        }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
-
-        .steps-list { display:flex; flex-direction:column; gap:.6rem; }
-
-        .step-row {
-            display:flex; align-items:flex-start; gap:.85rem;
-            padding:.85rem 1rem; border-radius:10px; border:1px solid transparent;
-            background:var(--surface-2); transition:all .35s;
-        }
-        .step-row.active {
-            border-color:rgba(59,130,246,.4);
-            background:rgba(59,130,246,.08);
-            box-shadow:0 0 18px rgba(59,130,246,.15);
-        }
-        .step-row.done {
-            border-color:rgba(16,185,129,.35);
-            background:rgba(16,185,129,.06);
-        }
-
-        .step-icon {
-            width:36px; height:36px; border-radius:50%; flex-shrink:0;
-            display:flex; align-items:center; justify-content:center;
-            font-size:1rem; font-weight:700; border:2px solid var(--faint);
-            color:var(--muted); background:var(--surface);
-            transition:all .35s;
-        }
-        .step-row.active .step-icon {
-            border-color:var(--primary); color:var(--primary);
-            animation:pulse-ring .9s infinite;
-        }
-        @keyframes pulse-ring {
-            0%   { box-shadow:0 0 0 0   rgba(59,130,246,.6); }
-            70%  { box-shadow:0 0 0 8px rgba(59,130,246,0);  }
-            100% { box-shadow:0 0 0 0   rgba(59,130,246,0);  }
-        }
-        .step-row.done .step-icon {
-            background:var(--accent); border-color:var(--accent); color:#fff; font-size:1.1rem;
-        }
-
-        .step-body { flex:1; }
-        .step-name {
-            font-size:.88rem; font-weight:600;
-            color:var(--muted); transition:color .3s;
-        }
-        .step-row.active .step-name, .step-row.done .step-name { color:var(--text); }
-        .step-detail {
-            font-size:.76rem; color:var(--muted); margin-top:.2rem;
-            font-family:'JetBrains Mono', monospace; display:none;
-            animation:fadeIn .3s ease;
-        }
-        .step-row.active .step-detail, .step-row.done .step-detail { display:block; }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
-
-        /* Spinner inside active step icon */
-        .spin-svg {
-            width:18px; height:18px;
-            animation:spin .8s linear infinite;
-        }
-        @keyframes spin { to{transform:rotate(360deg)} }
-
-        /* Progress bar under pipeline */
-        .prog-bar-wrap { height:4px; background:var(--faint); border-radius:99px; margin-top:1rem; overflow:hidden; }
-        .prog-bar { height:100%; background:linear-gradient(90deg,var(--primary),var(--accent)); border-radius:99px; transition:width .5s ease; width:0%; }
-
-        /* ─────────────────────────────────────────────────
-           RESULT
-        ───────────────────────────────────────────────── */
-        .result-card { display:none; animation:up .5s ease forwards; }
-        @keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
-
-        video {
-            width:100%; border-radius:10px; border:1px solid var(--border);
-            background:#000; margin-top:.9rem;
-        }
-
-        .meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:.65rem; margin-top:1rem; }
-        .meta-chip {
-            background:var(--surface-2); border:1px solid var(--border); border-radius:10px;
-            padding:.7rem; text-align:center;
-        }
-        .meta-chip .v { font-size:1.35rem; font-weight:700; color:var(--primary); }
-        .meta-chip .l { font-size:.7rem; color:var(--muted); margin-top:.18rem; }
-        .meta-chip.green .v { color:var(--accent); }
-        .meta-chip.red   .v { color:var(--danger); }
-
-        /* ── Error ─────────────────────────────────────── */
-        .err {
-            display:none; background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3);
-            border-radius:9px; padding:.85rem 1.1rem; margin-top:.9rem;
-            color:#fca5a5; font-size:.87rem;
-        }
-
-        .divider { height:1px; background:var(--border); margin:1.25rem 0; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AttentiveSkel-3D | Explanation Dashboard V2</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#050d1b;--surface:#0c1a2e;--surface2:#132038;--surface3:#1a2d4a;--border:rgba(96,165,250,.15);--primary:#3b82f6;--prim-g:rgba(59,130,246,.3);--accent:#10b981;--acc-g:rgba(16,185,129,.25);--warn:#f59e0b;--danger:#ef4444;--purple:#a855f7;--text:#e2e8f0;--muted:#64748b;--faint:#1e3050}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:1.75rem 1.25rem 6rem;background-image:radial-gradient(ellipse 60% 40% at 10% 5%,rgba(59,130,246,.12) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 90% 90%,rgba(16,185,129,.09) 0%,transparent 60%)}
+.nav{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto 2rem}
+.logo{display:flex;align-items:center;gap:.75rem}
+.logo-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#10b981);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.logo-name{font-size:1.05rem;font-weight:700}.logo-sub{font-size:.66rem;color:var(--muted)}
+.badge{font-size:.7rem;font-weight:600;letter-spacing:.07em;padding:.28rem .75rem;border-radius:999px;background:rgba(168,85,247,.14);border:1px solid rgba(168,85,247,.3);color:#c084fc}
+.wrap{max-width:1100px;margin:0 auto}
+h1{font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,#93c5fd 0%,#6ee7b7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.35rem}
+.sub{color:var(--muted);font-size:.9rem;margin-bottom:2rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1rem}
+.sec-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:.9rem}
+.panel-header{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.panel-badge{font-size:.68rem;font-weight:700;padding:.18rem .55rem;border-radius:6px;letter-spacing:.05em}
+.badge-a{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
+.badge-b{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:#93c5fd}
+.badge-c{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.3);color:#c084fc}
+.panel-title{font-size:.92rem;font-weight:600}
+label{display:block;font-size:.87rem;font-weight:500;margin-bottom:.35rem}
+select{width:100%;padding:.65rem 1rem;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.9rem;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
+select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--prim-g)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+@media(max-width:640px){.form-row{grid-template-columns:1fr}}
+.drop{border:2px dashed var(--faint);border-radius:12px;padding:2rem;text-align:center;cursor:pointer;background:rgba(12,26,46,.5);transition:all .25s}
+.drop:hover,.drop.on{border-color:var(--primary);background:rgba(59,130,246,.07);box-shadow:0 0 20px var(--prim-g)}
+.drop-icon{font-size:2rem;margin-bottom:.5rem}
+.drop-txt{font-size:.88rem}.drop-txt span{color:var(--primary);font-weight:600}
+.drop-hint{font-size:.73rem;color:var(--muted);margin-top:.3rem}
+#file-input{display:none}
+.file-tag{display:none;margin-top:.75rem;padding:.3rem .8rem;background:rgba(16,185,129,.14);border:1px solid rgba(16,185,129,.3);border-radius:999px;font-size:.76rem;color:var(--accent);font-weight:600}
+.btn{padding:.78rem 1.4rem;border-radius:9px;border:none;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.02em}
+.btn-primary{background:linear-gradient(135deg,var(--primary),#1d4ed8);color:#fff;box-shadow:0 4px 16px rgba(59,130,246,.3)}
+.btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 24px rgba(59,130,246,.44)}
+.btn-primary:disabled{background:var(--faint);color:var(--muted);cursor:not-allowed;box-shadow:none}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--primary);background:rgba(59,130,246,.08)}
+.btn-sm{padding:.45rem .9rem;font-size:.8rem}
+.btn-row{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1rem}
+.pipeline-card{display:none}
+.steps-list{display:flex;flex-direction:column;gap:.55rem}
+.step-row{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem 1rem;border-radius:10px;border:1px solid transparent;background:var(--surface2);transition:all .35s}
+.step-row.active{border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.08);box-shadow:0 0 18px rgba(59,130,246,.14)}
+.step-row.done{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.06)}
+.step-icon{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:700;border:2px solid var(--faint);color:var(--muted);background:var(--surface);transition:all .35s}
+.step-row.active .step-icon{border-color:var(--primary);color:var(--primary);animation:pulse .9s infinite}
+.step-row.done .step-icon{background:var(--accent);border-color:var(--accent);color:#fff}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(59,130,246,.6)}70%{box-shadow:0 0 0 8px rgba(59,130,246,0)}100%{box-shadow:0 0 0 0 rgba(59,130,246,0)}}
+.step-body{flex:1}
+.step-name{font-size:.87rem;font-weight:600;color:var(--muted);transition:color .3s}
+.step-row.active .step-name,.step-row.done .step-name{color:var(--text)}
+.step-detail{font-size:.74rem;color:var(--muted);margin-top:.2rem;font-family:'JetBrains Mono',monospace;display:none}
+.step-row.active .step-detail,.step-row.done .step-detail{display:block}
+.prog-bar-wrap{height:4px;background:var(--faint);border-radius:99px;margin-top:1rem;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:99px;transition:width .5s;width:0%}
+.spin-svg{width:18px;height:18px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.result-card{display:none;animation:up .5s ease forwards}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+video{width:100%;border-radius:10px;border:1px solid var(--border);background:#000;margin-top:.9rem}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.6rem;margin-top:.9rem}
+.meta-chip{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.65rem;text-align:center}
+.meta-chip .v{font-size:1.3rem;font-weight:700;color:var(--primary)}
+.meta-chip .l{font-size:.68rem;color:var(--muted);margin-top:.15rem}
+.meta-chip.green .v{color:var(--accent)}.meta-chip.red .v{color:var(--danger)}.meta-chip.warn .v{color:var(--warn)}
+.divider{height:1px;background:var(--border);margin:1.2rem 0}
+.chart-wrap{position:relative;height:200px;margin-top:.9rem}
+.chart-wrap-sm{position:relative;height:140px;margin-top:.75rem}
+.chart-wrap-t{position:relative;height:120px;margin-top:.75rem}
+table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:.6rem}
+th{text-align:left;padding:.5rem .7rem;background:var(--surface3);color:var(--muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em}
+td{padding:.5rem .7rem;border-top:1px solid var(--border)}
+tr:hover td{background:rgba(255,255,255,.025)}
+.tag{display:inline-block;padding:.12rem .45rem;border-radius:4px;font-size:.68rem;font-weight:600}
+.tag-salah{background:rgba(239,68,68,.18);color:#fca5a5}.tag-benar{background:rgba(16,185,129,.18);color:#6ee7b7}.tag-neutral{background:rgba(100,116,139,.15);color:var(--muted)}
+.bfm-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-top:.75rem}
+.bfm-chip{background:var(--surface3);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center}
+.bfm-chip .bv{font-size:1.5rem;font-weight:700;color:var(--warn)}.bfm-chip .bl{font-size:.68rem;color:var(--muted);margin-top:.2rem}
+.faith-box{background:var(--surface3);border:1px solid var(--border);border-radius:10px;padding:1rem;font-size:.82rem;margin-top:.75rem}
+.faith-box code{color:#c084fc;font-family:'JetBrains Mono',monospace;font-size:.78rem}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.7rem;margin-top:.9rem}
+.cmp-card{background:var(--surface3);border:1px solid var(--border);border-radius:10px;padding:.9rem}
+.cmp-card h4{font-size:.8rem;font-weight:600;margin-bottom:.6rem;color:var(--text)}
+.cmp-stat{display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:.28rem}
+.cmp-stat .k{color:var(--muted)}.cmp-stat .val{font-weight:600}
+.alert-info{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:.75rem 1rem;font-size:.8rem;color:#93c5fd;margin-top:.75rem}
+.err{display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:9px;padding:.8rem 1rem;margin-top:.75rem;color:#fca5a5;font-size:.85rem}
+.tab-row{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
+.tab-btn{padding:.4rem .9rem;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.8rem;font-family:inherit;transition:all .2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.hidden{display:none!important}
+.note{font-size:.72rem;color:var(--muted);margin-top:.5rem;font-style:italic}
+</style>
 </head>
 <body>
-
 <nav class="nav">
-    <div class="logo">
-        <div class="logo-icon">🧠</div>
-        <div>
-            <div class="logo-name">AttentiveSkel-3D</div>
-            <div class="logo-sub">Weight Training Posture AI</div>
-        </div>
-    </div>
-    <div class="badge">V2 · Per-Frame</div>
+  <div class="logo"><div class="logo-icon">&#x1F9E0;</div><div><div class="logo-name">AttentiveSkel-3D</div><div class="logo-sub">Explanation Dashboard V2</div></div></div>
+  <div class="badge">Scientifically Defensible XAI</div>
 </nav>
-
 <div class="wrap">
-
-    <h1>Demo Inferensi &amp; Atensi Sendi</h1>
-    <p class="sub">Unggah video latihan, pilih model, dan saksikan AI menganalisis postur <em>per-frame</em> lengkap dengan heatmap perhatian sendi secara real-time.</p>
-
-    <!-- Config -->
-    <div class="card">
-        <div class="sec-label">⚙ Konfigurasi</div>
-
-        <div style="margin-bottom:.95rem">
-            <label for="model-select">Model yang Digunakan</label>
-            <select id="model-select"><option value="">⏳ Memuat daftar model…</option></select>
-        </div>
-
-        <div>
-            <label>Unggah Video Latihan</label>
-            <div class="drop" id="dropzone">
-                <div class="drop-icon">🎬</div>
-                <div class="drop-txt">Seret &amp; lepas, atau <span>klik untuk memilih</span></div>
-                <div class="drop-hint">Format MP4 · Pastikan seluruh tubuh terlihat kamera</div>
-                <input type="file" id="file-input" accept="video/mp4,video/*">
-            </div>
-            <div class="file-tag" id="file-tag"></div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="sec-label">🎨 Panduan Warna Heatmap</div>
-        <div class="legend-row">
-            <div style="flex:1">
-                <div class="legend-bar"></div>
-                <div class="legend-ends"><span>Rendah</span><span>Tinggi</span></div>
-            </div>
-            <div class="legend-desc">Titik sendi <strong style="color:#ef4444">merah &amp; besar</strong> = model sangat memperhatikan sendi itu.<br>Efek <em>glow</em> muncul saat atensi sangat tinggi.</div>
-        </div>
-
-        <button class="btn btn-primary" id="submit-btn" disabled>🚀 Mulai Analisis Video</button>
-        <div class="err" id="err"></div>
-    </div>
-
-    <!-- Pipeline Steps -->
-    <div class="card pipeline-card" id="pipeline-card">
-        <div class="pipeline-title">
-            <div class="pipe-dot"></div>
-            Proses Pipeline Berjalan…
-        </div>
-
-        <div class="steps-list" id="steps-list">
-            <!-- Diisi JavaScript -->
-        </div>
-
-        <div class="prog-bar-wrap">
-            <div class="prog-bar" id="prog-bar"></div>
-        </div>
-    </div>
-
-    <!-- Result -->
-    <div class="card result-card" id="result-card">
-        <div class="sec-label">✅ Hasil Analisis</div>
-        <video id="out-video" controls autoplay loop playsinline muted></video>
-        <div class="meta-grid" id="meta-grid"></div>
-    </div>
-
+<h1>Model Explanation Dashboard</h1>
+<p class="sub">Joint Influence Attribution &middot; Perturbation-based &middot; 3 Explanation Panels &middot; Cross-Model Comparison</p>
+<div class="card">
+  <div class="sec-label">&#x2699; Konfigurasi Analisis</div>
+  <div class="form-row">
+    <div><label for="model-select">Model Skenario</label><select id="model-select"><option value="">&#x23F3; Memuat daftar model&hellip;</option></select></div>
+    <div><label for="exercise-select">Jenis Latihan</label><select id="exercise-select"><option value="Squat">Squat</option><option value="Bench Press">Bench Press</option><option value="Deadlift">Deadlift</option></select></div>
+  </div>
+  <div><label>Unggah Video Latihan</label>
+    <div class="drop" id="dropzone"><div class="drop-icon">&#x1F3AC;</div><div class="drop-txt">Seret &amp; lepas, atau <span>klik untuk memilih</span></div><div class="drop-hint">Format MP4 &middot; Pastikan seluruh tubuh terlihat</div><input type="file" id="file-input" accept="video/mp4,video/*"></div>
+    <div class="file-tag" id="file-tag"></div>
+  </div>
+  <div class="alert-info">&#x1F7E5; Merah = mendukung prediksi SALAH &nbsp;&middot;&nbsp; &#x1F535; Biru = mendukung BENAR &nbsp;&middot;&nbsp; &#x26AA; Abu = netral &nbsp;&middot;&nbsp; &#x25EF; Ring putih = Validator Reference Joint</div>
+  <div class="err" id="err"></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" id="submit-btn" disabled>&#x1F680; Analisis &amp; Explain</button>
+    <button class="btn btn-outline" id="compare-btn" disabled>&#x2696; Compare All Models</button>
+  </div>
 </div>
-
+<div class="card pipeline-card" id="pipeline-card">
+  <div class="sec-label">Pipeline Berjalan&hellip;</div>
+  <div class="steps-list" id="steps-list"></div>
+  <div class="prog-bar-wrap"><div class="prog-bar" id="prog-bar"></div></div>
+</div>
+<div class="card result-card" id="result-card">
+  <div class="sec-label">&#x2705; Hasil Analisis</div>
+  <video id="out-video" controls autoplay loop playsinline muted></video>
+  <div class="meta-grid" id="meta-grid"></div>
+  <div class="divider"></div>
+  <div class="sec-label">&#x1F4CA; Quantitative Attribution Metrics</div>
+  <div class="bfm-row" id="bfm-row"></div>
+  <div class="divider"></div>
+  <div class="sec-label">&#x1F52C; Three-Source Explanation Panels</div>
+  <div class="card" style="margin-bottom:.75rem">
+    <div class="panel-header"><span class="panel-badge badge-a">A</span><span class="panel-title">Model Evidence &mdash; Joint Influence Attribution</span></div>
+    <p class="note">Dihitung via perturbasi mean-ablation pada tensor 64x33x3. Importance = mean(|influence|), Direction = signed mean. Bukan BSP weights, bukan hard-coded.</p>
+    <table id="top5-table"><thead><tr><th>Rank</th><th>Sendi</th><th>Importance (|Influence|)</th><th>Signed Mean</th><th>Kecenderungan</th></tr></thead><tbody id="top5-body"></tbody></table>
+    <div class="chart-wrap"><canvas id="chart-influence"></canvas></div>
+  </div>
+  <div class="card" style="margin-bottom:.75rem">
+    <div class="panel-header"><span class="panel-badge badge-b">B</span><span class="panel-title">Learned Attention (from Checkpoint)</span></div>
+    <div class="tab-row" id="attn-tabs">
+      <button class="tab-btn active" data-tab="bsp">BSP Weights (33)</button>
+      <button class="tab-btn" data-tab="ls">LS Channel (128)</button>
+      <button class="tab-btn" data-tab="temporal">Temporal Weights</button>
+    </div>
+    <div id="tab-bsp"><p class="note">Bobot BSP dari sigmoid(biomechanical_spatial_prior) &mdash; dibaca langsung dari checkpoint. Ini bobot input modulation, BUKAN attribution per-frame.</p><div class="chart-wrap"><canvas id="chart-bsp"></canvas></div></div>
+    <div id="tab-ls" class="hidden"><p class="note">Learned Spatial Attention menghasilkan 128 channel weights (SE-style MLP). Channel-level attention, TIDAK dipetakan ke 33 sendi skeleton.</p><div class="chart-wrap-sm"><canvas id="chart-ls"></canvas></div></div>
+    <div id="tab-temporal" class="hidden"><p class="note">Temporal attention weights dalam domain T' (~32 frame). Softmax memastikan semua bobot menjumlah ke 1.0.</p><div class="chart-wrap-t"><canvas id="chart-temporal"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-bottom:.75rem">
+    <div class="panel-header"><span class="panel-badge badge-c">C</span><span class="panel-title">Validator Reference Joints</span></div>
+    <p class="note">Standar acuan fisik dasar validator (Shoulder, Hip, Knee, Ankle). Ini BUKAN atensi model dan BUKAN hasil learned weights.</p>
+    <div id="bio-ref-list" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem"></div>
+    <p class="note" id="bio-ref-source" style="margin-top:.7rem"></p>
+  </div>
+  <div class="divider"></div>
+  <div class="sec-label">&#x1F9EA; Perturbation-based Faithfulness Check</div>
+  <div class="faith-box" id="faith-box"><p style="color:var(--muted)">Akan muncul setelah analisis selesai.</p></div>
+  <div class="btn-row" style="margin-top:.75rem"><button class="btn btn-outline btn-sm" id="dl-json-btn">&#x2B07; Download Explanation JSON</button></div>
+</div>
+<div class="card" id="compare-card" style="display:none">
+  <div class="sec-label">&#x2696; Perbandingan Semua Skenario Model</div>
+  <p class="note">Tensor yang sama dijalankan melalui semua 5 skenario. Output masing-masing model tidak diubah.</p>
+  <div class="compare-grid" id="compare-grid"></div>
+  <div class="chart-wrap" id="compare-chart-wrap" style="display:none;margin-top:1rem"><canvas id="chart-compare"></canvas></div>
+</div>
+</div>
 <script>
-/* ── Definisi 4 Tahapan Pipeline ──────────────────────── */
-const STEPS = [
-    {
-        icon: "1",
-        name: "Tahap 1 — Memuat Model AI",
-        hint: "Membaca file bobot (.pth) ke memori GPU/CPU"
-    },
-    {
-        icon: "2",
-        name: "Tahap 2 — Ekstraksi Pose (MediaPipe)",
-        hint: "Mengekstrak 33 titik sendi per-frame dari video mentah"
-    },
-    {
-        icon: "3",
-        name: "Tahap 3 — Preprocessing & Inferensi",
-        hint: "Membentuk tensor (64×33×3) → Forward pass AttentiveSkel-3D"
-    },
-    {
-        icon: "4",
-        name: "Tahap 4 — Rendering Video Heatmap",
-        hint: "Menggambar visualisasi atensi sendi tiap-frame"
-    }
+let currentFile=null,currentExpl=null,currentStem=null;
+let chartInfluence=null,chartBSP=null,chartLS=null,chartTemp=null,chartCompare=null;
+const STEPS=[
+  {icon:"1",name:"Memuat Model AI",hint:"Membaca bobot .pth ke memori GPU/CPU"},
+  {icon:"2",name:"Ekstraksi Pose (MediaPipe)",hint:"33 sendi per-frame dari video mentah"},
+  {icon:"3",name:"Preprocessing & Inferensi",hint:"Tensor 64x33x3 -> Forward pass"},
+  {icon:"4",name:"Joint Influence Attribution",hint:"Perturbation batched 33 landmark x 64 frame"},
+  {icon:"5",name:"Rendering Video & Export JSON",hint:"Heatmap attribution per-frame + JSON"},
 ];
-
-/* ── State ────────────────────────────────────────────── */
-let currentFile  = null;
-let currentStep  = 0;  // 0 = belum mulai, 1-4 = tahap aktif
-
-/* ── DOM refs ─────────────────────────────────────────── */
-const modelSelect  = document.getElementById('model-select');
-const dropzone     = document.getElementById('dropzone');
-const fileInput    = document.getElementById('file-input');
-const fileTag      = document.getElementById('file-tag');
-const submitBtn    = document.getElementById('submit-btn');
-const pipelineCard = document.getElementById('pipeline-card');
-const stepsList    = document.getElementById('steps-list');
-const progBar      = document.getElementById('prog-bar');
-const resultCard   = document.getElementById('result-card');
-const outVideo     = document.getElementById('out-video');
-const errDiv       = document.getElementById('err');
-const metaGrid     = document.getElementById('meta-grid');
-
-/* ── Build step rows ──────────────────────────────────── */
-function buildSteps() {
-    stepsList.innerHTML = '';
-    STEPS.forEach((s, i) => {
-        const row = document.createElement('div');
-        row.className = 'step-row';
-        row.id = `step-row-${i + 1}`;
-        row.innerHTML = `
-            <div class="step-icon" id="step-icon-${i+1}">${s.icon}</div>
-            <div class="step-body">
-                <div class="step-name">${s.name}</div>
-                <div class="step-detail" id="step-detail-${i+1}">${s.hint}</div>
-            </div>`;
-        stepsList.appendChild(row);
-    });
-}
-
-/* ── Activate step (in-progress) ─────────────────────── */
-function activateStep(stepNum) {
-    const row  = document.getElementById(`step-row-${stepNum}`);
-    const icon = document.getElementById(`step-icon-${stepNum}`);
-    if (!row) return;
-    row.classList.add('active');
-    // Replace number with spinner SVG
-    icon.innerHTML = `
-        <svg class="spin-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-        </svg>`;
-    progBar.style.width = `${((stepNum - 1) / 4) * 100}%`;
-}
-
-/* ── Complete step ────────────────────────────────────── */
-function completeStep(stepNum, detail) {
-    const row    = document.getElementById(`step-row-${stepNum}`);
-    const icon   = document.getElementById(`step-icon-${stepNum}`);
-    const detDiv = document.getElementById(`step-detail-${stepNum}`);
-    if (!row) return;
-    row.classList.remove('active');
-    row.classList.add('done');
-    icon.innerHTML = '✓';
-    if (detail) detDiv.textContent = detail;
-    progBar.style.width = `${(stepNum / 4) * 100}%`;
-}
-
-/* ── Fetch model list ─────────────────────────────────── */
-fetch('/api/models')
-    .then(r => r.json())
-    .then(d => {
-        modelSelect.innerHTML = '';
-        if (!d.models.length) {
-            modelSelect.innerHTML = '<option value="">Tidak ada model ditemukan</option>';
-            return;
-        }
-        d.models.forEach(m => {
-            const o = document.createElement('option');
-            o.value = m; o.textContent = m;
-            if (m.includes('full')) o.selected = true;
-            modelSelect.appendChild(o);
-        });
-        checkReady();
-    });
-
-/* ── Drag & Drop ──────────────────────────────────────── */
-['dragenter','dragover','dragleave','drop'].forEach(ev =>
-    dropzone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); })
-);
-['dragenter','dragover'].forEach(ev => dropzone.addEventListener(ev, () => dropzone.classList.add('on')));
-['dragleave','drop'].forEach(ev => dropzone.addEventListener(ev, () => dropzone.classList.remove('on')));
-dropzone.addEventListener('drop', e => { if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
-dropzone.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
-
-function handleFile(f) {
-    if (!f.type.startsWith('video/')) { alert('Harap unggah file video!'); return; }
-    currentFile = f;
-    fileTag.textContent = `📎 ${f.name}  (${(f.size/1024/1024).toFixed(1)} MB)`;
-    fileTag.style.display = 'inline-block';
-    checkReady();
-}
-function checkReady() {
-    submitBtn.disabled = !(currentFile && modelSelect.value);
-}
-modelSelect.addEventListener('change', checkReady);
-
-/* ── Submit → SSE ─────────────────────────────────────── */
-submitBtn.addEventListener('click', async () => {
-    if (!currentFile || !modelSelect.value) return;
-
-    // Reset UI
-    errDiv.style.display    = 'none';
-    resultCard.style.display = 'none';
-    pipelineCard.style.display = 'block';
-    submitBtn.disabled      = true;
-    outVideo.src            = '';
-    metaGrid.innerHTML      = '';
-    progBar.style.width     = '0%';
-    buildSteps();
-
-    // Build multipart form
-    const fd = new FormData();
-    fd.append('video', currentFile);
-    fd.append('model_name', modelSelect.value);
-
-    let lastStep = 0;
-
-    try {
-        const resp = await fetch('/api/predict/stream', { method: 'POST', body: fd });
-        const reader = resp.body.getReader();
-        const decoder = new TextDecoder();
-        let buf = '';
-
-        while (true) {
-            const { value, done } = await reader.read();
-            if (done) break;
-
-            buf += decoder.decode(value, { stream: true });
-            const lines = buf.split('\n');
-            buf = lines.pop(); // keep incomplete line
-
-            for (const line of lines) {
-                if (!line.startsWith('data:')) continue;
-                const raw = line.slice(5).trim();
-                if (!raw) continue;
-
-                let event;
-                try { event = JSON.parse(raw); } catch { continue; }
-
-                if (event.done) {
-                    // Finish progress bar
-                    progBar.style.width = '100%';
-                    setTimeout(() => { pipelineCard.style.display = 'none'; }, 600);
-
-                    if (event.success) {
-                        outVideo.src = event.video_url + '?t=' + Date.now();
-                        resultCard.style.display = 'block';
-                        metaGrid.innerHTML = [
-                            { v: event.n_benar, l: 'Frame BENAR', cls: 'green' },
-                            { v: event.n_salah, l: 'Frame SALAH', cls: 'red'   },
-                            { v: 64,            l: 'Total Frame', cls: ''      },
-                            { v: modelSelect.value.replace('best_model_','').replace('.pth','').toUpperCase(), l: 'Model', cls: '' }
-                        ].map(c => `<div class="meta-chip ${c.cls}"><div class="v">${c.v}</div><div class="l">${c.l}</div></div>`).join('');
-                        resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    } else {
-                        errDiv.textContent = '⚠ Error: ' + event.error;
-                        errDiv.style.display = 'block';
-                    }
-                    submitBtn.disabled = false;
-                    break;
-                }
-
-                // Progress event
-                const step = event.step;
-                const msg  = event.message || '';
-                const det  = event.detail  || '';
-
-                // Done with previous step
-                if (step > lastStep && lastStep > 0) {
-                    // Mark previous step done if message starts with ✓
-                }
-                
-                if (msg.startsWith('✓')) {
-                    completeStep(step, det);
-                } else {
-                    // New step starting
-                    if (step !== lastStep) {
-                        activateStep(step);
-                        lastStep = step;
-                    }
-                    if (det) {
-                        const detEl = document.getElementById(`step-detail-${step}`);
-                        if (detEl) detEl.textContent = det;
-                    }
-                }
-            }
-        }
-    } catch (ex) {
-        pipelineCard.style.display = 'none';
-        errDiv.textContent = '⚠ Terjadi kesalahan jaringan: ' + ex.message;
-        errDiv.style.display = 'block';
-        submitBtn.disabled = false;
-    }
+const BIO_SOURCES={
+  "Squat":"Acuan Validator: Shoulder (11/12), Hip (23/24), Knee (25/26), Ankle (27/28)",
+  "Bench Press":"Acuan Validator: Shoulder (11/12), Elbow (13/14), Wrist (15/16)",
+  "Deadlift":"Acuan Validator: Shoulder (11/12), Hip (23/24), Knee (25/26)",
+};
+const LM_NAMES=[];
+fetch("/api/models").then(r=>r.json()).then(d=>{
+  const sel=document.getElementById("model-select");
+  sel.innerHTML="";
+  if(!d.models.length){sel.innerHTML='<option value="">Tidak ada model</option>';return;}
+  d.models.forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;if(m.includes("ablasi_a"))o.selected=true;sel.appendChild(o);});
+  checkReady();
 });
+fetch("/api/landmark_names").then(r=>r.json()).then(d=>{LM_NAMES.push(...d.names);});
+const modelSel=document.getElementById("model-select");
+const exerciseSel=document.getElementById("exercise-select");
+const dropzone=document.getElementById("dropzone");
+const fileInput=document.getElementById("file-input");
+const fileTag=document.getElementById("file-tag");
+const submitBtn=document.getElementById("submit-btn");
+const compareBtn=document.getElementById("compare-btn");
+const pipeCard=document.getElementById("pipeline-card");
+const stepsList=document.getElementById("steps-list");
+const progBar=document.getElementById("prog-bar");
+const resultCard=document.getElementById("result-card");
+const compareCard=document.getElementById("compare-card");
+const outVideo=document.getElementById("out-video");
+const errDiv=document.getElementById("err");
+const metaGrid=document.getElementById("meta-grid");
+["dragenter","dragover","dragleave","drop"].forEach(ev=>dropzone.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();}));
+["dragenter","dragover"].forEach(ev=>dropzone.addEventListener(ev,()=>dropzone.classList.add("on")));
+["dragleave","drop"].forEach(ev=>dropzone.addEventListener(ev,()=>dropzone.classList.remove("on")));
+dropzone.addEventListener("drop",e=>{if(e.dataTransfer.files[0])handleFile(e.dataTransfer.files[0]);});
+dropzone.addEventListener("click",()=>fileInput.click());
+fileInput.addEventListener("change",()=>{if(fileInput.files[0])handleFile(fileInput.files[0]);});
+function handleFile(f){if(!f.type.startsWith("video/")){alert("Harap unggah file video!");return;}currentFile=f;fileTag.textContent="File: "+f.name+" ("+(f.size/1024/1024).toFixed(1)+" MB)";fileTag.style.display="inline-block";checkReady();}
+function checkReady(){submitBtn.disabled=!(currentFile&&modelSel.value);compareBtn.disabled=!currentFile;}
+modelSel.addEventListener("change",checkReady);
+exerciseSel.addEventListener("change",checkReady);
+function buildSteps(steps){
+  stepsList.innerHTML="";
+  steps.forEach((s,i)=>{
+    const row=document.createElement("div");row.className="step-row";row.id="sr"+(i+1);
+    row.innerHTML='<div class="step-icon" id="si'+(i+1)+'">'+s.icon+'</div><div class="step-body"><div class="step-name">'+s.name+'</div><div class="step-detail" id="sd'+(i+1)+'">'+s.hint+'</div></div>';
+    stepsList.appendChild(row);
+  });
+}
+function activateStep(n){
+  const row=document.getElementById("sr"+n),icon=document.getElementById("si"+n);if(!row)return;
+  row.classList.add("active");
+  icon.innerHTML='<svg class="spin-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
+  const tot=stepsList.querySelectorAll(".step-row").length;
+  progBar.style.width=((n-1)/tot*100)+"%";
+}
+function completeStep(n,detail){
+  const row=document.getElementById("sr"+n),icon=document.getElementById("si"+n),det=document.getElementById("sd"+n);if(!row)return;
+  row.classList.remove("active");row.classList.add("done");icon.innerHTML="&#x2713;";
+  if(detail)det.textContent=detail;
+  const tot=stepsList.querySelectorAll(".step-row").length;
+  progBar.style.width=(n/tot*100)+"%";
+}
+submitBtn.addEventListener("click",async()=>{
+  if(!currentFile||!modelSel.value)return;
+  errDiv.style.display="none";resultCard.style.display="none";compareCard.style.display="none";
+  pipeCard.style.display="block";submitBtn.disabled=true;compareBtn.disabled=true;
+  outVideo.src="";metaGrid.innerHTML="";progBar.style.width="0%";buildSteps(STEPS);
+  const fd=new FormData();fd.append("video",currentFile);fd.append("model_name",modelSel.value);fd.append("exercise",exerciseSel.value);
+  let lastStep=0;
+  try{
+    const resp=await fetch("/api/explain/stream",{method:"POST",body:fd});
+    const reader=resp.body.getReader();const decoder=new TextDecoder();let buf="";
+    while(true){
+      const{value,done}=await reader.read();if(done)break;
+      buf+=decoder.decode(value,{stream:true});
+      const lines=buf.split("\n");buf=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith("data:"))continue;
+        const raw=line.slice(5).trim();if(!raw)continue;
+        let ev;try{ev=JSON.parse(raw);}catch{continue;}
+        if(ev.done){
+          progBar.style.width="100%";
+          setTimeout(()=>{pipeCard.style.display="none";},600);
+          if(ev.success){currentExpl=ev.explanation;currentStem=ev.json_stem;renderResult(ev);}
+          else{errDiv.textContent="Error: "+(ev.error||"Unknown");errDiv.style.display="block";}
+          submitBtn.disabled=false;compareBtn.disabled=false;break;
+        }
+        const step=ev.step||0,msg=ev.message||"",det=ev.detail||"";
+        if(msg.startsWith("\u2713")||msg.startsWith("+")||msg.startsWith("!")){completeStep(step,det);}
+        else{if(step!==lastStep){activateStep(step);lastStep=step;}const detEl=document.getElementById("sd"+step);if(detEl&&det)detEl.textContent=det;}
+      }
+    }
+  }catch(ex){pipeCard.style.display="none";errDiv.textContent="Kesalahan jaringan: "+ex.message;errDiv.style.display="block";submitBtn.disabled=false;compareBtn.disabled=!currentFile;}
+});
+function renderResult(ev){
+  outVideo.src=ev.video_url+"?t="+Date.now();
+  resultCard.style.display="block";
+  const expl=ev.explanation;const sum=expl.summary;const exercise=exerciseSel.value;
+  metaGrid.innerHTML=[{v:sum.n_benar,l:"Frame BENAR",cls:"green"},{v:sum.n_salah,l:"Frame SALAH",cls:"red"},{v:64,l:"Total Frame",cls:""},{v:modelSel.value.replace("best_model_","").replace(".pth","").toUpperCase(),l:"Model",cls:""}].map(c=>'<div class="meta-chip '+c.cls+'"><div class="v">'+c.v+'</div><div class="l">'+c.l+'</div></div>').join("");
+  
+  const bfmRow=document.getElementById("bfm-row");
+  const rasVal = (sum.RAS !== undefined ? sum.RAS : sum.BFM) || 0;
+  const attrLiftVal = (sum.attribution_lift !== undefined ? sum.attribution_lift : sum.focus_lift) || 0;
+  const refJointsList = sum.validator_reference_joints || sum.reference_joints || [];
+  
+  bfmRow.innerHTML='<div class="bfm-chip"><div class="bv">'+(rasVal*100).toFixed(1)+'%</div><div class="bl">Reference Attribution Share (RAS)</div></div><div class="bfm-chip"><div class="bv">'+(sum.uniform_reference*100).toFixed(1)+'%</div><div class="bl">Uniform Reference ('+refJointsList.length+'/33)</div></div><div class="bfm-chip"><div class="bv">'+attrLiftVal.toFixed(2)+'&times;</div><div class="bl">Attribution Lift (RAS / Uniform)</div></div>';
+  
+  const tbody=document.getElementById("top5-body");
+  tbody.innerHTML=sum.top5_joints.map(j=>{
+    const imp = (j.importance_score !== undefined ? j.importance_score : j.score) || 0;
+    const sm  = (j.signed_mean_influence !== undefined ? j.signed_mean_influence : (j.score || 0));
+    let tagCls = 'tag-neutral';
+    let tagText = 'Netral';
+    if(j.tendency === 'SALAH' || sm > 0.0001){ tagCls = 'tag-salah'; tagText = 'Kecenderungan: SALAH'; }
+    else if(j.tendency === 'BENAR' || sm < -0.0001){ tagCls = 'tag-benar'; tagText = 'Kecenderungan: BENAR'; }
+    return '<tr><td>'+j.rank+'</td><td><code style="color:#c084fc">'+j.name+'</code></td><td>'+imp.toFixed(4)+'</td><td>'+sm.toFixed(4)+'</td><td><span class="tag '+tagCls+'">'+tagText+'</span></td></tr>';
+  }).join("");
+  
+  const seqScores=expl.sequence_joint_scores;
+  const labels=Object.keys(seqScores);
+  const vals=labels.map(k => typeof seqScores[k] === 'object' ? seqScores[k].importance_score : seqScores[k]);
+  const colors=vals.map(()=>"rgba(59,130,246,0.6)");
+  sum.top5_joints.forEach(j=>{const idx=labels.indexOf(j.name);if(idx>=0)colors[idx]="rgba(239,68,68,0.85)";});
+  if(chartInfluence)chartInfluence.destroy();
+  chartInfluence=new Chart(document.getElementById("chart-influence"),{type:"bar",data:{labels,datasets:[{label:"Importance Score |S[v]|",data:vals,backgroundColor:colors,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:8},color:"#64748b"},grid:{color:"rgba(255,255,255,.04)"}},y:{ticks:{color:"#64748b"},grid:{color:"rgba(255,255,255,.04)"}}}}});
+  
+  const attn=expl.attention_sources;
+  if(attn.BSP_weights_33){
+    const bspW=attn.BSP_weights_33;
+    const bspL=attn.BSP_landmark_names||bspW.map((_,i)=>"J"+i);
+    const bspC=bspW.map(w=>w>0.74?"rgba(239,68,68,.8)":w>0.70?"rgba(245,158,11,.7)":"rgba(96,165,250,.5)");
+    if(chartBSP)chartBSP.destroy();
+    chartBSP=new Chart(document.getElementById("chart-bsp"),{type:"bar",data:{labels:bspL,datasets:[{label:"BSP sigmoid weight",data:bspW,backgroundColor:bspC,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:8},color:"#64748b"},grid:{color:"rgba(255,255,255,.04)"}},y:{min:0.5,max:0.85,ticks:{color:"#64748b"},grid:{color:"rgba(255,255,255,.04)"}}}}});
+    document.querySelector("[data-tab=bsp]").textContent="BSP Weights (33) OK";
+  }else{document.querySelector("[data-tab=bsp]").textContent="BSP Weights (N/A-Baseline)";}
+  
+  if(attn.LS_channel_weights_128){
+    const lsW=attn.LS_channel_weights_128;
+    if(chartLS)chartLS.destroy();
+    chartLS=new Chart(document.getElementById("chart-ls"),{type:"bar",data:{labels:lsW.map((_,i)=>"Ch"+i),datasets:[{label:"LS channel weight",data:lsW,backgroundColor:"rgba(59,130,246,.55)",borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{ticks:{color:"#64748b",font:{size:9}},grid:{color:"rgba(255,255,255,.04)"}}}}});
+    document.querySelector("[data-tab=ls]").textContent="LS Channel (128) OK";
+  }else{document.querySelector("[data-tab=ls]").textContent="LS Channel (N/A)";}
+  
+  if(attn.temporal_weights_T_prime){
+    const tw=attn.temporal_weights_T_prime;
+    if(chartTemp)chartTemp.destroy();
+    chartTemp=new Chart(document.getElementById("chart-temporal"),{type:"line",data:{labels:tw.map((_,i)=>"t'"+(i+1)),datasets:[{label:"Temporal weight",data:tw,borderColor:"#10b981",backgroundColor:"rgba(16,185,129,.15)",fill:true,tension:.35,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:"#64748b",font:{size:8}},grid:{color:"rgba(255,255,255,.04)"}},y:{ticks:{color:"#64748b",font:{size:9}},grid:{color:"rgba(255,255,255,.04)"}}}}});
+    document.querySelector("[data-tab=temporal]").textContent="Temporal Weights OK";
+  }else{document.querySelector("[data-tab=temporal]").textContent="Temporal Weights (N/A)";}
+  
+  const refList=document.getElementById("bio-ref-list");
+  refList.innerHTML=refJointsList.map(j=>'<span class="tag" style="background:rgba(168,85,247,.18);border:1px solid rgba(168,85,247,.35);color:#c084fc;padding:.3rem .7rem">&#x25EF; '+j.name+' (idx '+j.idx+')</span>').join("");
+  document.getElementById("bio-ref-source").textContent=(BIO_SOURCES[exercise]||"Standar acuan fisik validator");
+  
+  const faith=expl.faithfulness_check;
+  const fbox=document.getElementById("faith-box");
+  if(faith){fbox.innerHTML='<p style="font-weight:600;margin-bottom:.6rem">Top-3 vs Random-3 Ablation <span class="tag tag-neutral">Bukan bukti kausal</span></p><p style="margin-bottom:.4rem"><strong>Top-3:</strong> <code>'+faith.top3_names.join(", ")+'</code></p><p style="margin-bottom:.4rem"><strong>Random-3:</strong> <code>'+faith.random3_names.join(", ")+'</code></p><table style="margin-top:.5rem"><tr><td>Margin original (mean)</td><td><strong>'+faith.margin_original_mean+'</strong></td></tr><tr><td>Margin Top-3 ablated</td><td><strong>'+faith.margin_top3_ablated_mean+'</strong></td></tr><tr><td>Margin Random-3 ablated</td><td><strong>'+faith.margin_random3_ablated_mean+'</strong></td></tr><tr><td>Delta Top-3</td><td style="color:var(--danger)"><strong>'+faith.delta_top3+'</strong></td></tr><tr><td>Delta Random-3</td><td><strong>'+faith.delta_random3+'</strong></td></tr><tr><td>Faithfulness Ratio</td><td style="color:var(--warn)"><strong>'+faith.faithfulness_ratio+'&times;</strong></td></tr></table>';}
+  document.getElementById("dl-json-btn").onclick=()=>{if(currentStem)window.open("/api/download_json?stem="+encodeURIComponent(currentStem),"_blank");};
+  resultCard.scrollIntoView({behavior:"smooth",block:"start"});
+}
+document.getElementById("attn-tabs").addEventListener("click",e=>{
+  const btn=e.target.closest("[data-tab]");if(!btn)return;
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
+  ["bsp","ls","temporal"].forEach(t=>{document.getElementById("tab-"+t).classList.toggle("hidden",t!==btn.dataset.tab);});
+});
+compareBtn.addEventListener("click",async()=>{
+  if(!currentFile)return;
+  compareCard.style.display="block";
+  document.getElementById("compare-grid").innerHTML='<p style="color:var(--muted)">Mengekstrak pose dan menjalankan 5 model...</p>';
+  document.getElementById("compare-chart-wrap").style.display="none";
+  const fd=new FormData();fd.append("video",currentFile);fd.append("exercise",exerciseSel.value);
+  try{
+    const resp=await fetch("/api/compare/stream",{method:"POST",body:fd});
+    const reader=resp.body.getReader();const decoder=new TextDecoder();let buf="";
+    while(true){
+      const{value,done}=await reader.read();if(done)break;
+      buf+=decoder.decode(value,{stream:true});
+      const lines=buf.split("\n");buf=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith("data:"))continue;
+        const raw=line.slice(5).trim();if(!raw)continue;
+        let ev;try{ev=JSON.parse(raw);}catch{continue;}
+        if(ev.done&&ev.success){renderCompare(ev.results,ev.exercise);}
+        else if(ev.done&&!ev.success){document.getElementById("compare-grid").innerHTML='<p style="color:var(--danger)">Error: '+ev.error+'</p>';}
+      }
+    }
+  }catch(ex){document.getElementById("compare-grid").innerHTML='<p style="color:var(--danger)">Jaringan error: '+ex.message+'</p>';}
+  compareCard.scrollIntoView({behavior:"smooth",block:"start"});
+});
+function renderCompare(results,exercise){
+  const grid=document.getElementById("compare-grid");grid.innerHTML="";
+  const chartData={labels:[],nBenar:[],nSalah:[]};
+  Object.entries(results).forEach(([name,r])=>{
+    if(!r.available){const c=document.createElement("div");c.className="cmp-card";c.innerHTML='<h4>'+name+'</h4><p style="color:var(--muted);font-size:.78rem">Model tidak tersedia</p>';grid.appendChild(c);return;}
+    chartData.labels.push(name.substring(0,10));chartData.nBenar.push(r.n_benar);chartData.nSalah.push(r.n_salah);
+    const mods=[r.use_bsp?"BSP":"",r.use_ls?"LS":"",r.use_temporal?"Temp":""].filter(Boolean).join("+")||"Baseline";
+    const rasVal = (r.RAS !== undefined ? r.RAS : r.BFM) || 0;
+    const liftVal = (r.attribution_lift !== undefined ? r.attribution_lift : r.focus_lift) || 0;
+    const c=document.createElement("div");c.className="cmp-card";
+    c.innerHTML='<h4 style="font-size:.78rem">'+name+'</h4><div class="cmp-stat"><span class="k">Modul</span><span class="val">'+mods+'</span></div><div class="cmp-stat"><span class="k">BENAR</span><span class="val" style="color:var(--accent)">'+r.n_benar+'</span></div><div class="cmp-stat"><span class="k">SALAH</span><span class="val" style="color:var(--danger)">'+r.n_salah+'</span></div><div class="cmp-stat"><span class="k">RAS</span><span class="val" style="color:var(--warn)">'+(rasVal*100).toFixed(1)+'%</span></div><div class="cmp-stat"><span class="k">Attribution Lift</span><span class="val">'+liftVal.toFixed(2)+'&times;</span></div><div class="cmp-stat"><span class="k">Top Joint</span><span class="val" style="font-size:.72rem">'+r.top_joint_name+'</span></div>';
+    grid.appendChild(c);
+  });
+  const wrap=document.getElementById("compare-chart-wrap");wrap.style.display="block";
+  if(chartCompare)chartCompare.destroy();
+  chartCompare=new Chart(document.getElementById("chart-compare"),{type:"bar",data:{labels:chartData.labels,datasets:[{label:"Frame BENAR",data:chartData.nBenar,backgroundColor:"rgba(16,185,129,.7)",borderRadius:4},{label:"Frame SALAH",data:chartData.nSalah,backgroundColor:"rgba(239,68,68,.7)",borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#94a3b8"}}},scales:{x:{ticks:{color:"#64748b",font:{size:8}},grid:{color:"rgba(255,255,255,.04)"}},y:{ticks:{color:"#64748b",font:{size:8}},grid:{color:"rgba(255,255,255,.04)"}}}}});
+}
 </script>
 </body>
 </html>
