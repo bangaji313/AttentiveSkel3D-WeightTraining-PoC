@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -195,7 +195,7 @@ fetch("/api/models").then(r=>r.json()).then(d=>{
   const sel=document.getElementById("model-select");
   sel.innerHTML="";
   if(!d.models.length){sel.innerHTML='<option value="">Tidak ada model</option>';return;}
-  d.models.forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;if(m.includes("ablasi_a"))o.selected=true;sel.appendChild(o);});
+  d.models.forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;if(m.includes("s3a_bsp_holdout_v2"))o.selected=true;sel.appendChild(o);});
   checkReady();
 });
 fetch("/api/landmark_names").then(r=>r.json()).then(d=>{LM_NAMES.push(...d.names);});

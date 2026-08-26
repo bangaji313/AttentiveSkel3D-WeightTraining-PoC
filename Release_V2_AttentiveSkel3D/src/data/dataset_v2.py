@@ -35,6 +35,42 @@ class PerFrameDataset(Dataset):
         ValueError        : Jika kolom wajib tidak ada di CSV.
     """
 
+    def _remap_path(self, raw: str, subfolder: str) -> str:
+        """
+        Mengembalikan path file yang valid dengan memeriksa kandidat lokasi secara berurutan:
+          1. Path asli
+          2. Path relatif terhadap PROJECT_ROOT
+          3. PROJECT_ROOT / data / <subfolder> / <filename>
+
+        Raises:
+            FileNotFoundError: Jika seluruh kandidat tidak ditemukan.
+        """
+        project_root = Path(__file__).resolve().parents[2]
+        normalized   = Path(str(raw).replace("\\", "/"))
+        filename     = normalized.name
+
+        candidates = []
+        if normalized.is_absolute():
+            candidates.append(normalized)
+
+        candidates.extend([
+            project_root / normalized,
+            project_root / "data" / subfolder / filename,
+        ])
+
+        checked = []
+        for cand in candidates:
+            if cand not in checked:
+                checked.append(cand)
+                if cand.is_file():
+                    return str(cand)
+
+        checked_str = "\n".join(f"  - {c}" for c in checked)
+        raise FileNotFoundError(
+            f"File tidak ditemukan untuk path asli: '{raw}'\n"
+            f"Kandidat yang telah diperiksa:\n{checked_str}"
+        )
+
     def __init__(self, csv_file: str | Path):
         csv_file = Path(csv_file)
 
@@ -55,6 +91,11 @@ class PerFrameDataset(Dataset):
                 f"Kolom wajib tidak ditemukan di CSV: {missing}. "
                 f"Kolom tersedia: {list(self.manifest.columns)}"
             )
+
+        # ── Remap path lama ke lokasi aktual secara cross-platform ─────────
+        self.manifest["file_path"]   = self.manifest["file_path"].apply(lambda p: self._remap_path(p, "tensors"))
+        self.manifest["labels_path"] = self.manifest["labels_path"].apply(lambda p: self._remap_path(p, "v2_labels"))
+        # ─────────────────────────────────────────────────────────────────
 
         self.manifest = self.manifest.reset_index(drop=True)
 
@@ -178,8 +219,8 @@ def create_dataloaders_v2(
     )
 
     print(f"Dataset split selesai (seed={random_seed}):")
-    print(f"  Train  : {len(train_set):4d} sampel → {len(train_loader)} batch")
-    print(f"  Val    : {len(val_set):4d} sampel → {len(val_loader)} batch")
-    print(f"  Test   : {len(test_set):4d} sampel → {len(test_loader)} batch")
+    print(f"  Train  : {len(train_set):4d} sampel -> {len(train_loader)} batch")
+    print(f"  Val    : {len(val_set):4d} sampel -> {len(val_loader)} batch")
+    print(f"  Test   : {len(test_set):4d} sampel -> {len(test_loader)} batch")
 
     return train_loader, val_loader, test_loader

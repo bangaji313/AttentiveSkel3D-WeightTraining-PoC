@@ -8,7 +8,7 @@
 #
 # Cara menggunakan:
 #   python src/demo_inference.py --video data/raw/Squat/Squat_001.mp4
-#   python src/demo_inference.py --video data/raw/Squat/Squat_001.mp4 --model bobot_model/best_model_ablasi_a.pth
+#   python src/demo_inference.py --video data/raw/Squat/Squat_001.mp4 --model bobot_model/best_model_s3a_bsp_holdout_v2.pth
 
 import os
 import sys

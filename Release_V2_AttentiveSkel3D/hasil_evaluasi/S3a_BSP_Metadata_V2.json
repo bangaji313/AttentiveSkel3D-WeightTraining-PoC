@@ -1,0 +1,43 @@
+{
+  "experiment": "S3a — BSP Only Holdout Per-Frame V2",
+  "checkpoint_file": "best_model_s3a_bsp_holdout_v2.pth",
+  "sha256": "2a5cc2c17ed33172a2f7e3ce1450edb580af2f69e6bba9742fe5d1551a28fad4",
+  "manifest": "D:\\Data-Aji\\KULIAH\\Tugas-Akhir\\AttentiveSkel3D-WeightTraining-PoC\\Release_V2_AttentiveSkel3D\\src\\data\\manifest_v2.csv",
+  "seed": 42,
+  "split": {
+    "train": 340,
+    "val": 73,
+    "test": 74
+  },
+  "hyperparameters": {
+    "batch_size": 16,
+    "learning_rate": 0.001,
+    "num_epochs": 100,
+    "optimizer": "Adam",
+    "loss": "CrossEntropyLoss"
+  },
+  "architecture": {
+    "use_spatial_prior": true,
+    "use_learned_spatial": false,
+    "use_temporal_attention": false,
+    "parameter_count": 101891
+  },
+  "best_checkpoint": {
+    "epoch": 52,
+    "val_loss": 0.204907,
+    "val_acc": 0.914598
+  },
+  "test_set_evaluation": {
+    "Accuracy (%)": 90.2027,
+    "F1_Macro": 0.900407,
+    "F1_Binary": 0.913109,
+    "Precision": 0.937332,
+    "Recall": 0.890106,
+    "TP": 2438,
+    "TN": 1834,
+    "FP": 163,
+    "FN": 301,
+    "Total_Frame": 4736
+  },
+  "training_history_csv": "D:\\Data-Aji\\KULIAH\\Tugas-Akhir\\AttentiveSkel3D-WeightTraining-PoC\\Release_V2_AttentiveSkel3D\\hasil_evaluasi\\S3a_BSP_Training_History_V2.csv"
+}

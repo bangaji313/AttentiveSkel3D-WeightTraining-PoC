@@ -1,6 +1,6 @@
 ﻿Skenario,TP,TN,FP,FN
-Skenario 1 — Baseline,2568,1739,258,171
-Skenario 2 — Full Model,2433,1736,261,306
-Skenario 3a — Ablasi: BSP,2538,1739,258,201
-Skenario 3b — Ablasi: BSP+LS,2475,1713,284,264
-Skenario 3c — Ablasi: BSP+Temp,2602,1645,352,137
+Skenario 1 — Baseline (Tanpa Atensi),2568,1739,258,171
+Skenario 2 — Full Model (BSP + LearnedSpatial + Temporal),2433,1736,261,306
+Skenario 3a — Ablasi: Hanya BSP,2438,1834,163,301
+Skenario 3b — Ablasi: BSP + LearnedSpatial,2602,1645,352,137
+Skenario 3c — Ablasi: BSP + Temporal,2475,1713,284,264

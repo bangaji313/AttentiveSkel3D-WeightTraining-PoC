@@ -67,9 +67,9 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 SKENARIO = {
     "Skenario 1 — Baseline (Tanpa Atensi)": "best_model_baseline.pth",
     "Skenario 2 — Full Model (BSP + LearnedSpatial + Temporal)": "best_model_v2.pth",
-    "Skenario 3a — Ablasi: Hanya BSP": "best_model_ablasi_a.pth",
-    "Skenario 3b — Ablasi: BSP + LearnedSpatial": "best_model_ablasi_b.pth",
-    "Skenario 3c — Ablasi: BSP + Temporal": "best_model_ablasi_c.pth",
+    "Skenario 3a — Ablasi: Hanya BSP": "best_model_s3a_bsp_holdout_v2.pth",
+    "Skenario 3b — Ablasi: BSP + LearnedSpatial": "best_model_ablasi_c.pth",
+    "Skenario 3c — Ablasi: BSP + Temporal": "best_model_ablasi_b.pth",
 }
 
 # Nama 33 landmark MediaPipe Pose (urut dari indeks 0 s/d 32)

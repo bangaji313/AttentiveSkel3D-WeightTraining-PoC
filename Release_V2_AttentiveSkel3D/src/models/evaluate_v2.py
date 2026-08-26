@@ -14,7 +14,7 @@
 # Cara menjalankan:
 #   conda activate attentiveskel
 #   python src/models/v2/evaluate.py
-#   python src/models/v2/evaluate.py --model bobot_model/best_model_ablasi_a.pth
+#   python src/models/v2/evaluate.py --model bobot_model/best_model_s3a_bsp_holdout_v2.pth
 
 import sys
 import argparse

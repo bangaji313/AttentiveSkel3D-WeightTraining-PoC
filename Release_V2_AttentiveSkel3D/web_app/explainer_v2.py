@@ -1,4 +1,4 @@
-﻿# web_app/explainer_v2.py
+# web_app/explainer_v2.py
 #
 # Explanation Engine — AttentiveSkel-3D V2
 #
@@ -40,7 +40,7 @@ BIOMECHANICAL_REFERENCE: Dict[str, List[int]] = {
 MODEL_SCENARIOS: Dict[str, str] = {
     "S1 — Baseline":      "best_model_baseline.pth",
     "S2 — Full Model":    "best_model_v2.pth",
-    "S3a — Hanya BSP":    "best_model_ablasi_a.pth",
+    "S3a — Hanya BSP":    "best_model_s3a_bsp_holdout_v2.pth",  # holdout resmi seed=42, epoch=52
     "S3b — BSP+LS":       "best_model_ablasi_c.pth",  # best_model_ablasi_c has BSP + LS
     "S3c — BSP+Temporal": "best_model_ablasi_b.pth",  # best_model_ablasi_b has BSP + Temporal
 }
