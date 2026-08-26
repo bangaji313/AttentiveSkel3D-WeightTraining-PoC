@@ -47,5 +47,8 @@ src/data/Bukti_Wujud_Tensor_V2.csv
 src/data/Pemetaan_Detail_Per_Frame_V2.csv
 src/data/Pemetaan_Detail_Per_Frame_V2.json
 
+# Local legacy weights archive (TIDAK di-push, disimpan lokal)
+bobot_model/archive/
+
 # Dataset zip
 *.zip

@@ -14,11 +14,16 @@
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.x-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
 [![Kaggle DOI](https://img.shields.io/badge/Kaggle%20DOI-10.34740%2Fkaggle%2Fdsv%2F19041891-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://doi.org/10.34740/kaggle/dsv/19041891)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![Branch](https://img.shields.io/badge/Branch-v2--per--frame--ai-blueviolet?style=for-the-badge)]()
+[![Branch](https://img.shields.io/badge/Branch-revision%2Fpost--semhas-blueviolet?style=for-the-badge)]()
 [![Model Size](https://img.shields.io/badge/Model%20Size-0.44%20MB-blue?style=for-the-badge)]()
 [![Params](https://img.shields.io/badge/Parameters-110%2C372-orange?style=for-the-badge)]()
 
 <br/>
+
+> **📌 Post-Seminar Revision Branch (`revision/post-semhas`)**
+> Cabang ini berisi seluruh implementasi, perbaikan arsitektur, retraining model, audit path cross-platform, serta benchmark latensi end-to-end hasil revisi pasca-Seminar Hasil.
+> **Seluruh materi teknis dan source code aktif terpusat di folder [`Release_V2_AttentiveSkel3D/`](Release_V2_AttentiveSkel3D/).**
+> 📖 Silakan merujuk ke **[Dokumentasi Teknis Release_V2_AttentiveSkel3D](Release_V2_AttentiveSkel3D/README.md)** untuk rincian eksperimen, struktur direktori, dan hasil benchmark final.
 
 > **Tugas Akhir — Program Studi Informatika**  
 > Institut Teknologi Nasional (ITENAS) Bandung · 2026
