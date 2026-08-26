@@ -17,9 +17,11 @@ Pada cabang `revision/post-semhas`, dilakukan serangkaian audit, perbaikan metod
 3. **PemberSIHAN Single Raw Tensor Write per Run (`extract_pose.py`)**:
    - Ditambahkan parameter `save_output: bool = True` pada `PoseExtractor.extract_video()`.
    - Pada benchmark end-to-end, dipanggil `save_output=False` sehingga penulisan file `.npy` mentah hanya dilakukan tepat 1x pada Stage 3 (`raw_tensor_saving_ms`).
-4. **Benchmark Latency End-to-End Canonical (10 Measured Runs)**:
-   - Dijalankan benchmark steady-state 10-run (+ 1 warm-up) per video pada 3 video mentah (*Bench Press*, *Deadlift*, *Squat*).
-   - Nomenklatur tahap disempurnakan menjadi `time_to_analysis_ready_ms`, `video_stream_open_and_metadata_inspection_ms`, `video_decoding_and_blazepose_extraction_ms`, dan `model_inference_and_joint_attribution_ms`.
+4. **Pembaruan Publikasi Kaggle Dataset & DOI**:
+   - Judul Dataset: **AttentiveSkel3D-WeightTraining Dataset Per-Frame**
+   - URL Kaggle: [https://www.kaggle.com/datasets/bangaji/attentiveskel3d-weighttraining-dataset-per-frame](https://www.kaggle.com/datasets/bangaji/attentiveskel3d-weighttraining-dataset-per-frame)
+   - DOI Terbaru: [`10.34740/kaggle/dsv/19043769`](https://doi.org/10.34740/kaggle/dsv/19043769)
+   - *(Catatan: DOI terdahulu `10.34740/kaggle/dsv/19038457` dan `10.34740/kaggle/dsv/19041891` tetap disimpan dalam arsip historis sebagai bukti evolusi iterasi dataset).*
 
 ---
 
@@ -30,11 +32,11 @@ Release_V2_AttentiveSkel3D/
 ├── README.md                                          # Dokumentasi teknis V2 (File ini)
 ├── .gitignore                                         # Aturan ignore spesifik paket V2
 ├── bobot_model/                                       # Checkpoint resmi PyTorch model V2 (.pth)
-│   ├── best_model_baseline.pth                        # S1 Baseline 3D-CNN
-│   ├── best_model_v2.pth                              # S2 Full Model (BSP + Learned + Temporal)
-│   ├── best_model_s3a_bsp_holdout_v2.pth              # S3a BSP-Only (Holdout Per-Frame Resmi)
-│   ├── best_model_ablasi_b.pth                        # S3c BSP + Temporal Attention
-│   ├── best_model_ablasi_c.pth                        # S3b BSP + Learned Spatial (Model Praktis Web App)
+│   ├── best_model_baseline.pth                        # S1 Baseline 3D-CNN (101,858 params)
+│   ├── best_model_v2.pth                              # S2 Full Model (BSP + Learned + Temporal) (110,372 params)
+│   ├── best_model_s3a_bsp_holdout_v2.pth              # S3a BSP-Only (Holdout Per-Frame Resmi) (101,891 params)
+│   ├── best_model_ablasi_b.pth                        # S3c BSP + Temporal Attention (102,020 params)
+│   ├── best_model_ablasi_c.pth                        # S3b BSP + Learned Spatial (Model Praktis) (110,243 params)
 │   ├── best_model_s3a_bsp_holdout_v2_metadata.json    # Metadata training S3a
 │   └── archive/                                       # Local legacy weights archive (TIDAK di-track)
 │       └── legacy_video_level_best_model_ablasi_a_sha34c84b37.pth
@@ -53,19 +55,12 @@ Release_V2_AttentiveSkel3D/
 │   ├── Perbandingan_Metrik_Semua_Skenario_V2.csv      # Ringkasan metrik akurasi, F1, val loss 5 skenario
 │   ├── Pemetaan_Detail_Per_Frame_V2.csv               # Pemetaan 31.168 frame
 │   └── archive/                                       # Arsip hasil evaluasi terdahulu
+│       ├── legacy_pre_v2/                             # Arsip berkas legacy sebelum penataan V2
 │       └── mapping_lama/                              # Hasil evaluasi sebelum koreksi mapping S3a
 ├── src/                                               # Source code utama
-│   ├── data/                                          # Data loading & preprocessing
-│   │   ├── dataset_v2.py                              # PerFrameDataset & Dataloader
-│   │   ├── extract_pose.py                            # PoseExtractor (MediaPipe BlazePose)
-│   │   └── preprocess.py                             # DataPreprocessor (Resampling, Smooth, Norm)
-│   ├── models/                                        # Arsitektur & script evaluasi
-│   │   ├── arsitektur_v2.py                           # Model AttentiveSkel3DPerFrame
-│   │   └── evaluasi_semua_skenario_v2.py              # Script evaluasi 5 skenario model V2
-│   ├── benchmark/                                     # Script pengujian latensi
-│   │   ├── benchmark_latency_v2.py                    # Benchmark Model-Only (CPU & CUDA)
-│   │   └── benchmark_end_to_end_v2.py                 # Benchmark End-to-End Pipeline (10-Run)
-│   └── visualization/                                 # Script generator visualisasi
+│   ├── data/                                          # Data loading & preprocessing (dataset_v2.py, extract_pose.py, preprocess.py)
+│   ├── models/                                        # Arsitektur & script evaluasi (arsitektur_v2.py, evaluasi_semua_skenario_v2.py)
+│   └── benchmark/                                     # Script benchmark (benchmark_latency_v2.py, benchmark_end_to_end_v2.py)
 └── web_app/                                           # Antarmuka Web Explainer & CLI
     ├── app_v2.py                                      # Server FastAPI & Dashboard Web UI
     ├── explainer_v2.py                                # Modul XAI Joint Influence Attribution
@@ -75,17 +70,23 @@ Release_V2_AttentiveSkel3D/
 
 ---
 
-## 🎯 Pemetaan Checkpoint Resmi 5 Skenario
+## 🎯 Pemetaan Checkpoint & Metrik Evaluasi Canonical
 
-| Skenario | Konfigurasi Atensi | File Checkpoint Resmi | Parameter | Accuracy (Test) | Val Loss |
-|---|---|---|---|---|---|
-| **S1 (Baseline)** | 3D-CNN Tanpa Atensi | `best_model_baseline.pth` | 100,546 | 89.19% | 0.2514 |
-| **S2 (Full Model)** | BSP + Learned Spatial + Temporal | `best_model_v2.pth` | 110,372 | 90.54% | 0.2241 |
-| **S3a (Ablasi A)** | BSP Only | `best_model_s3a_bsp_holdout_v2.pth` | 101,891 | 90.20% | **0.2049** |
-| **S3b (Ablasi C)** | BSP + Learned Spatial | `best_model_ablasi_c.pth` | 101,956 | **91.89%** | 0.2185 |
-| **S3c (Ablasi B)** | BSP + Temporal Attention | `best_model_ablasi_b.pth` | 108,962 | 90.54% | 0.2215 |
+Evaluasi dilakukan pada 4.736 frame tes independen dari 74 video holdout:
 
-> **Model Praktis Utama**: **S3b (BSP + Learned Spatial)** dipadukan dalam Web App (`explainer_v2.py`) dan Benchmark End-to-End karena mencapai akurasi test tertinggi (**91.89%**) dengan estimasi atensi spasial yang cepat tanpa overhead atensi temporal.
+| Skenario | Konfigurasi Atensi | Checkpoint Resmi | Parameter | Accuracy (%) | Precision | Recall (Deviasi) | F1-Binary |
+|---|---|---|---|---|---|---|---|
+| **S1 (Baseline)** | 3D-CNN Tanpa Atensi | `best_model_baseline.pth` | 101,858 | **90.94%** | 0.9087 | 0.9376 | 0.9229 |
+| **S2 (Full Model)** | BSP + Learned Spatial + Temporal | `best_model_v2.pth` | 110,372 | 88.03% | 0.9031 | 0.8883 | 0.8956 |
+| **S3a (Ablasi A)** | BSP Only | `best_model_s3a_bsp_holdout_v2.pth` | 101,891 | 90.20% | **0.9373** | 0.8901 | 0.9131 |
+| **S3b (Ablasi C)** | BSP + Learned Spatial | `best_model_ablasi_c.pth` | 110,243 | 89.67% | 0.8808 | **95.00%** | **0.9141** |
+| **S3c (Ablasi B)** | BSP + Temporal Attention | `best_model_ablasi_b.pth` | 102,020 | 88.43% | 0.8971 | 0.9036 | 0.9003 |
+
+> **Rasional Pemilihan Model Praktis (S3b)**:
+> Model **S3b (`best_model_ablasi_c.pth`)** dipilih sebagai model praktis utama dalam aplikasi demo analisis pascaperekaman dan benchmark pipeline karena:
+> 1. Mengintegrasikan *Biomechanical Spatial Prior* (BSP) dan *Learned Spatial Attention* untuk penyajian atribusi tingkat sendi;
+> 2. Mencapai **Recall deviasi postur tertinggi (95.00%)** yang sangat krusial agar kesalahan gerakan tidak terlewat (meminimalisasi *False Negative*);
+> 3. Menghindari *overhead* komputasi modul atensi temporal sehingga lebih efisien.
 
 ---
 
@@ -93,19 +94,21 @@ Release_V2_AttentiveSkel3D/
 
 Diuji pada tensor input `(1, 64, 33, 3)` selama 50 warm-up iterations dan 500 measured iterations:
 
-| Skenario | CPU Latency Mean (ms) | CPU Latency P95 (ms) | CUDA Latency Mean (ms) | CUDA Latency P95 (ms) | CUDA Speedup |
-|---|---|---|---|---|---|
-| **S1 Baseline** | 4.85 ms | 5.42 ms | 1.12 ms | 1.35 ms | 4.33x |
-| **S2 Full Model** | 5.68 ms | 6.21 ms | 1.38 ms | 1.62 ms | 4.11x |
-| **S3a BSP-Only** | 5.12 ms | 5.65 ms | 1.18 ms | 1.40 ms | 4.34x |
-| **S3b BSP + Learned** | 5.24 ms | 5.80 ms | 1.21 ms | 1.42 ms | 4.33x |
-| **S3c BSP + Temporal** | 5.51 ms | 6.08 ms | 1.32 ms | 1.55 ms | 4.17x |
+| Skenario | Checkpoint | Parameter | CPU Mean (ms) | CPU P95 (ms) | CUDA Mean (ms) | CUDA P95 (ms) | CUDA Throughput (Sekuens/s) |
+|---|---|---|---|---|---|---|---|
+| **S1 Baseline** | `best_model_baseline.pth` | 101,858 | 1.194 ms | 1.495 ms | 0.734 ms | 0.804 ms | 1361.71 sekuens/s |
+| **S2 Full Model** | `best_model_v2.pth` | 110,372 | 1.630 ms | 1.989 ms | 1.087 ms | 1.148 ms | 919.80 sekuens/s |
+| **S3a BSP-Only** | `best_model_s3a_bsp_holdout_v2.pth` | 101,891 | 1.275 ms | 1.575 ms | 0.771 ms | 0.837 ms | 1297.24 sekuens/s |
+| **S3b BSP+Learned** | `best_model_ablasi_c.pth` | 110,243 | **1.264 ms** | **1.517 ms** | **0.954 ms** | **1.017 ms** | **1047.73 sekuens/s** |
+| **S3c BSP+Temporal** | `best_model_ablasi_b.pth` | 102,020 | 1.468 ms | 1.737 ms | 0.897 ms | 0.985 ms | 1114.43 sekuens/s |
+
+*Catatan: Nilai CUDA Throughput (misal 1047.73 sekuens/s pada S3b) menyatakan kecepatan komputasi tensor model PyTorch per detik dan BUKAN kecepatan FPS pemrosesan video.*
 
 ---
 
 ## ⏱️ Hasil Benchmark Latency End-to-End Canonical (10 Measured Runs)
 
-Pengukuran dilakukan pada 3 video mentah representatif menggunakan model praktis **S3b (`best_model_ablasi_c.pth`)** di perangkat NVIDIA GPU (CUDA). Cold-start load time model: **101.21 ms**.
+Pengukuran dilakukan pada 3 video mentah representatif menggunakan model praktis **S3b (`best_model_ablasi_c.pth`)** di perangkat GPU CUDA. Cold-start load time model: **101.21 ms**.
 
 ### 1. Ringkasan Kinerja Utama Per Latihan
 
@@ -154,15 +157,15 @@ Pengukuran dilakukan pada 3 video mentah representatif menggunakan model praktis
 ## 🔍 Catatan Metodologis & Penjelasan Operasional
 
 1. **Perbedaan Pure Model Inference vs Model Inference + Joint Attribution**:
-   - Pure forward pass model PyTorch untuk tensor $(1, 64, 33, 3)$ pada GPU CUDA hanya membutuhkan waktu **~1.21 ms**.
-   - Namun, Stage 5 (`model_inference_and_joint_attribution_ms`) mencakup pembuatan 33 tensor perturbasi sendi (temporal-mean ablation) dan mengeksekusi **3 kali model forward pass** (1x model forward asli, 1x original logits di `joint_influence`, dan 1x batched perturbation forward dengan $B=33$), serta kalkulasi skor attribution biomekanis. Hal ini menyebabkan durasi Stage 5 menjadi **~69 – 94 ms**. Jika terjadi fallback memori GPU, eksekusi dilakukan sebanyak 35 forward passes.
+   - Forward pass model-only PyTorch untuk tensor $(1, 64, 33, 3)$ pada GPU CUDA sangat ringan (**0.954 ms**).
+   - Namun, Stage 5 (`model_inference_and_joint_attribution_ms`) mencakup pembuatan 33 tensor perturbasi sendi (ablasia temporal-mean per-joint) dan mengeksekusi **3 kali model forward pass** (1x model forward asli, 1x original logits di `joint_influence`, dan 1x batched perturbation forward dengan $B=33$), serta kalkulasi skor atribusi biomekanik. Hal ini menyebabkan durasi Stage 5 menjadi **~69 – 94 ms**.
 2. **Cakupan Stage 2 (`video_decoding_and_blazepose_extraction_ms`)**:
    - Stage 2 mencakup pembacaan frame video menggunakan OpenCV `cap.read()`, konversi warna BGR-ke-RGB, dan inferensi MediaPipe Pose (`model_complexity=2`). Tahap ini mengonsumsi **>98.6%** dari total waktu *Time-to-Analysis-Ready*, menjadikannya *bottleneck* utama sistem.
 3. **Penulisan Single Raw Tensor per Run**:
    - Dengan menyetel `save_output=False` pada `PoseExtractor`, penulisan file `.npy` mentah ke disk hanya dilakukan **tepat 1x** pada Stage 3 (`raw_tensor_saving_ms`), menghindari I/O ganda.
 4. **Inisialisasi Per-Run MediaPipe Pose**:
    - Setiap iterasi *run* benchmark membuat ulang objek `PoseExtractor`, sehingga mengukur latensi cold-start inisialisasi model MediaPipe Pose pada setiap *run*, bukan *persistent steady-state daemon*.
-5. **Status Real-Time & Keterbatasan Metodologis**:
+5. **Status Performa & Keterbatasan Metodologis**:
    - Nilai *Real-Time Factor* (RTF) sistem saat ini berkisar antara **2.74x hingga 2.78x** ($RTF > 1.0$), sehingga pipeline saat ini **belum memenuhi kriteria real-time** pada pemrosesan sekuensial tunggal.
    - **Metodologi Pengujian**: Pengukuran ini menggunakan video *pre-recorded* lokal, tidak mencakup latensi jaringan (network upload/download), tidak mencakup latensi UI browser, bukan *live-camera latency*, memerlukan konteks sekuens 64 frame untuk klasifikasi, dan **belum membuktikan kemampuan pencegahan cedera secara klinis**.
 
@@ -186,9 +189,8 @@ python Release_V2_AttentiveSkel3D/src/benchmark/benchmark_latency_v2.py
 ```bash
 python Release_V2_AttentiveSkel3D/src/benchmark/benchmark_end_to_end_v2.py
 ```
-*(Gunakan `--smoke-test` untuk pengujian cepat 1 warm-up + 1 run).*
 
-### 4. Menjalankan Dashboard Web App (FastAPI UI)
+### 4. Menjalankan Dashboard Web App (Aplikasi Demo Analisis Pascaperekaman)
 ```bash
 python Release_V2_AttentiveSkel3D/web_app/app_v2.py
 ```

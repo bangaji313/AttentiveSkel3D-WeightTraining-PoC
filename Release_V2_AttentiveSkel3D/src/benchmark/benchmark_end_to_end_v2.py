@@ -630,7 +630,7 @@ def run_benchmark(smoke_test: bool = False):
         "practical_model"    : {
             "name"      : "S3b BSP + Learned Spatial",
             "checkpoint": MODEL_REL_PATH.name,
-            "path"      : str(model_path),
+            "path"      : MODEL_REL_PATH.as_posix(),
         },
         "device"             : str(device),
         "n_measured_runs"    : n_measured,

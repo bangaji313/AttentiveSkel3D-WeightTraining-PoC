@@ -3,7 +3,7 @@
   "practical_model": {
     "name": "S3b BSP + Learned Spatial",
     "checkpoint": "best_model_ablasi_c.pth",
-    "path": "D:\\Data-Aji\\KULIAH\\Tugas-Akhir\\AttentiveSkel3D-WeightTraining-PoC\\Release_V2_AttentiveSkel3D\\bobot_model\\best_model_ablasi_c.pth"
+    "path": "bobot_model\\best_model_ablasi_c.pth"
   },
   "device": "cuda",
   "n_measured_runs": 10,

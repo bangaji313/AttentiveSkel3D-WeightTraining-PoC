@@ -2,7 +2,7 @@
   "experiment": "S3a — BSP Only Holdout Per-Frame V2",
   "checkpoint_file": "best_model_s3a_bsp_holdout_v2.pth",
   "sha256": "2a5cc2c17ed33172a2f7e3ce1450edb580af2f69e6bba9742fe5d1551a28fad4",
-  "manifest": "D:\\Data-Aji\\KULIAH\\Tugas-Akhir\\AttentiveSkel3D-WeightTraining-PoC\\Release_V2_AttentiveSkel3D\\src\\data\\manifest_v2.csv",
+  "manifest": "src\\data\\manifest_v2.csv",
   "seed": 42,
   "split": {
     "train": 340,
