@@ -1,0 +1,34 @@
+exercise,video_file,resolution,source_fps,frame_count,video_duration_sec,frames_with_pose,frames_without_pose,run_id,t_video_stream_open_and_metadata_inspection_ms,t_video_decoding_and_blazepose_extraction_ms,t_raw_tensor_saving_ms,t_preprocessing_ms,t_model_inference_and_joint_attribution_ms,t_time_to_analysis_ready_ms,t_rendering_ms,t_total_with_rendering_ms,run_type,cold_start_load_ms,n_measured_runs
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,warmup,25.339,8575.664,2.634,38.453,247.69,8889.779,7584.74,16474.519,warmup,101.206,10
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,run_1,23.16,8653.165,1.541,26.635,63.935,8768.436,7292.548,16060.984,measured_1,101.206,10
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,run_2,22.448,8672.146,1.027,25.504,64.815,8785.941,7285.696,16071.637,measured_2,101.206,10
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,run_3,22.671,8571.675,1.792,27.508,63.821,8687.467,7246.006,15933.473,measured_3,101.206,10
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,run_4,22.953,8548.343,2.549,25.252,64.285,8663.382,7256.252,15919.634,measured_4,101.206,10
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,run_5,22.533,8482.96,2.291,25.71,64.134,8597.629,7261.584,15859.212,measured_5,101.206,10
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,run_6,21.681,8506.442,1.539,27.565,63.912,8621.139,7284.572,15905.711,measured_6,101.206,10
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,run_7,22.227,8540.424,2.408,25.169,80.505,8670.733,7247.372,15918.104,measured_7,101.206,10
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,run_8,23.851,8560.697,1.874,26.11,64.628,8677.16,7226.709,15903.869,measured_8,101.206,10
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,run_9,22.008,8612.344,1.63,25.34,64.286,8725.608,7387.015,16112.623,measured_9,101.206,10
+Bench Press,primer_benchpress_frontal_subjek01_rep1.mp4,1080x1920,30.0,94,3.133,94,0,run_10,21.873,8872.498,1.774,30.325,97.466,9023.935,7589.712,16613.648,measured_10,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,warmup,15.09,20053.376,1.607,33.541,70.616,20174.23,7640.968,27815.198,warmup,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,run_1,15.574,20769.348,1.13,30.872,83.169,20900.093,7607.669,28507.762,measured_1,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,run_2,15.996,20244.962,1.131,32.88,266.185,20561.155,7842.141,28403.296,measured_2,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,run_3,16.107,20244.589,1.125,30.407,63.688,20355.916,7639.452,27995.367,measured_3,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,run_4,15.104,20075.339,1.56,30.64,76.555,20199.199,7633.152,27832.35,measured_4,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,run_5,16.8,20080.78,1.566,30.985,108.418,20238.55,7873.685,28112.234,measured_5,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,run_6,16.518,20021.499,1.572,30.506,63.578,20133.672,7726.889,27860.561,measured_6,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,run_7,17.438,19966.689,2.385,31.113,64.472,20082.098,7402.408,27484.506,measured_7,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,run_8,15.209,19617.543,1.734,29.356,83.197,19747.04,7395.843,27142.883,measured_8,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,run_9,15.068,19679.27,1.906,29.305,63.265,19788.813,7396.409,27185.222,measured_9,101.206,10
+Deadlift,primer_deadlift_lateral_subjek01_rep1.mp4,1080x1920,30.0,221,7.367,221,0,run_10,13.951,19966.46,1.641,29.743,70.723,20082.519,7420.184,27502.703,measured_10,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,warmup,18.067,8892.014,2.585,27.155,75.219,9015.041,7116.048,16131.09,warmup,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,run_1,18.808,8922.341,1.522,24.462,65.268,9032.401,7380.805,16413.205,measured_1,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,run_2,19.397,9057.219,1.778,24.439,63.506,9166.338,7262.886,16429.224,measured_2,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,run_3,17.887,9120.223,3.005,31.869,117.77,9290.754,7442.842,16733.596,measured_3,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,run_4,19.474,9122.877,1.943,25.524,65.299,9235.118,7406.116,16641.234,measured_4,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,run_5,18.988,9119.439,1.943,24.715,64.873,9229.959,7325.993,16555.952,measured_5,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,run_6,20.492,9056.668,2.054,24.557,105.866,9209.637,7424.721,16634.358,measured_6,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,run_7,21.046,9103.809,1.702,30.478,72.497,9229.533,7350.88,16580.413,measured_7,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,run_8,18.022,9067.926,1.85,24.274,63.672,9175.744,7367.375,16543.119,measured_8,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,run_9,19.45,9091.091,1.042,26.054,79.945,9217.582,7388.211,16605.793,measured_9,101.206,10
+Squat,primer_squat_frontal_subjek01_rep1.mp4,1080x1920,30.0,99,3.3,99,0,run_10,18.884,9092.88,1.996,23.357,63.611,9200.727,7354.475,16555.203,measured_10,101.206,10
