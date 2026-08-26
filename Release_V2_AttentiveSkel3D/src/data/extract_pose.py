@@ -52,8 +52,9 @@ class PoseExtractor:
     def extract_video(
         self,
         video_path: str,
-        output_npy_path: str,
+        output_npy_path: str = "",
         output_video_path: str = None,
+        save_output: bool = True,
     ) -> np.ndarray:
         """
         Membaca video frame-demi-frame, mengekstraksi pose dari setiap frame,
@@ -208,10 +209,12 @@ class PoseExtractor:
             pose_array = np.stack(all_pose_landmarks, axis=0)
             print(f"[INFO] Bentuk array pose akhir: {pose_array.shape}  (Frame x 33 Landmark x 4 Koordinat)")
 
-        # --- Simpan array ke file .npy ---
-        os.makedirs(os.path.dirname(output_npy_path), exist_ok=True)
-        np.save(output_npy_path, pose_array)
-        print(f"[INFO] Array pose disimpan ke: {output_npy_path}")
+        # --- Simpan array ke file .npy (jika save_output=True) ---
+        if save_output and output_npy_path:
+            if os.path.dirname(output_npy_path):
+                os.makedirs(os.path.dirname(output_npy_path), exist_ok=True)
+            np.save(output_npy_path, pose_array)
+            print(f"[INFO] Array pose disimpan ke: {output_npy_path}")
 
         return pose_array
 

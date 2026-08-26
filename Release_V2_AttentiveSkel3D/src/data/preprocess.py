@@ -9,8 +9,8 @@
 #   4. temporal_resample — Resample jumlah frame menjadi tepat 64
 #
 # Format data:
-#   Input  : (T, 33, 4)  → T frame, 33 landmark, [x, y, z, visibility]
-#   Output : (64, 33, 3) → 64 frame, 33 landmark, [x, y, z] ternormalisasi
+#   Input  : (T, 33, 4)  -> T frame, 33 landmark, [x, y, z, visibility]
+#   Output : (64, 33, 3) -> 64 frame, 33 landmark, [x, y, z] ternormalisasi
 
 import os
 import warnings
@@ -26,7 +26,7 @@ class DataPreprocessor:
     Melakukan serangkaian pra-pemrosesan pada array pose skeleton 3D.
 
     Pipeline lengkap:
-        filter_and_clean → smooth_data → spatial_normalize → temporal_resample
+        filter_and_clean -> smooth_data -> spatial_normalize -> temporal_resample
 
     Atribut:
         visibility_threshold (float): Ambang batas confidence; di bawahnya
@@ -64,7 +64,7 @@ class DataPreprocessor:
           (c) Interpolasi linear untuk mengisi gap NaN (maks. `max_interp_gap` frame).
 
         Args:
-            data: Array bentuk (T, 33, 4) → [x, y, z, visibility].
+            data: Array bentuk (T, 33, 4) -> [x, y, z, visibility].
 
         Returns:
             Array bentuk (T', 33, 4) setelah pembersihan, di mana T' ≤ T.
@@ -103,7 +103,7 @@ class DataPreprocessor:
                 )
                 data[:, landmark_idx, coord_idx] = series_interp.to_numpy()
 
-        # Sisa NaN yang tidak dapat diinterpolasi (gap terlalu panjang) → isi dengan 0
+        # Sisa NaN yang tidak dapat diinterpolasi (gap terlalu panjang) -> isi dengan 0
         remaining_nan = np.isnan(data[:, :, :3]).sum()
         if remaining_nan > 0:
             warnings.warn(
@@ -141,7 +141,7 @@ class DataPreprocessor:
 
         data[:, :, :3] = median_filter(data[:, :, :3], size=kernel_shape)
 
-        print(f"  [smooth_data] Median filter diterapkan (kernel={self.median_kernel}) → shape: {data.shape}")
+        print(f"  [smooth_data] Median filter diterapkan (kernel={self.median_kernel}) -> shape: {data.shape}")
         return data
 
     # ------------------------------------------------------------------
@@ -151,12 +151,12 @@ class DataPreprocessor:
         """
         Normalisasi spasial per-frame:
           (a) Translasi: geser semua koordinat sehingga mid-hip menjadi (0,0,0).
-          (b) Scaling  : bagi semua koordinat dengan panjang torso (mid-hip → mid-shoulder).
+          (b) Scaling  : bagi semua koordinat dengan panjang torso (mid-hip -> mid-shoulder).
           (c) Buang kolom visibility; output menjadi (T, 33, 3).
 
         Landmark referensi MediaPipe BlazePose:
-          - Left Hip  = 23, Right Hip  = 24  → mid-hip
-          - Left Shoulder = 11, Right Shoulder = 12 → mid-shoulder
+          - Left Hip  = 23, Right Hip  = 24  -> mid-hip
+          - Left Shoulder = 11, Right Shoulder = 12 -> mid-shoulder
 
         Args:
             data: Array bentuk (T, 33, 4).
@@ -195,7 +195,7 @@ class DataPreprocessor:
         # Broadcast: (T, 33, 3) / (T, 1, 1)
         coords_xyz = coords_xyz / torso_length[:, np.newaxis, np.newaxis]
 
-        print(f"  [spatial_normalize] Translasi & scaling selesai → shape: {coords_xyz.shape}")
+        print(f"  [spatial_normalize] Translasi & scaling selesai -> shape: {coords_xyz.shape}")
         print(f"  [spatial_normalize] Rata-rata panjang torso: {torso_length.mean():.4f}")
 
         return coords_xyz.astype(np.float32)  # (T, 33, 3)
@@ -244,7 +244,7 @@ class DataPreprocessor:
         # Kembalikan ke bentuk (target_frames, 33, 3)
         resampled = resampled_flat.reshape(target_frames, N_landmarks, N_coords)
 
-        print(f"  [temporal_resample] {T_src} frame → {target_frames} frame selesai → shape: {resampled.shape}")
+        print(f"  [temporal_resample] {T_src} frame -> {target_frames} frame selesai -> shape: {resampled.shape}")
         return resampled.astype(np.float32)
 
     # ------------------------------------------------------------------
@@ -255,11 +255,11 @@ class DataPreprocessor:
         Metode utama pipeline pra-pemrosesan.
 
         Urutan proses:
-            1. Baca file .npy  → (T, 33, 4)
-            2. filter_and_clean → (T', 33, 4)
-            3. smooth_data      → (T', 33, 4)
-            4. spatial_normalize → (T', 33, 3)
-            5. temporal_resample → (64, 33, 3)
+            1. Baca file .npy  -> (T, 33, 4)
+            2. filter_and_clean -> (T', 33, 4)
+            3. smooth_data      -> (T', 33, 4)
+            4. spatial_normalize -> (T', 33, 3)
+            5. temporal_resample -> (64, 33, 3)
             6. Simpan hasil ke disk.
 
         Args:

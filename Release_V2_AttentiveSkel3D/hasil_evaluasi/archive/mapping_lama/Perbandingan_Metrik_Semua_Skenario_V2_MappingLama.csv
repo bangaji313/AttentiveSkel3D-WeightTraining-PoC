@@ -1,0 +1,6 @@
+﻿Skenario,File_Model,BSP,Learned_Spatial,Temporal,Accuracy (%),F1_Macro,F1_Binary,Precision,Recall,TP,TN,FP,FN,Total_Frame
+Skenario 1 — Baseline,best_model_baseline.pth,✗,✗,✗,90.94,0.9066,0.9229,0.9087,0.9376,2568,1739,258,171,4736
+Skenario 2 — Full Model,best_model_v2.pth,✓,✓,✓,88.03,0.8776,0.8956,0.9031,0.8883,2433,1736,261,306,4736
+Skenario 3a — Ablasi: BSP,best_model_ablasi_a.pth,✗,✓,✓,90.31,0.9002,0.9171,0.9077,0.9266,2538,1739,258,201,4736
+Skenario 3b — Ablasi: BSP+LS,best_model_ablasi_b.pth,✓,✗,✓,88.43,0.8812,0.9003,0.8971,0.9036,2475,1713,284,264,4736
+Skenario 3c — Ablasi: BSP+Temp,best_model_ablasi_c.pth,✓,✓,✗,89.67,0.8924,0.9141,0.8808,0.95,2602,1645,352,137,4736
