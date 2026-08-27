@@ -1,0 +1,301 @@
+scenario,modules,epoch,train_loss,train_acc,val_loss,val_acc,source_artifact
+S3a,BSP,1,0.605824,0.635184,0.57468,0.696704,S3a_BSP_Training_History_V2.csv
+S3a,BSP,2,0.555492,0.708147,0.565742,0.683647,S3a_BSP_Training_History_V2.csv
+S3a,BSP,3,0.519154,0.735445,0.487883,0.792808,S3a_BSP_Training_History_V2.csv
+S3a,BSP,4,0.457658,0.780878,0.445955,0.799229,S3a_BSP_Training_History_V2.csv
+S3a,BSP,5,0.421297,0.809338,0.408257,0.806079,S3a_BSP_Training_History_V2.csv
+S3a,BSP,6,0.418788,0.812965,0.423452,0.79131,S3a_BSP_Training_History_V2.csv
+S3a,BSP,7,0.385782,0.819661,0.395196,0.812286,S3a_BSP_Training_History_V2.csv
+S3a,BSP,8,0.382997,0.829381,0.420367,0.786601,S3a_BSP_Training_History_V2.csv
+S3a,BSP,9,0.378881,0.826358,0.328269,0.861515,S3a_BSP_Training_History_V2.csv
+S3a,BSP,10,0.34106,0.854492,0.329689,0.866224,S3a_BSP_Training_History_V2.csv
+S3a,BSP,11,0.329773,0.860166,0.434155,0.806293,S3a_BSP_Training_History_V2.csv
+S3a,BSP,12,0.333431,0.857468,0.312138,0.873288,S3a_BSP_Training_History_V2.csv
+S3a,BSP,13,0.332516,0.85705,0.404168,0.828767,S3a_BSP_Training_History_V2.csv
+S3a,BSP,14,0.319428,0.857329,0.285989,0.882705,S3a_BSP_Training_History_V2.csv
+S3a,BSP,15,0.302862,0.874442,0.284104,0.885916,S3a_BSP_Training_History_V2.csv
+S3a,BSP,16,0.276977,0.88723,0.329827,0.848245,S3a_BSP_Training_History_V2.csv
+S3a,BSP,17,0.299276,0.875744,0.315006,0.866438,S3a_BSP_Training_History_V2.csv
+S3a,BSP,18,0.277992,0.8883,0.278455,0.880137,S3a_BSP_Training_History_V2.csv
+S3a,BSP,19,0.276936,0.886533,0.352791,0.833476,S3a_BSP_Training_History_V2.csv
+S3a,BSP,20,0.264563,0.889416,0.321451,0.860017,S3a_BSP_Training_History_V2.csv
+S3a,BSP,21,0.293033,0.873512,0.440485,0.818493,S3a_BSP_Training_History_V2.csv
+S3a,BSP,22,0.284166,0.880673,0.255677,0.900685,S3a_BSP_Training_History_V2.csv
+S3a,BSP,23,0.256417,0.891323,0.282728,0.867295,S3a_BSP_Training_History_V2.csv
+S3a,BSP,24,0.274247,0.890299,0.341911,0.864298,S3a_BSP_Training_History_V2.csv
+S3a,BSP,25,0.258265,0.898251,0.254775,0.906892,S3a_BSP_Training_History_V2.csv
+S3a,BSP,26,0.242345,0.903134,0.296441,0.87393,S3a_BSP_Training_History_V2.csv
+S3a,BSP,27,0.260996,0.889509,0.267354,0.884204,S3a_BSP_Training_History_V2.csv
+S3a,BSP,28,0.244297,0.900577,0.257829,0.894692,S3a_BSP_Training_History_V2.csv
+S3a,BSP,29,0.225664,0.90732,0.243631,0.895976,S3a_BSP_Training_History_V2.csv
+S3a,BSP,30,0.229917,0.905134,0.288983,0.869863,S3a_BSP_Training_History_V2.csv
+S3a,BSP,31,0.235924,0.90332,0.358044,0.833904,S3a_BSP_Training_History_V2.csv
+S3a,BSP,32,0.227779,0.90718,0.287991,0.884632,S3a_BSP_Training_History_V2.csv
+S3a,BSP,33,0.215373,0.910947,0.285512,0.88399,S3a_BSP_Training_History_V2.csv
+S3a,BSP,34,0.203279,0.917643,0.286697,0.876498,S3a_BSP_Training_History_V2.csv
+S3a,BSP,35,0.239973,0.901507,0.288176,0.873716,S3a_BSP_Training_History_V2.csv
+S3a,BSP,36,0.224357,0.907506,0.235804,0.912457,S3a_BSP_Training_History_V2.csv
+S3a,BSP,37,0.211474,0.917178,0.268485,0.894264,S3a_BSP_Training_History_V2.csv
+S3a,BSP,38,0.186076,0.925595,0.314599,0.857663,S3a_BSP_Training_History_V2.csv
+S3a,BSP,39,0.200248,0.918341,0.223653,0.90839,S3a_BSP_Training_History_V2.csv
+S3a,BSP,40,0.17887,0.927502,0.292944,0.873074,S3a_BSP_Training_History_V2.csv
+S3a,BSP,41,0.190094,0.920015,0.278123,0.886344,S3a_BSP_Training_History_V2.csv
+S3a,BSP,42,0.191801,0.921828,0.239318,0.900899,S3a_BSP_Training_History_V2.csv
+S3a,BSP,43,0.169003,0.931408,0.224737,0.905822,S3a_BSP_Training_History_V2.csv
+S3a,BSP,44,0.181498,0.926758,0.25948,0.892765,S3a_BSP_Training_History_V2.csv
+S3a,BSP,45,0.219077,0.907366,0.318614,0.869007,S3a_BSP_Training_History_V2.csv
+S3a,BSP,46,0.209709,0.912528,0.264248,0.893408,S3a_BSP_Training_History_V2.csv
+S3a,BSP,47,0.19326,0.922108,0.395511,0.837543,S3a_BSP_Training_History_V2.csv
+S3a,BSP,48,0.175964,0.928525,0.263933,0.906892,S3a_BSP_Training_History_V2.csv
+S3a,BSP,49,0.176311,0.927967,0.218351,0.908818,S3a_BSP_Training_History_V2.csv
+S3a,BSP,50,0.168312,0.935268,0.31715,0.860659,S3a_BSP_Training_History_V2.csv
+S3a,BSP,51,0.186987,0.924479,0.353166,0.870291,S3a_BSP_Training_History_V2.csv
+S3a,BSP,52,0.163915,0.934477,0.204907,0.914598,S3a_BSP_Training_History_V2.csv
+S3a,BSP,53,0.185047,0.924572,0.22736,0.906464,S3a_BSP_Training_History_V2.csv
+S3a,BSP,54,0.168281,0.931129,0.31681,0.873716,S3a_BSP_Training_History_V2.csv
+S3a,BSP,55,0.182282,0.926618,0.26407,0.893836,S3a_BSP_Training_History_V2.csv
+S3a,BSP,56,0.157646,0.937779,0.24175,0.89833,S3a_BSP_Training_History_V2.csv
+S3a,BSP,57,0.174461,0.929827,0.324003,0.86708,S3a_BSP_Training_History_V2.csv
+S3a,BSP,58,0.152999,0.938663,0.237068,0.904752,S3a_BSP_Training_History_V2.csv
+S3a,BSP,59,0.19892,0.920526,0.30167,0.879709,S3a_BSP_Training_History_V2.csv
+S3a,BSP,60,0.172672,0.92992,0.239778,0.897688,S3a_BSP_Training_History_V2.csv
+S3a,BSP,61,0.171941,0.932943,0.371027,0.858091,S3a_BSP_Training_History_V2.csv
+S3a,BSP,62,0.166258,0.93192,0.241154,0.901327,S3a_BSP_Training_History_V2.csv
+S3a,BSP,63,0.155823,0.9375,0.224347,0.911173,S3a_BSP_Training_History_V2.csv
+S3a,BSP,64,0.149797,0.942476,0.329646,0.872646,S3a_BSP_Training_History_V2.csv
+S3a,BSP,65,0.145296,0.942615,0.258124,0.903253,S3a_BSP_Training_History_V2.csv
+S3a,BSP,66,0.13403,0.946847,0.246582,0.90839,S3a_BSP_Training_History_V2.csv
+S3a,BSP,67,0.13425,0.944429,0.222644,0.912671,S3a_BSP_Training_History_V2.csv
+S3a,BSP,68,0.133586,0.948428,0.240636,0.899829,S3a_BSP_Training_History_V2.csv
+S3a,BSP,69,0.125945,0.950846,0.222322,0.912671,S3a_BSP_Training_History_V2.csv
+S3a,BSP,70,0.140557,0.944615,0.294442,0.885488,S3a_BSP_Training_History_V2.csv
+S3a,BSP,71,0.139715,0.945266,0.358336,0.871789,S3a_BSP_Training_History_V2.csv
+S3a,BSP,72,0.156125,0.939081,0.274772,0.892979,S3a_BSP_Training_History_V2.csv
+S3a,BSP,73,0.149174,0.939918,0.305763,0.893193,S3a_BSP_Training_History_V2.csv
+S3a,BSP,74,0.134469,0.946196,0.252496,0.900899,S3a_BSP_Training_History_V2.csv
+S3a,BSP,75,0.130522,0.948707,0.318336,0.888913,S3a_BSP_Training_History_V2.csv
+S3a,BSP,76,0.131519,0.947684,0.279728,0.891909,S3a_BSP_Training_History_V2.csv
+S3a,BSP,77,0.128986,0.948242,0.316183,0.884846,S3a_BSP_Training_History_V2.csv
+S3a,BSP,78,0.128428,0.948568,0.249146,0.912885,S3a_BSP_Training_History_V2.csv
+S3a,BSP,79,0.138775,0.943685,0.247374,0.90411,S3a_BSP_Training_History_V2.csv
+S3a,BSP,80,0.140843,0.942569,0.283148,0.896832,S3a_BSP_Training_History_V2.csv
+S3a,BSP,81,0.131049,0.947777,0.229344,0.916524,S3a_BSP_Training_History_V2.csv
+S3a,BSP,82,0.113671,0.955032,0.248366,0.910103,S3a_BSP_Training_History_V2.csv
+S3a,BSP,83,0.103995,0.957868,0.410233,0.868365,S3a_BSP_Training_History_V2.csv
+S3a,BSP,84,0.121951,0.951962,0.37713,0.866866,S3a_BSP_Training_History_V2.csv
+S3a,BSP,85,0.11984,0.952055,0.216818,0.913741,S3a_BSP_Training_History_V2.csv
+S3a,BSP,86,0.117829,0.95466,0.298368,0.892337,S3a_BSP_Training_History_V2.csv
+S3a,BSP,87,0.114323,0.955125,0.279591,0.900043,S3a_BSP_Training_History_V2.csv
+S3a,BSP,88,0.111987,0.956659,0.250532,0.906892,S3a_BSP_Training_History_V2.csv
+S3a,BSP,89,0.105908,0.957729,0.276663,0.899829,S3a_BSP_Training_History_V2.csv
+S3a,BSP,90,0.109995,0.957217,0.257551,0.903253,S3a_BSP_Training_History_V2.csv
+S3a,BSP,91,0.113363,0.954148,0.268102,0.901327,S3a_BSP_Training_History_V2.csv
+S3a,BSP,92,0.108508,0.956055,0.223613,0.91738,S3a_BSP_Training_History_V2.csv
+S3a,BSP,93,0.124834,0.950009,0.264744,0.903682,S3a_BSP_Training_History_V2.csv
+S3a,BSP,94,0.128285,0.947359,0.280262,0.903896,S3a_BSP_Training_History_V2.csv
+S3a,BSP,95,0.118325,0.952706,0.242044,0.910103,S3a_BSP_Training_History_V2.csv
+S3a,BSP,96,0.119856,0.953451,0.226864,0.913099,S3a_BSP_Training_History_V2.csv
+S3a,BSP,97,0.118278,0.952613,0.451803,0.861729,S3a_BSP_Training_History_V2.csv
+S3a,BSP,98,0.118624,0.952474,0.282407,0.900685,S3a_BSP_Training_History_V2.csv
+S3a,BSP,99,0.12752,0.949684,0.462526,0.841824,S3a_BSP_Training_History_V2.csv
+S3a,BSP,100,0.112553,0.954009,0.269543,0.906678,S3a_BSP_Training_History_V2.csv
+S3b,BSP + Learned Spatial,1,0.6285,0.6317,0.6123,0.6411,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,2,0.5559,0.7136,0.5127,0.7252,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,3,0.5044,0.7512000000000001,0.5007,0.7491,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,4,0.4904,0.7589,0.4603,0.7716,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,5,0.4305,0.7945,0.3952,0.8172,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,6,0.3771,0.8338,0.3798,0.8217,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,7,0.3683,0.8395,0.3341,0.8652,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,8,0.3545,0.8428,0.358,0.8459,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,9,0.363,0.8395,0.3677,0.8362999999999999,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,10,0.3173,0.8652,0.2956,0.8784000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,11,0.3087,0.8617,0.3136,0.8637,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,12,0.2989,0.8776999999999999,0.3444,0.8427,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,13,0.347,0.8417,0.3067,0.8726,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,14,0.2868,0.8825,0.2844,0.8851,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,15,0.2581,0.8965000000000001,0.3638,0.8365,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,16,0.2725,0.8862000000000001,0.3781,0.838,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,17,0.3144,0.8639,0.3231,0.8517,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,18,0.2785,0.8843000000000001,0.5083,0.7742,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,19,0.2516,0.8962,0.4797,0.7848999999999999,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,20,0.2568,0.8946999999999999,0.6283,0.7483,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,21,0.2645,0.8889,0.2772,0.8844,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,22,0.2486,0.8976999999999999,0.3145,0.8703,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,23,0.2281,0.9089,0.2795,0.8793000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,24,0.2326,0.9085,0.2491,0.9015000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,25,0.2131,0.9155,0.2478,0.9005,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,26,0.2098,0.92,0.3201,0.8703,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,27,0.2337,0.9095,0.3942,0.8461,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,28,0.2168,0.912,0.2531,0.8934000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,29,0.2006,0.9234,0.2865,0.8793000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,30,0.1988,0.9228000000000001,0.2636,0.8898,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,31,0.1926,0.9243000000000001,0.2511,0.8943000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,32,0.2069,0.9167000000000001,0.2921,0.8793000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,33,0.2013,0.9206,0.241,0.8994,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,34,0.1734,0.9315000000000001,0.2313,0.9122,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,35,0.1703,0.9336,0.3455,0.8639,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,36,0.1876,0.924,0.2948,0.8801000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,37,0.2027,0.9193000000000001,0.2647,0.8917,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,38,0.1846,0.9266,0.2504,0.9024,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,39,0.1699,0.9343,0.3442,0.8662000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,40,0.161,0.9358,0.293,0.8823000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,41,0.1682,0.9338,0.2201,0.9146,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,42,0.1642,0.9366,0.2543,0.8994,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,43,0.163,0.9372,0.2252,0.9015000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,44,0.1564,0.9395,0.2838,0.8968,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,45,0.1541,0.941,0.2387,0.9045000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,46,0.1421,0.9455,0.2257,0.9112,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,47,0.1417,0.9443,0.2084,0.9189,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,48,0.1397,0.9448000000000001,0.261,0.8948999999999999,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,49,0.1536,0.9377,0.2921,0.8889,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,50,0.1388,0.9462,0.2219,0.9129,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,51,0.1306,0.9501000000000001,0.2801,0.8957999999999999,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,52,0.1586,0.9347,0.3365,0.8818,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,53,0.152,0.9390999999999999,0.2316,0.8996,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,54,0.1636,0.9359000000000001,0.313,0.8771,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,55,0.1505,0.9411,0.3276,0.8709,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,56,0.1338,0.9490000000000001,0.2235,0.9122,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,57,0.1211,0.955,0.2145,0.9146,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,58,0.1165,0.9536,0.2498,0.9176000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,59,0.1417,0.9445999999999999,0.227,0.9045000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,60,0.1395,0.9455,0.2474,0.9103,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,61,0.134,0.9475,0.2161,0.9146,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,62,0.1207,0.9523999999999999,0.2596,0.8953,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,63,0.1307,0.9484,0.2082,0.9172,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,64,0.1108,0.9581000000000001,0.2118,0.9155,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,65,0.1091,0.9573999999999999,0.2487,0.9026000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,66,0.1312,0.9477,0.2197,0.9135,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,67,0.1118,0.9566,0.2179,0.9144,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,68,0.1187,0.9540000000000001,0.2194,0.9172,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,69,0.1094,0.9555,0.2763,0.899,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,70,0.1101,0.9562999999999999,0.2163,0.9198999999999999,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,71,0.0973,0.9612999999999999,0.2289,0.9142,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,72,0.0934,0.9634,0.2518,0.9116,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,73,0.1228,0.9521,0.2881,0.8906000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,74,0.1113,0.9556999999999999,0.2488,0.9059999999999999,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,75,0.098,0.9623,0.347,0.8795000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,76,0.1089,0.9571,0.2405,0.9131,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,77,0.0958,0.9626,0.2301,0.9092,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,78,0.1111,0.9564,0.2788,0.9028,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,79,0.0978,0.9615,0.2515,0.909,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,80,0.1064,0.9591,0.312,0.8891,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,81,0.1235,0.9519,0.2349,0.9155,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,82,0.1185,0.9529000000000001,0.3145,0.8962,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,83,0.105,0.9593,0.2306,0.9122,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,84,0.096,0.9623,0.2555,0.9068999999999999,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,85,0.0891,0.9648,0.249,0.912,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,86,0.086,0.9673,0.29,0.8973,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,87,0.0899,0.9621999999999999,0.2279,0.914,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,88,0.0869,0.9649,0.2478,0.9131,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,89,0.0978,0.9612,0.281,0.897,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,90,0.0964,0.9625,0.25,0.9137000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,91,0.1008,0.9598,0.235,0.9161,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,92,0.0938,0.9632,0.2505,0.9155,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,93,0.1053,0.9605,0.2748,0.9015000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,94,0.0969,0.9615,0.2206,0.914,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,95,0.0836,0.9671,0.231,0.9137000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,96,0.0806,0.9684,0.2677,0.9075,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,97,0.0862,0.9671,0.2955,0.9026000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,98,0.1235,0.9506999999999999,0.3044,0.8904000000000001,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,99,0.1358,0.9462999999999999,0.314,0.8848,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3b,BSP + Learned Spatial,100,0.1036,0.9598,0.2144,0.9242,03_train_scenario3_ablation.ipynb:Ablasi_C
+S3c,BSP + Temporal,1,0.6862,0.5527000000000001,0.6686,0.6246,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,2,0.6433,0.6557,0.6247,0.6393,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,3,0.5991,0.7062999999999999,0.5811,0.6706,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,4,0.5419,0.7486,0.5348,0.7123,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,5,0.5043,0.7554000000000001,0.5363,0.7232,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,6,0.4629,0.7798,0.4618,0.7575,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,7,0.4402,0.7962,0.4334,0.7827,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,8,0.4264,0.8015000000000001,0.47,0.7474,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,9,0.404,0.8054000000000001,0.4159,0.7883,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,10,0.4013,0.8218000000000001,0.5048,0.7170000000000001,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,11,0.3947,0.8269,0.3943,0.8208,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,12,0.3686,0.8432,0.377,0.841,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,13,0.3403,0.8659,0.3389,0.8675,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,14,0.3265,0.8640000000000001,0.3766,0.8393,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,15,0.3224,0.867,0.3167,0.8634000000000001,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,16,0.3208,0.8678,0.4102,0.787,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,17,0.3096,0.8762000000000001,0.3632,0.8397,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,18,0.3045,0.8744,0.2957,0.8853,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,19,0.3047,0.8806,0.2725,0.8915000000000001,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,20,0.2678,0.8975,0.2664,0.8962,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,21,0.2629,0.8986,0.3732,0.841,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,22,0.2789,0.8929,0.2952,0.8823000000000001,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,23,0.286,0.8915000000000001,0.4495,0.7970999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,24,0.2667,0.897,0.3153,0.8767,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,25,0.2567,0.8998999999999999,0.2791,0.8855,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,26,0.2437,0.9068999999999999,0.2551,0.894,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,27,0.2895,0.895,0.3124,0.8667,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,28,0.2585,0.9025,0.2737,0.8883,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,29,0.2248,0.9170999999999999,0.2553,0.8887,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,30,0.2062,0.9237000000000001,0.2586,0.8973,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,31,0.2268,0.9153,0.2678,0.8885,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,32,0.2177,0.9187000000000001,0.2331,0.9079999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,33,0.2302,0.9137000000000001,0.2965,0.8872,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,34,0.2588,0.9027,0.2777,0.8808,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,35,0.2195,0.9170999999999999,0.2599,0.8908,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,36,0.2115,0.919,0.2745,0.8872,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,37,0.2082,0.9229999999999999,0.2343,0.9011,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,38,0.2076,0.9226000000000001,0.2318,0.9013,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,39,0.2031,0.9262,0.2757,0.8878,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,40,0.1824,0.9335,0.2197,0.9152,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,41,0.172,0.9383,0.2232,0.9107,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,42,0.1926,0.9309000000000001,0.2949,0.8953,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,43,0.1887,0.9304000000000001,0.2485,0.8987999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,44,0.1769,0.9358,0.2478,0.8946999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,45,0.1821,0.9346,0.2454,0.9022,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,46,0.1724,0.9365000000000001,0.2204,0.9118,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,47,0.1782,0.9325,0.2438,0.9013,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,48,0.1866,0.9309999999999999,0.2452,0.9087999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,49,0.1684,0.9404,0.2229,0.9155,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,50,0.1668,0.9389,0.2337,0.9077,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,51,0.1676,0.9389,0.2915,0.8861,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,52,0.157,0.9429000000000001,0.2238,0.9146,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,53,0.144,0.9478,0.2409,0.9079999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,54,0.1675,0.9378,0.2501,0.8981,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,55,0.1663,0.9388,0.234,0.9079999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,56,0.1533,0.9453,0.2396,0.903,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,57,0.1532,0.9438,0.2692,0.8981,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,58,0.1511,0.9445999999999999,0.2688,0.8959999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,59,0.1522,0.9440000000000001,0.241,0.9095,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,60,0.143,0.9495,0.2435,0.9095,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,61,0.1542,0.9440000000000001,0.2297,0.9086,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,62,0.1648,0.9398000000000001,0.2467,0.9026000000000001,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,63,0.1374,0.9494,0.2497,0.9045000000000001,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,64,0.1416,0.9473999999999999,0.2267,0.9146,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,65,0.1377,0.9514,0.2378,0.9097,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,66,0.1419,0.9494,0.2407,0.915,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,67,0.1527,0.9455,0.2179,0.9189,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,68,0.1301,0.9543,0.2307,0.9148000000000001,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,69,0.1241,0.955,0.2905,0.8959999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,70,0.1169,0.9573999999999999,0.2912,0.8856999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,71,0.1203,0.9577,0.2266,0.9086,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,72,0.1161,0.9594,0.2267,0.917,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,73,0.126,0.9529000000000001,0.2339,0.9127,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,74,0.1313,0.9528,0.2641,0.9070999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,75,0.1288,0.9537,0.2324,0.9152,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,76,0.1169,0.9573999999999999,0.2544,0.9024,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,77,0.1403,0.9490000000000001,0.2808,0.894,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,78,0.1447,0.9455,0.2442,0.9122,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,79,0.1233,0.9561,0.2494,0.9067000000000001,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,80,0.112,0.9612,0.2406,0.912,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,81,0.1155,0.9595999999999999,0.235,0.9174,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,82,0.1165,0.9594,0.2561,0.9127,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,83,0.1053,0.9621999999999999,0.2393,0.9048,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,84,0.1044,0.9615,0.2322,0.9152,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,85,0.1035,0.9623999999999999,0.251,0.9103,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,86,0.1005,0.9634,0.245,0.9129,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,87,0.1014,0.9643999999999999,0.2649,0.9057999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,88,0.108,0.9628,0.3374,0.8953,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,89,0.1111,0.961,0.2359,0.9167000000000001,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,90,0.118,0.9582999999999999,0.269,0.9005,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,91,0.1208,0.9566,0.2399,0.9101,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,92,0.1191,0.9556,0.2578,0.9114,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,93,0.1124,0.9588,0.2844,0.8985,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,94,0.107,0.9621999999999999,0.2366,0.9181999999999999,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,95,0.1149,0.9599,0.2518,0.9107,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,96,0.1142,0.9571999999999999,0.301,0.9011,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,97,0.1204,0.9565,0.2724,0.9103,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,98,0.1322,0.9518000000000001,0.2649,0.9118,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,99,0.1088,0.96,0.2716,0.8994,03_train_scenario3_ablation.ipynb:Ablasi_B
+S3c,BSP + Temporal,100,0.105,0.9629000000000001,0.2641,0.9075,03_train_scenario3_ablation.ipynb:Ablasi_B
