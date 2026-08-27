@@ -24,9 +24,9 @@ Pada cabang `revision/post-semhas`, dilakukan serangkaian audit, perbaikan metod
    - *(Catatan: DOI terdahulu `10.34740/kaggle/dsv/19038457` dan `10.34740/kaggle/dsv/19041891` tetap disimpan dalam arsip historis sebagai bukti evolusi iterasi dataset).*
 5. **Koreksi & Sintesis Kurva Pembelajaran S3 (Canonical Holdout Curves)**:
    - Evaluasi K-Fold Cross-Validation (5-fold) dan Evaluasi Holdout (fixed-split) merupakan dua jalur evaluasi independen. Metrik kuantitatif canonical keduanya tidak berubah.
-   - Kurva `curve_s3_ablation_comparison.png` diperbarui dari sumber riwayat pelatihan holdout 100 epoch per skenario menggunakan script `src/visualization/generate_holdout_learning_curves_v2.py` tanpa retraining.
+   - Sumbu grafik disesuaikan ke `Validation Loss (Cross-Entropy)` dan batas rentang plot disesuaikan (0.15 hingga >0.67) agar seluruh titik data 100 epoch per skenario terlihat tanpa terpotong.
    - Provenance data 300 baris diekspor ke `hasil_evaluasi/Holdout_Training_History_S3_Canonical_V2.csv` (S3a Ep 52 val_loss 0.2049, S3b Ep 63 val_loss 0.2082, S3c Ep 67 val_loss 0.2179).
-   - Notebook `notebooks/06_KFold_Semua_Skenario_V2.ipynb` adalah notebook K-Fold canonical resmi, sedangkan `notebooks/06_kfold_cross_validation_v2_PerFrame.ipynb` merupakan duplikat historis yang dipertahankan.
+   - Notebook `notebooks/06_KFold_Semua_Skenario_V2.ipynb` adalah notebook K-Fold canonical resmi, sedangkan `notebooks/06_kfold_cross_validation_v2_PerFrame.ipynb` (SHA256: `6882066291d0b1571201ceaa12f7daee47fa511748eb59cda5f39c6991c02894`) merupakan duplikat historis yang dipertahankan.
 
 ---
 

@@ -210,10 +210,11 @@ def plot_canonical_learning_curves(df_all: pd.DataFrame):
         fontweight="bold",
         pad=12,
     )
-    ax1.set_ylabel("Validation Loss (BCE)", fontsize=11, fontweight="bold")
+    ax1.set_ylabel("Validation Loss (Cross-Entropy)", fontsize=11, fontweight="bold")
     ax1.grid(True, linestyle="--", alpha=0.5)
     ax1.legend(loc="upper right", fontsize=9.5, framealpha=0.95)
-    ax1.set_ylim(0.15, 0.65)
+    max_val_loss = df_all["val_loss"].max()
+    ax1.set_ylim(0.15, max(max_val_loss * 1.08, 0.72))
 
     # ── Panel 2: Validation Accuracy ───────────────────────────────────────────
     for sc, cfg in configs.items():
